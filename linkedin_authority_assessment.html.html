@@ -1,0 +1,1541 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0"/>
+<title>LinkedIn Visibility Assessment — Always-On Authority System™</title>
+<script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Playfair+Display:ital,wght@0,600;1,500&display=swap');
+
+:root{
+  --navy: #050d1f;
+  --navy2:#0a1628;
+  --navy3:#0f2040;
+  --teal: #00d4c8;
+  --teal2:#00f5ea;
+  --gold: #f0a500;
+  --gold2:#ffc43a;
+  --green:#00e676;
+  --pink: #ff6b9d;
+  --red:  #ff4757;
+  --text: #e8f4f8;
+  --muted:#7a9bb5;
+  --card: rgba(255,255,255,0.04);
+  --border:rgba(0,212,200,0.15);
+}
+
+*{margin:0;padding:0;box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{
+  background:var(--navy);
+  color:var(--text);
+  font-family:'Inter',sans-serif;
+  overflow-x:hidden;
+  -webkit-font-smoothing:antialiased;
+}
+
+/* ── HERO ── */
+#hero{
+  position:relative;min-height:100vh;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  text-align:center;padding:40px 24px;overflow:hidden;
+}
+#bgCanvas{position:absolute;inset:0;width:100%;height:100%;z-index:0;}
+
+.hero-badge{
+  position:relative;z-index:2;
+  display:inline-flex;align-items:center;gap:8px;
+  background:rgba(0,212,200,0.1);border:1px solid var(--border);
+  border-radius:100px;padding:8px 20px;
+  font-size:11px;letter-spacing:2px;text-transform:uppercase;
+  color:var(--teal);font-weight:600;margin-bottom:28px;backdrop-filter:blur(10px);
+}
+.dot{width:7px;height:7px;border-radius:50%;background:var(--teal);animation:pulse 2s infinite;}
+@keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.4;transform:scale(.7)}}
+
+.hero-brand{
+  position:relative;z-index:2;
+  font-size:clamp(11px,1.5vw,13px);letter-spacing:3px;text-transform:uppercase;
+  color:var(--muted);font-weight:400;margin-bottom:16px;
+}
+
+.hero-h1{
+  position:relative;z-index:2;
+  font-family:'Playfair Display',serif;
+  font-size:clamp(32px,5.5vw,64px);font-weight:600;line-height:1.1;margin-bottom:18px;
+  background:linear-gradient(135deg,#fff 30%,var(--teal) 100%);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+}
+
+.hero-h1 em{font-style:italic;}
+
+.hero-sub{
+  position:relative;z-index:2;
+  font-size:clamp(14px,2vw,18px);color:var(--muted);
+  margin-bottom:36px;font-weight:400;max-width:540px;line-height:1.7;
+}
+
+/* Deliverables inline */
+.hero-dels{
+  position:relative;z-index:2;
+  display:grid;grid-template-columns:1fr 1fr;gap:10px 32px;
+  text-align:left;max-width:480px;margin:0 auto 40px;
+}
+.del-row{
+  display:flex;align-items:center;gap:9px;
+  font-size:13px;color:var(--muted);line-height:1.4;
+}
+.del-icon{
+  width:18px;height:18px;border-radius:50%;
+  background:rgba(0,212,200,0.12);border:1px solid rgba(0,212,200,0.25);
+  display:flex;align-items:center;justify-content:center;flex-shrink:0;
+}
+.del-icon::after{
+  content:'';width:5px;height:3px;
+  border-left:1.5px solid var(--teal);border-bottom:1.5px solid var(--teal);
+  transform:rotate(-45deg) translateY(-1px);
+}
+
+.hero-cta-btn{
+  position:relative;z-index:2;
+  display:inline-flex;align-items:center;gap:10px;
+  background:linear-gradient(135deg,var(--teal),#00a8ff);
+  color:var(--navy);font-weight:700;font-size:15px;
+  padding:16px 40px;border-radius:100px;
+  border:none;cursor:pointer;text-decoration:none;
+  box-shadow:0 0 40px rgba(0,212,200,.3);
+  transition:transform .2s,box-shadow .2s;
+  font-family:'Inter',sans-serif;
+}
+.hero-cta-btn:hover{transform:translateY(-2px);box-shadow:0 0 60px rgba(0,212,200,.5);}
+
+.hero-note{
+  position:relative;z-index:2;
+  margin-top:14px;font-size:12px;color:var(--muted);letter-spacing:.5px;
+}
+
+.scroll-hint{
+  position:absolute;bottom:28px;z-index:2;
+  display:flex;flex-direction:column;align-items:center;gap:8px;
+  color:var(--muted);font-size:10px;letter-spacing:2px;text-transform:uppercase;
+  animation:bounce 2s infinite;
+}
+@keyframes bounce{0%,100%{transform:translateY(0)}50%{transform:translateY(8px)}}
+
+/* ── SHARED ── */
+.section-label{font-size:11px;letter-spacing:3px;text-transform:uppercase;color:var(--teal);font-weight:600;margin-bottom:12px;}
+.section-title{font-family:'Playfair Display',serif;font-size:clamp(24px,3.5vw,40px);font-weight:600;line-height:1.2;margin-bottom:14px;color:#fff;}
+
+.fade-in{opacity:0;transform:translateY(20px);transition:opacity .6s ease,transform .6s ease;}
+.fade-in.vis{opacity:1;transform:none;}
+
+.divider{height:1px;background:linear-gradient(to right,transparent,rgba(0,212,200,0.15),transparent);}
+
+/* ── PROGRESS ── */
+#prog-wrap{
+  position:sticky;top:0;z-index:100;
+  background:linear-gradient(180deg,var(--navy) 60%,transparent);
+  padding:14px 24px 8px;display:none;
+}
+.prog-inner{max-width:680px;margin:0 auto;}
+.prog-track{height:2px;background:rgba(255,255,255,0.06);border-radius:2px;overflow:hidden;}
+.prog-fill{
+  height:100%;
+  background:linear-gradient(90deg,rgba(0,212,200,0.5),var(--teal));
+  border-radius:2px;width:0%;
+  transition:width .5s cubic-bezier(.4,0,.2,1);
+  box-shadow:0 0 8px rgba(0,212,200,0.5);
+}
+.prog-meta{display:flex;justify-content:space-between;margin-top:7px;font-size:11px;color:var(--muted);}
+
+/* ── FORM AREA ── */
+#form-area{display:none;padding:0 24px 80px;}
+.form-inner{max-width:680px;margin:0 auto;}
+
+/* Section cards */
+.sec-card{
+  border:1px solid rgba(0,212,200,0.1);
+  border-radius:20px;margin-bottom:8px;overflow:hidden;
+  transition:border-color .3s;
+  background:rgba(10,22,40,0.8);
+}
+.sec-card.is-active{border-color:rgba(0,212,200,0.3);}
+.sec-card.is-done{border-color:rgba(0,212,200,0.08);opacity:0.6;}
+
+.sec-card.is-active::before{
+  content:'';display:block;height:1px;
+  background:linear-gradient(90deg,transparent,rgba(0,212,200,0.4),transparent);
+}
+
+.sec-head{
+  padding:18px 24px;
+  background:rgba(255,255,255,0.02);
+  display:flex;align-items:center;gap:14px;
+}
+
+.sec-num{
+  width:32px;height:32px;border-radius:9px;
+  border:1px solid rgba(255,255,255,0.08);
+  display:flex;align-items:center;justify-content:center;
+  font-size:12px;color:var(--muted);flex-shrink:0;font-weight:600;
+  transition:all .3s;
+  background:rgba(255,255,255,0.03);
+}
+.sec-card.is-active .sec-num{
+  background:rgba(0,212,200,0.1);
+  border-color:rgba(0,212,200,0.3);
+  color:var(--teal);
+  box-shadow:0 0 12px rgba(0,212,200,0.15);
+}
+.sec-card.is-done .sec-num{
+  background:rgba(0,212,200,0.08);
+  border-color:rgba(0,212,200,0.2);
+  color:var(--teal);font-size:14px;
+}
+
+.sec-title{font-size:14px;font-weight:600;color:rgba(255,255,255,0.3);transition:color .3s;}
+.sec-card.is-active .sec-title{color:#fff;}
+
+.sec-body{max-height:0;overflow:hidden;transition:max-height .55s cubic-bezier(.4,0,.2,1);}
+.sec-card.is-active .sec-body{max-height:1600px;}
+.sec-inner{padding:6px 24px 28px;}
+
+/* ── QUESTIONS ── */
+.qblock{margin-top:20px;}
+.qlabel{display:block;font-size:13px;color:var(--muted);margin-bottom:10px;line-height:1.5;}
+.qlabel b{color:#fff;font-weight:600;}
+.qlabel small{display:block;font-size:11px;color:rgba(122,155,181,0.6);margin-top:3px;letter-spacing:.3px;}
+
+input[type="text"],input[type="email"],input[type="url"],textarea{
+  width:100%;
+  background:rgba(255,255,255,0.03);
+  border:1px solid rgba(255,255,255,0.08);
+  border-radius:12px;color:var(--text);
+  font-family:'Inter',sans-serif;font-size:14px;
+  padding:12px 16px;outline:none;
+  transition:border-color .2s,box-shadow .2s;
+  -webkit-appearance:none;
+}
+input:focus,textarea:focus{
+  border-color:rgba(0,212,200,0.35);
+  box-shadow:0 0 0 3px rgba(0,212,200,0.07);
+}
+textarea{resize:vertical;min-height:80px;}
+
+/* Chips */
+.chips{display:flex;flex-wrap:wrap;gap:8px;}
+.chip{
+  padding:8px 16px;
+  border:1px solid rgba(255,255,255,0.08);
+  border-radius:100px;font-size:12px;
+  color:var(--muted);cursor:pointer;
+  transition:all .18s;
+  background:rgba(255,255,255,0.03);
+  user-select:none;line-height:1.4;
+  -webkit-tap-highlight-color:transparent;
+}
+.chip:hover{border-color:rgba(0,212,200,0.3);color:var(--teal);}
+.chip.on{
+  background:rgba(0,212,200,0.1);
+  border-color:rgba(0,212,200,0.35);
+  color:var(--teal);
+  box-shadow:0 0 10px rgba(0,212,200,0.1);
+}
+
+/* Range */
+.range-val{
+  text-align:center;
+  font-family:'Playfair Display',serif;
+  font-size:32px;color:var(--gold);
+  margin-bottom:8px;line-height:1;
+}
+.range-val small{font-family:'Inter',sans-serif;font-size:13px;color:var(--muted);}
+
+input[type="range"]{
+  width:100%;-webkit-appearance:none;appearance:none;
+  height:3px;background:rgba(255,255,255,0.08);
+  border-radius:3px;outline:none;border:none;padding:0;
+  box-shadow:none;cursor:pointer;
+}
+input[type="range"]::-webkit-slider-thumb{
+  -webkit-appearance:none;width:20px;height:20px;
+  border-radius:50%;background:var(--gold);cursor:pointer;
+  border:3px solid var(--navy);
+  box-shadow:0 0 0 1px rgba(240,165,0,0.4),0 0 14px rgba(240,165,0,0.3);
+  transition:transform .15s;
+}
+input[type="range"]::-webkit-slider-thumb:hover{transform:scale(1.15);}
+input[type="range"]::-moz-range-thumb{
+  width:20px;height:20px;border-radius:50%;
+  background:var(--gold);cursor:pointer;border:3px solid var(--navy);
+}
+.range-row{display:flex;justify-content:space-between;margin-top:8px;font-size:11px;color:var(--muted);}
+
+/* Budget grid */
+.budget-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+.bcard{
+  border:1px solid rgba(255,255,255,0.08);
+  border-radius:14px;padding:16px;cursor:pointer;
+  transition:all .2s;background:rgba(255,255,255,0.03);
+  -webkit-tap-highlight-color:transparent;
+}
+.bcard:hover{border-color:rgba(240,165,0,0.3);}
+.bcard.on{border-color:rgba(240,165,0,0.4);background:rgba(240,165,0,0.06);}
+.bcard .ba{
+  font-family:'Playfair Display',serif;font-size:17px;
+  color:#fff;display:block;margin-bottom:4px;
+}
+.bcard.on .ba{color:var(--gold);}
+.bcard .bd{font-size:11px;color:var(--muted);}
+
+.q-rule{height:1px;background:rgba(255,255,255,0.06);margin:22px 0 0;}
+
+/* ── VALIDATION ── */
+.field-err input,.field-err textarea{border-color:rgba(255,71,87,0.6)!important;box-shadow:0 0 0 3px rgba(255,71,87,0.08)!important;}
+.chips.field-err .chip{border-color:rgba(255,71,87,0.3);}
+.err-msg{display:none;font-size:11px;color:#ff4757;margin-top:6px;letter-spacing:.2px;}
+.field-err .err-msg{display:block;}
+.req-star{color:#ff4757;margin-left:3px;}
+
+/* Buttons */
+.btn-next{
+  margin-top:22px;width:100%;padding:14px;
+  background:rgba(0,212,200,0.08);
+  color:var(--teal);
+  border:1px solid rgba(0,212,200,0.2);
+  border-radius:12px;
+  font-family:'Inter',sans-serif;font-size:14px;font-weight:600;
+  cursor:pointer;transition:all .2s;letter-spacing:.3px;
+  -webkit-tap-highlight-color:transparent;
+}
+.btn-next:hover{background:rgba(0,212,200,0.14);border-color:rgba(0,212,200,0.35);}
+
+.btn-submit{
+  background:linear-gradient(135deg,var(--teal),#00a8ff);
+  color:var(--navy);border:none;
+  box-shadow:0 0 32px rgba(0,212,200,0.2);
+}
+.btn-submit:hover{transform:translateY(-1px);box-shadow:0 4px 40px rgba(0,212,200,0.35);color:var(--navy);}
+
+/* ── ANALYSING ── */
+#analysing{
+  display:none;text-align:center;
+  max-width:680px;margin:0 auto;padding:0 24px 80px;
+}
+.an-inner{
+  background:rgba(10,22,40,0.9);
+  border:1px solid var(--border);border-radius:24px;
+  padding:64px 40px;position:relative;overflow:hidden;
+}
+.an-inner::before{
+  content:'';position:absolute;top:0;left:0;right:0;height:1px;
+  background:linear-gradient(90deg,transparent,var(--teal),transparent);
+}
+
+.pulse-rings{
+  width:100px;height:100px;position:relative;margin:0 auto 32px;
+}
+.pulse-ring-el{
+  position:absolute;inset:0;border-radius:50%;
+  border:1px solid rgba(0,212,200,0.3);
+  animation:ringPulse 2s ease infinite;
+}
+.pulse-ring-el:nth-child(2){animation-delay:.5s;opacity:.6;}
+.pulse-ring-el:nth-child(3){animation-delay:1s;opacity:.3;}
+@keyframes ringPulse{
+  0%{transform:scale(.5);opacity:1;}
+  100%{transform:scale(1.6);opacity:0;}
+}
+.pulse-core-btn{
+  position:absolute;inset:0;display:flex;align-items:center;justify-content:center;
+}
+.pulse-core-inner{
+  width:44px;height:44px;border-radius:50%;
+  background:linear-gradient(135deg,var(--teal),#00a8ff);
+  display:flex;align-items:center;justify-content:center;
+  box-shadow:0 0 24px rgba(0,212,200,0.4);
+}
+.pulse-core-inner::after{
+  content:'';width:16px;height:16px;
+  border-left:2px solid var(--navy);border-bottom:2px solid var(--navy);
+  transform:rotate(-45deg) translateY(-2px);
+}
+
+.an-title{font-family:'Playfair Display',serif;font-size:24px;color:#fff;margin-bottom:10px;}
+.an-sub{font-size:13px;color:var(--muted);margin-bottom:32px;}
+
+.an-steps{display:flex;flex-direction:column;gap:10px;text-align:left;}
+.an-step{
+  display:flex;align-items:center;gap:12px;
+  font-size:12px;color:var(--muted);
+  padding:11px 16px;border:1px solid rgba(255,255,255,0.05);
+  border-radius:10px;background:rgba(255,255,255,0.02);
+  opacity:0;transform:translateX(-12px);
+  transition:all .4s;
+}
+.an-step.show{opacity:1;transform:translateX(0);}
+.an-step .step-dot{
+  width:7px;height:7px;border-radius:50%;
+  background:rgba(255,255,255,0.1);flex-shrink:0;
+  transition:background .3s,box-shadow .3s;
+}
+.an-step.show .step-dot{
+  background:var(--teal);
+  box-shadow:0 0 8px var(--teal);
+}
+
+/* ── RESULTS ── */
+#result-panel{display:none;padding:0 24px 80px;}
+.res-inner{max-width:900px;margin:0 auto;}
+
+/* Result hero */
+.res-hero{
+  background:linear-gradient(135deg,var(--navy2),var(--navy3));
+  border:1px solid var(--border);border-radius:24px;
+  padding:56px 40px;text-align:center;margin-bottom:32px;
+  position:relative;overflow:hidden;
+}
+.res-hero::before{
+  content:'';position:absolute;top:0;left:0;right:0;height:1px;
+  background:linear-gradient(90deg,transparent,var(--teal),transparent);
+}
+.res-eyebrow{font-size:11px;letter-spacing:3px;text-transform:uppercase;color:var(--teal);font-weight:600;margin-bottom:16px;}
+.res-name{font-family:'Playfair Display',serif;font-size:clamp(28px,4vw,44px);color:#fff;margin-bottom:6px;}
+.res-tagline{font-size:15px;color:var(--muted);margin-bottom:0;}
+
+/* Score rings grid */
+.score-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(160px,1fr));
+  gap:20px;margin-bottom:32px;
+}
+.score-card{
+  background:var(--card);border:1px solid var(--border);
+  border-radius:20px;padding:32px 20px;text-align:center;
+  position:relative;overflow:hidden;transition:transform .3s,border-color .3s;
+}
+.score-card:hover{transform:translateY(-4px);border-color:rgba(0,212,200,0.3);}
+.score-card::before{
+  content:'';position:absolute;inset:0;
+  background:radial-gradient(circle at 50% 0%,rgba(0,212,200,0.05) 0%,transparent 70%);
+  pointer-events:none;
+}
+.ring-wrap{position:relative;width:100px;height:100px;margin:0 auto 16px;}
+.ring-wrap canvas{position:absolute;inset:0;}
+.ring-center{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;}
+.ring-num{font-size:24px;font-weight:800;color:#fff;line-height:1;}
+.ring-unit{font-size:11px;color:var(--muted);margin-top:2px;}
+.card-name{font-size:13px;font-weight:600;color:#fff;margin-bottom:6px;}
+.card-status{font-size:11px;padding:3px 12px;border-radius:100px;display:inline-block;font-weight:600;margin-bottom:10px;}
+.s-good{background:rgba(0,230,118,.1);color:var(--green);}
+.s-mid {background:rgba(240,165,0,.1); color:var(--gold);}
+.s-low {background:rgba(255,71,87,.1);  color:var(--red);}
+.card-desc{font-size:11px;color:var(--muted);line-height:1.6;}
+
+/* Insights panels */
+.insights-grid{display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-bottom:32px;}
+@media(max-width:680px){.insights-grid{grid-template-columns:1fr;}}
+
+.ins-panel{border-radius:20px;padding:28px;border:1px solid;}
+.ins-panel.gap{
+  background:rgba(255,71,87,0.04);
+  border-color:rgba(255,71,87,0.15);
+}
+.ins-panel.opp{
+  background:rgba(0,212,200,0.04);
+  border-color:rgba(0,212,200,0.15);
+}
+.ins-head{display:flex;align-items:center;gap:10px;margin-bottom:16px;}
+.ins-icon{
+  width:32px;height:32px;border-radius:8px;
+  display:flex;align-items:center;justify-content:center;font-size:15px;flex-shrink:0;
+}
+.gap .ins-icon{background:rgba(255,71,87,0.1);}
+.opp .ins-icon{background:rgba(0,212,200,0.1);}
+.ins-panel-title{font-size:14px;font-weight:700;color:#fff;}
+.ins-list{display:flex;flex-direction:column;gap:12px;}
+.ins-item{
+  display:flex;gap:10px;font-size:12px;line-height:1.6;
+}
+.ins-item .idot{
+  width:6px;height:6px;border-radius:50%;
+  flex-shrink:0;margin-top:5px;
+}
+.gap .ins-item .idot{background:var(--red);box-shadow:0 0 6px var(--red);}
+.opp .ins-item .idot{background:var(--teal);box-shadow:0 0 6px var(--teal);}
+.ins-item .itext{color:var(--muted);}
+
+/* Opportunity bars */
+.opp-section{
+  background:var(--card);border:1px solid var(--border);
+  border-radius:20px;padding:32px;margin-bottom:32px;
+}
+.opp-section-title{font-size:16px;font-weight:700;color:#fff;margin-bottom:24px;}
+.opp-list-el{display:flex;flex-direction:column;gap:18px;}
+.opp-row-head{display:flex;justify-content:space-between;margin-bottom:8px;align-items:center;}
+.opp-name{font-size:13px;font-weight:600;color:#fff;}
+.opp-val{font-size:12px;color:var(--teal);font-weight:700;}
+.bar-track{height:7px;background:rgba(255,255,255,0.05);border-radius:100px;overflow:hidden;}
+.bar-fill{height:100%;border-radius:100px;width:0%;transition:width 1.4s cubic-bezier(.25,1,.5,1);}
+
+/* ROI strip */
+.roi-strip{
+  display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));
+  gap:16px;margin-bottom:32px;
+}
+.roi-card{
+  background:var(--card);border:1px solid var(--border);
+  border-radius:16px;padding:24px 20px;text-align:center;
+  transition:transform .3s;
+}
+.roi-card:hover{transform:translateY(-4px);}
+.roi-num{font-size:36px;font-weight:800;line-height:1;margin-bottom:8px;}
+.roi-label{font-size:12px;color:var(--muted);line-height:1.5;}
+
+/* Visibility chart */
+.chart-section{
+  background:var(--navy2);border:1px solid var(--border);
+  border-radius:20px;padding:32px;margin-bottom:32px;
+}
+.chart-title{font-size:16px;font-weight:700;color:#fff;margin-bottom:6px;}
+.chart-sub{font-size:12px;color:var(--muted);margin-bottom:20px;}
+.chart-legend{display:flex;gap:24px;margin-top:16px;flex-wrap:wrap;}
+.leg-item{display:flex;align-items:center;gap:8px;font-size:12px;color:var(--muted);}
+.leg-line{width:24px;height:2px;border-radius:2px;}
+
+/* CTA / Booking */
+.booking-section{
+  background:linear-gradient(135deg,var(--navy2),var(--navy3));
+  border:1px solid var(--border);border-radius:24px;
+  padding:48px 40px;position:relative;overflow:hidden;
+}
+.booking-section::before{
+  content:'';position:absolute;top:0;left:0;right:0;height:1px;
+  background:linear-gradient(90deg,transparent,var(--gold),transparent);
+}
+.booking-grid{display:grid;grid-template-columns:1fr 1fr;gap:48px;align-items:start;}
+@media(max-width:700px){.booking-grid{grid-template-columns:1fr;gap:32px;}}
+
+.booking-why-list{list-style:none;margin:24px 0;display:flex;flex-direction:column;gap:14px;}
+.booking-why-list li{display:flex;align-items:flex-start;gap:12px;font-size:13px;color:var(--muted);line-height:1.6;}
+.bw-icon{
+  width:30px;height:30px;border-radius:8px;
+  background:rgba(0,212,200,0.08);display:flex;align-items:center;
+  justify-content:center;font-size:14px;flex-shrink:0;margin-top:1px;
+}
+.bw-icon b{color:#fff;display:block;font-size:12px;font-weight:600;margin-bottom:1px;}
+
+.cal-box{
+  background:rgba(255,255,255,0.02);border:1px solid var(--border);
+  border-radius:18px;overflow:hidden;
+}
+.cal-head{
+  background:linear-gradient(135deg,rgba(0,212,200,0.1),rgba(0,168,255,0.07));
+  border-bottom:1px solid var(--border);padding:20px 24px;
+  display:flex;align-items:center;gap:12px;
+}
+.cal-title-text{font-size:14px;font-weight:700;color:#fff;}
+.cal-sub-text{font-size:11px;color:var(--muted);}
+.cal-details{padding:20px 24px;border-bottom:1px solid rgba(255,255,255,0.04);}
+.cal-row{display:flex;align-items:center;gap:10px;font-size:12px;color:var(--muted);margin-bottom:10px;}
+.cal-row:last-child{margin-bottom:0;}
+.cal-row span{color:#fff;font-weight:500;}
+.cal-slots{padding:16px 24px;display:flex;gap:8px;flex-wrap:wrap;border-bottom:1px solid rgba(255,255,255,0.04);}
+.slot{
+  background:rgba(0,212,200,0.06);border:1px solid rgba(0,212,200,0.2);
+  border-radius:8px;padding:6px 12px;font-size:11px;color:var(--teal);font-weight:600;
+}
+.cal-btn-wrap{padding:20px 24px;}
+.btn-cal{
+  display:flex;align-items:center;justify-content:center;gap:8px;
+  background:linear-gradient(135deg,var(--teal),#00a8ff);
+  color:var(--navy);font-weight:800;font-size:15px;
+  padding:16px;border-radius:12px;width:100%;
+  text-decoration:none;border:none;cursor:pointer;
+  font-family:'Inter',sans-serif;
+  box-shadow:0 0 32px rgba(0,212,200,0.2);
+  transition:transform .2s,box-shadow .2s;
+}
+.btn-cal:hover{transform:translateY(-2px);box-shadow:0 0 50px rgba(0,212,200,0.4);}
+.btn-wa{
+  display:flex;align-items:center;justify-content:center;gap:9px;
+  margin-top:10px;width:100%;padding:13px;
+  background:rgba(0,230,118,0.07);color:var(--green);
+  border:1px solid rgba(0,230,118,0.2);border-radius:12px;
+  font-family:'Inter',sans-serif;font-weight:600;font-size:14px;
+  cursor:pointer;transition:all .2s;text-decoration:none;
+  -webkit-tap-highlight-color:transparent;
+}
+.btn-wa:hover{background:rgba(0,230,118,0.12);}
+.wa-svg{width:18px;height:18px;fill:var(--green);flex-shrink:0;}
+.cal-note{text-align:center;font-size:11px;color:var(--muted);margin-top:12px;line-height:1.5;}
+.cal-note strong{color:var(--teal);}
+
+.ketan-card{
+  margin-top:24px;
+  background:rgba(0,212,200,0.04);border:1px solid var(--border);
+  border-radius:14px;padding:20px;display:flex;align-items:center;gap:16px;
+  text-decoration:none;transition:border-color .2s,transform .2s;
+}
+.ketan-card:hover{border-color:rgba(0,212,200,0.3);transform:translateY(-2px);}
+.ketan-av{
+  width:48px;height:48px;border-radius:50%;
+  background:linear-gradient(135deg,var(--teal),#00a8ff);
+  display:flex;align-items:center;justify-content:center;
+  font-size:18px;font-weight:800;color:var(--navy);flex-shrink:0;
+}
+.ketan-name{font-size:14px;font-weight:700;color:#fff;margin-bottom:2px;}
+.ketan-role{font-size:11px;color:var(--muted);}
+
+/* ── MOBILE ── */
+@media(max-width:600px){
+  .hero-dels{grid-template-columns:1fr;max-width:300px;}
+  .score-grid{grid-template-columns:1fr 1fr;}
+  .budget-grid{grid-template-columns:1fr;}
+  .booking-section{padding:32px 24px;}
+  #form-area,#analysing,#result-panel{padding:0 16px 60px;}
+  .res-hero{padding:40px 24px;}
+  .an-inner{padding:48px 24px;}
+}
+@media(min-width:601px) and (max-width:900px){
+  .score-grid{grid-template-columns:repeat(3,1fr);}
+}
+
+@media(hover:none){
+  .chip:active{border-color:rgba(0,212,200,0.35);color:var(--teal);}
+  .btn-next:active{opacity:.85;}
+  .hero-cta-btn:active{transform:scale(.98);}
+}
+</style>
+</head>
+<body>
+
+<!-- ═══════════ HERO ═══════════ -->
+<div id="hero">
+  <canvas id="bgCanvas"></canvas>
+
+  <div class="hero-badge"><span class="dot"></span>LinkedIn Visibility Assessment · Always-On Authority System™</div>
+
+  <div class="hero-brand">Viedge Box · Ketan Vaghela</div>
+
+  <div class="hero-h1">Your expertise deserves to be<br/><em>seen by the right people.</em></div>
+
+  <p class="hero-sub">Answer 6 sections. Receive a personalised authority score across 5 dimensions — with the exact gaps and opportunities specific to your profile.</p>
+
+  <div class="hero-dels">
+    <div class="del-row"><div class="del-icon"></div>LinkedIn Authority Score (0–100)</div>
+    <div class="del-row"><div class="del-icon"></div>Profile & positioning analysis</div>
+    <div class="del-row"><div class="del-icon"></div>Content strategy for your field</div>
+    <div class="del-row"><div class="del-icon"></div>Audience reach assessment</div>
+    <div class="del-row"><div class="del-icon"></div>Visibility opportunity roadmap</div>
+    <div class="del-row"><div class="del-icon"></div>Clear next steps — no guesswork</div>
+  </div>
+
+  <button class="hero-cta-btn" onclick="startAudit()">
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+    Begin My Assessment
+  </button>
+  <div class="hero-note">3 minutes · No credit card · Instant personalised results</div>
+
+  <div class="scroll-hint">
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12l7 7 7-7"/></svg>
+    scroll
+  </div>
+</div>
+
+<!-- ═══════════ PROGRESS ═══════════ -->
+<div id="prog-wrap">
+  <div class="prog-inner">
+    <div class="prog-track"><div class="prog-fill" id="prog-fill"></div></div>
+    <div class="prog-meta">
+      <span id="prog-label">Section 1 of 6</span>
+      <span id="prog-pct">0% complete</span>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════ FORM ═══════════ -->
+<div id="form-area">
+<div class="form-inner">
+
+  <!-- S1 -->
+  <div class="sec-card" id="s1">
+    <div class="sec-head"><div class="sec-num" id="sn1">1</div><div class="sec-title">About you</div></div>
+    <div class="sec-body"><div class="sec-inner">
+      <div class="qblock">
+        <label class="qlabel"><b>Full name</b><span class="req-star">*</span></label>
+        <input type="text" id="q-name" placeholder="Dr. Jane Smith" autocomplete="name">
+        <div class="err-msg" id="err-name">Please enter your full name.</div>
+      </div>
+      <div class="qblock">
+        <label class="qlabel"><b>Email address</b><span class="req-star">*</span><small>Your assessment summary will be sent here</small></label>
+        <input type="email" id="q-email" placeholder="jane@yourpractice.com" autocomplete="email">
+        <div class="err-msg" id="err-email">Please enter a valid email address.</div>
+      </div>
+      <div class="qblock">
+        <label class="qlabel"><b>LinkedIn profile URL</b><small>Optional — helps personalise your score</small></label>
+        <input type="url" id="q-li" placeholder="https://linkedin.com/in/yourname">
+      </div>
+      <div class="qblock">
+        <label class="qlabel"><b>Your profession</b><span class="req-star">*</span></label>
+        <div class="chips" id="c-prof">
+          <div class="chip" data-v="surgeon">Surgeon / Physician</div>
+          <div class="chip" data-v="consultant">Medical Consultant</div>
+          <div class="chip" data-v="integrative">Integrative Practitioner</div>
+          <div class="chip" data-v="psychologist">Psychologist / Therapist</div>
+          <div class="chip" data-v="coach">Health Coach</div>
+          <div class="chip" data-v="researcher">Researcher / Academic</div>
+          <div class="chip" data-v="other">Other Health Professional</div>
+        </div>
+        <div class="err-msg" id="err-prof">Please select your profession.</div>
+      </div>
+      <div class="qblock">
+        <label class="qlabel"><b>Years of experience</b><span class="req-star">*</span></label>
+        <div class="chips" id="c-yrs">
+          <div class="chip" data-v="1-5">1–5 years</div>
+          <div class="chip" data-v="5-10">5–10 years</div>
+          <div class="chip" data-v="10-20">10–20 years</div>
+          <div class="chip" data-v="20+">20+ years</div>
+        </div>
+        <div class="err-msg" id="err-yrs">Please select your years of experience.</div>
+      </div>
+      <div class="q-rule"></div>
+      <button class="btn-next" onclick="go(1)">Continue →</button>
+    </div></div>
+  </div>
+
+  <!-- S2 -->
+  <div class="sec-card" id="s2">
+    <div class="sec-head"><div class="sec-num" id="sn2">2</div><div class="sec-title">Your LinkedIn presence today</div></div>
+    <div class="sec-body"><div class="sec-inner">
+      <div class="qblock">
+        <label class="qlabel"><b>How would you describe your profile right now?</b><span class="req-star">*</span></label>
+        <div class="chips" id="c-profile">
+          <div class="chip" data-v="basic">Photo and title — that's about it</div>
+          <div class="chip" data-v="partial">Some sections filled in</div>
+          <div class="chip" data-v="mostly">Mostly complete</div>
+          <div class="chip" data-v="full">Fully built out</div>
+        </div>
+      </div>
+      <div class="qblock">
+        <label class="qlabel"><b>How often do you post on LinkedIn?</b><span class="req-star">*</span></label>
+        <div class="chips" id="c-freq">
+          <div class="chip" data-v="never">I don't post</div>
+          <div class="chip" data-v="rarely">Once a month or less</div>
+          <div class="chip" data-v="sometimes">A few times a month</div>
+          <div class="chip" data-v="weekly">Weekly</div>
+          <div class="chip" data-v="daily">Daily or near-daily</div>
+        </div>
+      </div>
+      <div class="qblock">
+        <label class="qlabel"><b>Current connections / followers</b><span class="req-star">*</span></label>
+        <div class="chips" id="c-fol">
+          <div class="chip" data-v="<500">Under 500</div>
+          <div class="chip" data-v="500-1k">500–1,000</div>
+          <div class="chip" data-v="1k-3k">1,000–3,000</div>
+          <div class="chip" data-v="3k-10k">3,000–10,000</div>
+          <div class="chip" data-v="10k+">10,000+</div>
+        </div>
+      </div>
+      <div class="qblock">
+        <label class="qlabel"><b>When the right person visits your profile, what should happen?</b><span class="req-star">*</span></label>
+        <div class="chips" id="c-goal">
+          <div class="chip" data-v="book">Book a consultation</div>
+          <div class="chip" data-v="refer">Refer into my practice</div>
+          <div class="chip" data-v="partner">Partner or collaborate</div>
+          <div class="chip" data-v="speak">Invite me to speak</div>
+          <div class="chip" data-v="advisory">Offer an advisory role</div>
+          <div class="chip" data-v="newsletter">Join my newsletter</div>
+        </div>
+      </div>
+      <div class="q-rule"></div>
+      <button class="btn-next" onclick="go(2)">Continue →</button>
+    </div></div>
+  </div>
+
+  <!-- S3 -->
+  <div class="sec-card" id="s3">
+    <div class="sec-head"><div class="sec-num" id="sn3">3</div><div class="sec-title">Audience & reach</div></div>
+    <div class="sec-body"><div class="sec-inner">
+      <div class="qblock">
+        <label class="qlabel"><b>Who do you most want to reach on LinkedIn?</b><small>Select all that apply</small></label>
+        <div class="chips" id="c-aud">
+          <div class="chip" data-v="peers">Fellow clinicians / peers</div>
+          <div class="chip" data-v="patients">Patients / clients directly</div>
+          <div class="chip" data-v="hospitals">Hospital networks</div>
+          <div class="chip" data-v="orgs">Wellness organisations</div>
+          <div class="chip" data-v="media">Journalists / media</div>
+          <div class="chip" data-v="investors">Investors / MedTech</div>
+          <div class="chip" data-v="educators">Academic institutions</div>
+        </div>
+      </div>
+      <div class="qblock">
+        <label class="qlabel"><b>Where are most of your ideal collaborators or clients?</b></label>
+        <div class="chips" id="c-loc">
+          <div class="chip" data-v="local">Local / city</div>
+          <div class="chip" data-v="national">National</div>
+          <div class="chip" data-v="apac">Asia-Pacific</div>
+          <div class="chip" data-v="us">North America</div>
+          <div class="chip" data-v="eu">Europe</div>
+          <div class="chip" data-v="global">Global</div>
+        </div>
+      </div>
+      <div class="qblock">
+        <label class="qlabel"><b>What's the biggest friction point in growing your visibility?</b><span class="req-star">*</span></label>
+        <div class="chips" id="c-barrier">
+          <div class="chip" data-v="time">No time to create content</div>
+          <div class="chip" data-v="ideas">Not sure what to say</div>
+          <div class="chip" data-v="voice">Worried it won't sound like me</div>
+          <div class="chip" data-v="peers">Unsure how peers will perceive it</div>
+          <div class="chip" data-v="results">Not confident in the ROI</div>
+          <div class="chip" data-v="start">Simply haven't started yet</div>
+        </div>
+      </div>
+      <div class="q-rule"></div>
+      <button class="btn-next" onclick="go(3)">Continue →</button>
+    </div></div>
+  </div>
+
+  <!-- S4 -->
+  <div class="sec-card" id="s4">
+    <div class="sec-head"><div class="sec-num" id="sn4">4</div><div class="sec-title">Expertise & existing assets</div></div>
+    <div class="sec-body"><div class="sec-inner">
+      <div class="qblock">
+        <label class="qlabel"><b>What content or platforms do you already have?</b><small>Select all that apply</small></label>
+        <div class="chips" id="c-assets">
+          <div class="chip" data-v="newsletter">Email newsletter</div>
+          <div class="chip" data-v="blog">Blog / published articles</div>
+          <div class="chip" data-v="podcast">Podcast appearances</div>
+          <div class="chip" data-v="talks">Conference / keynote talks</div>
+          <div class="chip" data-v="book">Book, course or programme</div>
+          <div class="chip" data-v="video">Video content / YouTube</div>
+          <div class="chip" data-v="none">None yet</div>
+        </div>
+      </div>
+      <div class="qblock">
+        <label class="qlabel"><b>What do you know — or have built — that very few others in your field have?</b><small>Helps us identify your strongest positioning angles</small></label>
+        <textarea id="q-unique" placeholder="e.g. I've built a structured outcomes framework over 20 years of practice that bridges clinical depth with patient compliance — something most practitioners haven't formalised..."></textarea>
+      </div>
+      <div class="qblock">
+        <label class="qlabel"><b>How clearly can you articulate your unique professional value right now?</b></label>
+        <div class="range-val" id="conf-val">5 <small>/ 10</small></div>
+        <input type="range" id="q-conf" min="1" max="10" value="5" step="1"
+          oninput="document.getElementById('conf-val').innerHTML=this.value+' <small>/ 10</small>'">
+        <div class="range-row"><span>Still finding my words</span><span>Crystal clear</span></div>
+      </div>
+      <div class="q-rule"></div>
+      <button class="btn-next" onclick="go(4)">Continue →</button>
+    </div></div>
+  </div>
+
+  <!-- S5 -->
+  <div class="sec-card" id="s5">
+    <div class="sec-head"><div class="sec-num" id="sn5">5</div><div class="sec-title">Goals & vision</div></div>
+    <div class="sec-body"><div class="sec-inner">
+      <div class="qblock">
+        <label class="qlabel"><b>What would a strong LinkedIn presence open up for you in the next 12 months?</b><small>Select all that apply</small></label>
+        <div class="chips" id="c-outcome">
+          <div class="chip" data-v="referrals">Consistent inbound referrals</div>
+          <div class="chip" data-v="speaking">Speaking invitations</div>
+          <div class="chip" data-v="advisory">Advisory board positions</div>
+          <div class="chip" data-v="media">Media & podcast features</div>
+          <div class="chip" data-v="partnerships">Strategic partnerships</div>
+          <div class="chip" data-v="patients">Direct patient / client growth</div>
+          <div class="chip" data-v="recognition">Peer recognition & standing</div>
+        </div>
+      </div>
+      <div class="qblock">
+        <label class="qlabel"><b>How much of a priority is building your visibility right now?</b></label>
+        <div class="range-val" id="urg-val">5 <small>/ 10</small></div>
+        <input type="range" id="q-urg" min="1" max="10" value="5" step="1"
+          oninput="document.getElementById('urg-val').innerHTML=this.value+' <small>/ 10</small>'">
+        <div class="range-row"><span>On the back burner</span><span>Top of my list</span></div>
+      </div>
+      <div class="qblock">
+        <label class="qlabel"><b>Have you previously invested in personal branding or content?</b><span class="req-star">*</span></label>
+        <div class="chips" id="c-prev">
+          <div class="chip" data-v="no">No — this would be a first</div>
+          <div class="chip" data-v="tried">Tried before, didn't continue</div>
+          <div class="chip" data-v="diy">Managed it myself</div>
+          <div class="chip" data-v="yes">Currently have support</div>
+        </div>
+      </div>
+      <div class="q-rule"></div>
+      <button class="btn-next" onclick="go(5)">Continue →</button>
+    </div></div>
+  </div>
+
+  <!-- S6 -->
+  <div class="sec-card" id="s6">
+    <div class="sec-head"><div class="sec-num" id="sn6">6</div><div class="sec-title">Investment & readiness</div></div>
+    <div class="sec-body"><div class="sec-inner">
+      <div class="qblock">
+        <label class="qlabel"><b>How much time could you give monthly?</b><small>After one onboarding session, the system runs entirely in the background</small></label>
+        <div class="chips" id="c-time">
+          <div class="chip" data-v="30min">30 minutes or less</div>
+          <div class="chip" data-v="1hr">About 1 hour</div>
+          <div class="chip" data-v="2hr">2–3 hours</div>
+          <div class="chip" data-v="flex">Flexible — open to what works</div>
+        </div>
+      </div>
+      <div class="qblock">
+        <label class="qlabel"><b>What monthly investment range feels right for a fully done-for-you authority system?</b><span class="req-star">*</span></label>
+        <div class="budget-grid">
+          <div class="bcard" data-v="<500" onclick="pickB(this)"><span class="ba">Under $500</span><span class="bd">Exploring options</span></div>
+          <div class="bcard" data-v="500-1500" onclick="pickB(this)"><span class="ba">$500 – $1,500</span><span class="bd">Ready to invest modestly</span></div>
+          <div class="bcard" data-v="1500-3000" onclick="pickB(this)"><span class="ba">$1,500 – $3,000</span><span class="bd">Serious about building authority</span></div>
+          <div class="bcard" data-v="3000+" onclick="pickB(this)"><span class="ba">$3,000+</span><span class="bd">Premium — fastest path</span></div>
+        </div>
+      </div>
+      <div class="qblock">
+        <label class="qlabel"><b>Who else is involved in a decision like this?</b></label>
+        <div class="chips" id="c-dec">
+          <div class="chip" data-v="solo">Just me</div>
+          <div class="chip" data-v="partner">Business partner</div>
+          <div class="chip" data-v="team">Practice manager / team</div>
+          <div class="chip" data-v="spouse">Spouse / family</div>
+        </div>
+      </div>
+      <div class="qblock">
+        <label class="qlabel"><b>Anything specific you'd like us to know?</b><small>Optional — context helps tailor your results</small></label>
+        <textarea id="q-notes" placeholder="e.g. I'm launching a new programme in Q3 and want LinkedIn to support the momentum..."></textarea>
+      </div>
+      <div class="q-rule"></div>
+      <button class="btn-next btn-submit" onclick="submitForm()">Generate My Authority Score →</button>
+      <p style="text-align:center;font-size:11px;color:var(--muted);margin-top:10px;">Your responses are private and never shared with third parties.</p>
+    </div></div>
+  </div>
+
+</div><!-- /form-inner -->
+</div><!-- /form-area -->
+
+<!-- ═══════════ ANALYSING ═══════════ -->
+<div id="analysing">
+  <div class="an-inner">
+    <div class="pulse-rings">
+      <div class="pulse-ring-el"></div>
+      <div class="pulse-ring-el"></div>
+      <div class="pulse-ring-el"></div>
+      <div class="pulse-core-btn"><div class="pulse-core-inner"></div></div>
+    </div>
+    <div class="an-title">Building your authority profile...</div>
+    <div class="an-sub">Analysing 5 dimensions of your LinkedIn visibility</div>
+    <div class="an-steps">
+      <div class="an-step" id="as1"><div class="step-dot"></div>Reviewing profile completeness & positioning</div>
+      <div class="an-step" id="as2"><div class="step-dot"></div>Calculating content consistency score</div>
+      <div class="an-step" id="as3"><div class="step-dot"></div>Assessing audience reach & network depth</div>
+      <div class="an-step" id="as4"><div class="step-dot"></div>Mapping visibility gaps & opportunities</div>
+      <div class="an-step" id="as5"><div class="step-dot"></div>Generating your personalised roadmap</div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════ RESULTS ═══════════ -->
+<div id="result-panel">
+<div class="res-inner">
+
+  <div class="res-hero">
+    <div class="res-eyebrow">LinkedIn Authority Assessment · Always-On Authority System™</div>
+    <div class="res-name" id="res-name">Your Visibility Score</div>
+    <div class="res-tagline" id="res-tagline">Personalised analysis based on your responses</div>
+  </div>
+
+  <!-- Score cards -->
+  <div class="score-grid" id="score-grid"></div>
+
+  <!-- Insights -->
+  <div class="insights-grid" id="insights-grid"></div>
+
+  <!-- Opportunity bars -->
+  <div class="opp-section">
+    <div class="opp-section-title">Your biggest visibility levers — ranked by impact</div>
+    <div class="opp-list-el" id="opp-bars"></div>
+  </div>
+
+  <!-- ROI strip -->
+  <div class="roi-strip" id="roi-strip"></div>
+
+  <!-- Visibility chart -->
+  <div class="chart-section">
+    <div class="chart-title">Two futures. Your choice.</div>
+    <div class="chart-sub">LinkedIn visibility compounds. Here's what 12 months looks like — with vs. without a consistent authority system.</div>
+    <canvas id="visCanvas" height="280" style="width:100%;border-radius:10px;"></canvas>
+    <div class="chart-legend">
+      <div class="leg-item"><div class="leg-line" style="background:var(--teal);"></div>With Authority System</div>
+      <div class="leg-item"><div class="leg-line" style="background:rgba(255,255,255,0.2);border-top:2px dashed rgba(255,255,255,0.2);height:0;"></div>Current trajectory</div>
+    </div>
+  </div>
+
+  <!-- Booking -->
+  <div class="booking-section">
+    <div class="booking-grid">
+      <div>
+        <div class="section-label" style="color:var(--gold);">Ready to turn this into a system?</div>
+        <div class="section-title" style="font-size:clamp(22px,3vw,32px);">Let's build a LinkedIn presence that works as hard as you do.</div>
+        <ul class="booking-why-list">
+          <li><span class="bw-icon">🎯</span><div><b style="color:#fff;display:block;font-size:12px;font-weight:600;margin-bottom:2px;">Personalised 90-Day Roadmap</b>A custom content and positioning plan built around your specific field, goals, and audit findings.</div></li>
+          <li><span class="bw-icon">🔬</span><div><b style="color:#fff;display:block;font-size:12px;font-weight:600;margin-bottom:2px;">Live Profile Deep-Dive</b>We'll walk through your profile together and show you exactly what to fix, in what order, and why.</div></li>
+          <li><span class="bw-icon">⚡</span><div><b style="color:#fff;display:block;font-size:12px;font-weight:600;margin-bottom:2px;">Zero Ongoing Time From You</b>One onboarding session. After that, the system runs in the background — content out, authority building, daily.</div></li>
+          <li><span class="bw-icon">🤝</span><div><b style="color:#fff;display:block;font-size:12px;font-weight:600;margin-bottom:2px;">No Pressure — Pure Clarity</b>20 minutes. Whether we work together or not, you walk away with a clear picture of what's possible.</div></li>
+        </ul>
+        <a href="https://www.linkedin.com/in/kketanrv/" target="_blank" class="ketan-card">
+          <div class="ketan-av">K</div>
+          <div>
+            <div class="ketan-name">Ketan Vaghela</div>
+            <div class="ketan-role">LinkedIn Authority Strategist · Viedge Box</div>
+          </div>
+        </a>
+      </div>
+
+      <div>
+        <div class="cal-box">
+          <div class="cal-head">
+            <span style="font-size:20px;">📅</span>
+            <div>
+              <div class="cal-title-text">Free 20-Min LinkedIn Strategy Call</div>
+              <div class="cal-sub-text">with Ketan Vaghela · Authority System Specialist</div>
+            </div>
+          </div>
+          <div class="cal-details">
+            <div class="cal-row">⏱ <span>Duration:</span> 20 minutes, video call</div>
+            <div class="cal-row">🎁 <span>Cost:</span> Completely free — no obligation</div>
+            <div class="cal-row">📍 <span>Format:</span> Google Meet / Zoom</div>
+            <div class="cal-row">✅ <span>You'll get:</span> Custom roadmap + live profile review</div>
+          </div>
+          <div class="cal-slots">
+            <div class="slot">Mon – Fri</div>
+            <div class="slot">Morning & Afternoon</div>
+            <div class="slot">Flexible Timezones</div>
+          </div>
+          <div class="cal-btn-wrap">
+            <button class="btn-cal" onclick="openCal()">📅 Book Your Free Strategy Call</button>
+            <a class="btn-wa" id="wa-link" href="#" onclick="openWA(event)">
+              <svg class="wa-svg" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/></svg>
+              Continue on WhatsApp
+            </a>
+            <div class="cal-note">No credit card. No commitment.<br/><strong>Just a real conversation about what's possible.</strong></div>
+          </div>
+        </div>
+
+        <div style="margin-top:16px;background:rgba(240,165,0,0.05);border:1px solid rgba(240,165,0,0.18);border-radius:14px;padding:18px 20px;">
+          <div style="font-size:12px;color:var(--gold);font-weight:700;margin-bottom:6px;">⚡ Why now?</div>
+          <div style="font-size:12px;color:var(--muted);line-height:1.65;" id="urgency-note">Every week without a consistent presence, the right people are finding someone else. The best time to start was a year ago. The second best time is today.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div><!-- /res-inner -->
+</div><!-- /result-panel -->
+
+<script>
+/* ══════════════════════════════════════
+   CONFIG
+══════════════════════════════════════*/
+const CAL  = 'https://calendly.com/ketanvaghela/ai-avatar-demo';
+const WA   = '919081581581';
+const HOOK = 'https://script.google.com/macros/s/AKfycbyy7AyJaEsh07PLk1nDJtMQ7dVHNPWVZtAScamOk0AzcPAKDjy5M6pRp3dQEoCK-lrr/exec';
+
+/* ── EMAILJS CONFIG ─────────────────────────────────────────
+   emailjs.com → New Service (Zoho) → New Template → paste IDs
+   Template variables: {{to_email}} {{first_name}} {{total_score}}
+   {{score_tier}} {{diagnosis}} {{pain_statement}} {{call_reason}}
+   {{top_gap}} {{top_opportunity}} {{cal_link}}
+──────────────────────────────────────────────────────────── */
+const EMAILJS_PUBLIC_KEY  = 'YOUR_EMAILJS_PUBLIC_KEY';
+const EMAILJS_SERVICE_ID  = 'YOUR_EMAILJS_SERVICE_ID';
+const EMAILJS_TEMPLATE_ID = 'YOUR_EMAILJS_TEMPLATE_ID';
+
+/* ══════════════════════════════════════
+   HERO CANVAS — biophoton particle network
+══════════════════════════════════════*/
+(function(){
+  const cv = document.getElementById('bgCanvas');
+  const cx = cv.getContext('2d');
+  let W,H,particles=[],scanAngle=0;
+
+  function resize(){W=cv.width=cv.offsetWidth;H=cv.height=cv.offsetHeight;}
+  resize();window.addEventListener('resize',resize);
+
+  class P{
+    constructor(){this.reset();}
+    reset(){
+      this.x=Math.random()*W; this.y=Math.random()*H;
+      this.r=Math.random()*2+.5;
+      this.vx=(Math.random()-.5)*.35; this.vy=(Math.random()-.5)*.35;
+      this.alpha=Math.random()*.5+.1;
+      this.color=Math.random()>.6?'#00d4c8':Math.random()>.5?'#f0a500':'#00e676';
+      this.pulse=Math.random()*Math.PI*2;
+    }
+    update(){this.x+=this.vx;this.y+=this.vy;this.pulse+=.04;if(this.x<0||this.x>W||this.y<0||this.y>H)this.reset();}
+    draw(){
+      cx.save();cx.globalAlpha=this.alpha*(.7+.3*Math.sin(this.pulse));
+      cx.beginPath();cx.arc(this.x,this.y,this.r,0,Math.PI*2);
+      cx.fillStyle=this.color;cx.shadowBlur=8;cx.shadowColor=this.color;cx.fill();cx.restore();
+    }
+  }
+
+  for(let i=0;i<120;i++)particles.push(new P());
+
+  function drawConnections(){
+    for(let i=0;i<particles.length;i++){
+      for(let j=i+1;j<particles.length;j++){
+        const dx=particles[i].x-particles[j].x,dy=particles[i].y-particles[j].y,d=Math.sqrt(dx*dx+dy*dy);
+        if(d<90){
+          cx.save();cx.globalAlpha=(1-d/90)*.1;cx.strokeStyle='#00d4c8';cx.lineWidth=.5;
+          cx.beginPath();cx.moveTo(particles[i].x,particles[i].y);cx.lineTo(particles[j].x,particles[j].y);cx.stroke();cx.restore();
+        }
+      }
+    }
+  }
+
+  function drawScanner(){
+    const ox=W/2,oy=H/2,R=Math.min(W,H)*.32;
+    cx.save();
+    [1,.6,.35].forEach((f,i)=>{
+      cx.beginPath();cx.arc(ox,oy,R*f,0,Math.PI*2);
+      cx.strokeStyle=`rgba(0,212,200,${0.06-i*0.015})`;cx.lineWidth=1;cx.stroke();
+    });
+    cx.translate(ox,oy);cx.rotate(scanAngle);
+    const sweep=cx.createLinearGradient(0,0,R,0);
+    sweep.addColorStop(0,'rgba(0,212,200,0.28)');sweep.addColorStop(1,'rgba(0,212,200,0)');
+    cx.beginPath();cx.moveTo(0,0);cx.arc(0,0,R,-.35,.35);cx.closePath();
+    cx.fillStyle=sweep;cx.fill();
+    cx.beginPath();cx.arc(R,0,4,0,Math.PI*2);
+    cx.fillStyle='#00f5ea';cx.shadowBlur=16;cx.shadowColor='#00d4c8';cx.fill();
+    cx.restore();
+  }
+
+  function tick(){
+    cx.clearRect(0,0,W,H);
+    const bg=cx.createRadialGradient(W/2,H/2,0,W/2,H/2,Math.max(W,H)*.7);
+    bg.addColorStop(0,'rgba(10,22,40,0.5)');bg.addColorStop(1,'rgba(5,13,31,0.95)');
+    cx.fillStyle=bg;cx.fillRect(0,0,W,H);
+    drawConnections();particles.forEach(p=>{p.update();p.draw();});
+    drawScanner();scanAngle+=.008;requestAnimationFrame(tick);
+  }
+  tick();
+})();
+
+/* ══════════════════════════════════════
+   STATE
+══════════════════════════════════════*/
+const D={};
+const MULTI=['c-aud','c-assets','c-outcome'];
+
+document.querySelectorAll('.chips').forEach(g=>{
+  const m=MULTI.includes(g.id);
+  g.querySelectorAll('.chip').forEach(c=>{
+    c.addEventListener('click',()=>{
+      if(!m)g.querySelectorAll('.chip').forEach(x=>x.classList.remove('on'));
+      c.classList.toggle('on');
+    });
+  });
+});
+
+function getV(id){
+  const sel=[...document.querySelectorAll(`#${id} .chip.on`)].map(c=>c.dataset.v);
+  return sel.length===1?sel[0]:sel;
+}
+function pickB(el){document.querySelectorAll('.bcard').forEach(c=>c.classList.remove('on'));el.classList.add('on');}
+
+/* ══════════════════════════════════════
+   START
+══════════════════════════════════════*/
+function startAudit(){
+  document.getElementById('hero').style.display='none';
+  document.getElementById('form-area').style.display='block';
+  document.getElementById('prog-wrap').style.display='block';
+  activate(1);setProgress(1);
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+/* ══════════════════════════════════════
+   PROGRESS
+══════════════════════════════════════*/
+function setProgress(n){
+  const pct=Math.round(((n-1)/6)*100);
+  document.getElementById('prog-fill').style.width=pct+'%';
+  document.getElementById('prog-label').textContent=`Section ${n} of 6`;
+  document.getElementById('prog-pct').textContent=pct+'% complete';
+}
+
+/* ══════════════════════════════════════
+   ACTIVATE SECTION
+══════════════════════════════════════*/
+function activate(n){
+  for(let i=1;i<=6;i++){
+    const c=document.getElementById('s'+i),b=document.getElementById('sn'+i);
+    c.classList.remove('is-active','is-done');
+    if(i<n){c.classList.add('is-done');b.textContent='✓';}
+    else if(i===n)c.classList.add('is-active');
+  }
+}
+
+/* ══════════════════════════════════════
+   COLLECT
+══════════════════════════════════════*/
+function collect(n){
+  if(n===1){D.name=document.getElementById('q-name').value.trim();D.email=document.getElementById('q-email').value.trim();D.linkedin=document.getElementById('q-li').value.trim();D.profession=getV('c-prof');D.years=getV('c-yrs');}
+  else if(n===2){D.profile=getV('c-profile');D.freq=getV('c-freq');D.followers=getV('c-fol');D.goal=getV('c-goal');}
+  else if(n===3){D.audience=getV('c-aud');D.location=getV('c-loc');D.barrier=getV('c-barrier');}
+  else if(n===4){D.assets=getV('c-assets');D.unique=document.getElementById('q-unique').value.trim();D.confidence=+document.getElementById('q-conf').value;}
+  else if(n===5){D.outcome=getV('c-outcome');D.urgency=+document.getElementById('q-urg').value;D.prev=getV('c-prev');}
+  else if(n===6){D.time=getV('c-time');const b=document.querySelector('.bcard.on');D.budget=b?b.dataset.v:'';D.decision=getV('c-dec');D.notes=document.getElementById('q-notes').value.trim();}
+}
+
+/* ── VALIDATION HELPERS ── */
+function clearErrs(){document.querySelectorAll('.field-err').forEach(el=>el.classList.remove('field-err'));}
+function markErr(id){const el=document.getElementById(id);if(el)el.closest('.qblock').classList.add('field-err');return false;}
+function chipVal(id){return document.querySelectorAll('#'+id+' .chip.on').length>0;}
+
+function validate(n){
+  clearErrs();
+  let ok=true;
+  if(n===1){
+    const name=document.getElementById('q-name').value.trim();
+    const email=document.getElementById('q-email').value.trim();
+    const emailOk=/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+    if(!name){markErr('q-name');ok=false;}
+    if(!emailOk){markErr('q-email');ok=false;}
+    if(!chipVal('c-prof')){
+      const el=document.getElementById('c-prof');
+      el.closest('.qblock').classList.add('field-err');ok=false;
+    }
+    if(!chipVal('c-yrs')){
+      const el=document.getElementById('c-yrs');
+      el.closest('.qblock').classList.add('field-err');ok=false;
+    }
+  }
+  else if(n===2){
+    ['c-profile','c-freq','c-fol','c-goal'].forEach(id=>{
+      if(!chipVal(id)){document.getElementById(id).closest('.qblock').classList.add('field-err');ok=false;}
+    });
+  }
+  else if(n===3){
+    if(!chipVal('c-barrier')){document.getElementById('c-barrier').closest('.qblock').classList.add('field-err');ok=false;}
+  }
+  else if(n===5){
+    if(!chipVal('c-prev')){document.getElementById('c-prev').closest('.qblock').classList.add('field-err');ok=false;}
+  }
+  else if(n===6){
+    if(!document.querySelector('.bcard.on')){
+      document.querySelector('.budget-grid').closest('.qblock').classList.add('field-err');ok=false;
+    }
+  }
+  if(!ok){
+    const firstErr=document.querySelector('.field-err');
+    if(firstErr)firstErr.scrollIntoView({behavior:'smooth',block:'center'});
+  }
+  return ok;
+}
+
+function go(n){
+  if(!validate(n))return;
+  collect(n);
+  if(n<6){activate(n+1);setProgress(n+1);setTimeout(()=>document.getElementById('s'+(n+1)).scrollIntoView({behavior:'smooth',block:'start'}),60);}
+}
+
+/* ══════════════════════════════════════
+   SUBMIT
+══════════════════════════════════════*/
+function submitForm(){
+  if(!validate(6))return;
+  collect(6);
+  document.getElementById('form-area').style.display='none';
+  document.getElementById('prog-wrap').style.display='none';
+  const an=document.getElementById('analysing');
+  an.style.display='block';
+  window.scrollTo({top:0,behavior:'smooth'});
+  sendLead();
+  [1,2,3,4,5].forEach((i,idx)=>setTimeout(()=>document.getElementById('as'+i).classList.add('show'),400+idx*500));
+  setTimeout(()=>{an.style.display='none';renderResults();},3600);
+}
+
+/* ══════════════════════════════════════
+   PIPELINE → GOOGLE SHEETS
+══════════════════════════════════════*/
+function sendLead(){
+  if(!HOOK)return;
+  fetch(HOOK,{method:'POST',mode:'no-cors',headers:{'Content-Type':'application/json'},
+    body:JSON.stringify({ts:new Date().toISOString(),...D,
+      audience:Array.isArray(D.audience)?D.audience.join(', '):D.audience,
+      assets:Array.isArray(D.assets)?D.assets.join(', '):D.assets,
+      outcome:Array.isArray(D.outcome)?D.outcome.join(', '):D.outcome
+    })
+  }).catch(()=>{});
+}
+
+/* ══════════════════════════════════════
+   CONVERSION EMAIL — Score + Diagnosis + Pain + CTA
+══════════════════════════════════════*/
+function sendConversionEmail(sc){
+  if(!EMAILJS_PUBLIC_KEY||EMAILJS_PUBLIC_KEY.includes('YOUR'))return;
+  const first=D.name?D.name.split(' ')[0]:'there';
+
+  let diagnosis,pain,callReason;
+  if(sc.total<35){
+    diagnosis='Your LinkedIn profile is essentially invisible right now. With a score of '+sc.total+'/100, the right clients, collaborators, and opportunities are landing on your profile and leaving — because there is nothing compelling enough to make them stay or act.';
+    pain='Every week you are not visible, someone with half your expertise is getting the call, the referral, the speaking invitation. Not because they are better. Because they showed up consistently and you did not.';
+    callReason='In 20 minutes I will show you exactly what is holding your profile back and map a 90-day authority roadmap built specifically for your field and goals.';
+  } else if(sc.total<60){
+    diagnosis='You have the foundation but not the system. Your score of '+sc.total+'/100 shows real expertise — but it is not yet translating into consistent visibility or inbound opportunities.';
+    pain='You are producing value every single day in your work. But your LinkedIn presence is not reflecting it. People who should be finding you are finding someone else — someone who posts consistently, even if they know far less than you do.';
+    callReason='In 20 minutes I will show you the exact 3 gaps costing you inbound opportunities and how a done-for-you system closes them — without taking your time.';
+  } else {
+    diagnosis='You have a strong foundation at '+sc.total+'/100 — but you are not fully leveraging it yet. The gap between your real authority and your perceived authority online is still significant and costing you.';
+    pain='You have built something real. But strong profiles without consistent content do not compound. Competitors posting 3 times a week — even with less experience — are being seen as the go-to expert in your space right now.';
+    callReason='In 20 minutes I will show you exactly how to convert your existing credibility into compounding daily visibility — without writing or recording anything yourself.';
+  }
+
+  let topGap='Your LinkedIn profile is not converting visitors the way your expertise deserves.';
+  if(sc.content<40)topGap='No consistent content means the algorithm is actively deprioritising your profile every single day.';
+  else if(sc.audience<40)topGap='Your current network limits how far your expertise and ideas can travel.';
+  else if(sc.positioning<55)topGap='There is a gap between what you know and how clearly it is communicated when the right person looks you up.';
+
+  let topOpp='A done-for-you authority system can transform your visibility within 90 days — without your ongoing time.';
+  if(D.barrier==='time')topOpp='Time is the real constraint — not your credibility or ideas. One onboarding session. Then the system runs entirely in the background.';
+  if(D.years==='20+'||D.years==='10-20')topOpp='With '+D.years+' of experience, you carry more authority content than almost anyone in your space. It just has not been extracted and published yet.';
+
+  const tierLabel=sc.total<35?'High Growth Potential':sc.total<60?'Building Momentum':'Strong Foundation';
+
+  emailjs.init({publicKey:EMAILJS_PUBLIC_KEY});
+  emailjs.send(EMAILJS_SERVICE_ID,EMAILJS_TEMPLATE_ID,{
+    to_email:         D.email,
+    first_name:       first,
+    total_score:      sc.total,
+    score_tier:       tierLabel,
+    profile_score:    sc.profile,
+    content_score:    sc.content,
+    audience_score:   sc.audience,
+    positioning_score:sc.positioning,
+    diagnosis:        diagnosis,
+    pain_statement:   pain,
+    top_gap:          topGap,
+    top_opportunity:  topOpp,
+    call_reason:      callReason,
+    cal_link:         CAL,
+    profession:       D.profession||'',
+  }).catch(()=>{});
+}
+
+/* ══════════════════════════════════════
+   SCORING ENGINE
+══════════════════════════════════════*/
+function calcScore(){
+  const pm={basic:15,partial:40,mostly:65,full:88};
+  const fm={never:5,rarely:22,sometimes:46,weekly:70,daily:94};
+  const fl={'<500':12,'500-1k':34,'1k-3k':55,'3k-10k':74,'10k+':94};
+  let profile=pm[D.profile]||20;
+  let content=fm[D.freq]||10;
+  let audience=fl[D.followers]||12;
+  let positioning=Math.round((D.confidence/10)*80);
+  let momentum=Math.round((D.urgency/10)*70);
+  const hasA=D.assets&&!(Array.isArray(D.assets)?D.assets.includes('none'):D.assets==='none')&&(Array.isArray(D.assets)?D.assets.length:1);
+  if(hasA)content=Math.min(100,content+18);
+  if(D.unique&&D.unique.length>40)positioning=Math.min(100,positioning+15);
+  if(D.prev==='yes')momentum=Math.min(100,momentum+20);
+  const total=Math.round(profile*.20+content*.25+audience*.20+positioning*.25+momentum*.10);
+  return{total,profile,content,audience,positioning,momentum};
+}
+
+/* ══════════════════════════════════════
+   RING DRAWING (same as Lori audit)
+══════════════════════════════════════*/
+function drawRing(canvas,pct,color){
+  const ctx=canvas.getContext('2d'),sz=100,r=40;
+  const start=-Math.PI/2,end=start+(pct/100)*Math.PI*2;
+  ctx.clearRect(0,0,sz,sz);
+  ctx.beginPath();ctx.arc(sz/2,sz/2,r,0,Math.PI*2);
+  ctx.strokeStyle='rgba(255,255,255,0.06)';ctx.lineWidth=8;ctx.stroke();
+  ctx.beginPath();ctx.arc(sz/2,sz/2,r,start,end);
+  ctx.strokeStyle=color;ctx.lineWidth=8;ctx.lineCap='round';
+  ctx.shadowBlur=12;ctx.shadowColor=color;ctx.stroke();
+}
+
+function animateRing(canvas,target,color){
+  let cur=0,step=target/60;
+  const t=setInterval(()=>{cur=Math.min(cur+step,target);drawRing(canvas,cur,color);if(cur>=target)clearInterval(t);},16);
+}
+
+function animateCounter(el,target){
+  let cur=0,step=Math.max(1,target/60);
+  const t=setInterval(()=>{cur=Math.min(cur+step,target);el.textContent=Math.round(cur);if(cur>=target)clearInterval(t);},16);
+}
+
+/* ══════════════════════════════════════
+   RENDER RESULTS
+══════════════════════════════════════*/
+function renderResults(){
+  const sc=calcScore();
+  const first=D.name?D.name.split(' ')[0]:'you';
+  if(D.email)sendConversionEmail(sc);
+
+  document.getElementById('res-name').textContent=`${first}'s LinkedIn Visibility Score`;
+  document.getElementById('res-tagline').textContent=`Personalised authority assessment · ${new Date().toLocaleDateString('en-US',{month:'long',year:'numeric'})}`;
+
+  /* Score tier */
+  let tier,tcolor;
+  if(sc.total<35){tier='High Growth Potential';tcolor='var(--red)';}
+  else if(sc.total<60){tier='Building Momentum';tcolor='var(--gold)';}
+  else{tier='Strong Foundation';tcolor='var(--green)';}
+
+  /* Build score cards */
+  const cards=[
+    {label:'Profile Completeness',val:sc.profile,color:'#00d4c8',status:sc.profile<50?'Critical Gap':sc.profile<70?'Needs Attention':'Strong Foundation',cls:sc.profile<50?'s-low':sc.profile<70?'s-mid':'s-good',desc:sc.profile<60?'Headline, About, and Featured sections are underbuilt — visitors leave without connecting.':'Profile has a solid foundation with room to sharpen positioning.'},
+    {label:'Content Visibility',val:sc.content,color:sc.content<40?'#ff4757':'#f0a500',status:sc.content<30?'Critical Gap':sc.content<60?'Needs Attention':'Good Cadence',cls:sc.content<30?'s-low':sc.content<60?'s-mid':'s-good',desc:sc.content<40?'No consistent content means the algorithm actively deprioritizes your profile.':'Some content presence — consistency and depth will compound results significantly.'},
+    {label:'Audience Reach',val:sc.audience,color:sc.audience<40?'#ff4757':'#a855f7',status:sc.audience<35?'Near Zero':sc.audience<60?'Growing':'Established',cls:sc.audience<35?'s-low':sc.audience<60?'s-mid':'s-good',desc:sc.audience<40?'Your reach limits how far your ideas travel. The right people simply haven\'t found you yet.':'Reasonable reach — the next step is expanding into the right professional circles.'},
+    {label:'Value Positioning',val:sc.positioning,color:'#00e676',status:sc.positioning<45?'Unclear':sc.positioning<70?'Partially Defined':'Well Defined',cls:sc.positioning<45?'s-low':sc.positioning<70?'s-mid':'s-good',desc:sc.positioning<55?'The gap between what you know and how clearly it\'s communicated is costing you inbound interest.':'Your positioning is forming — sharper articulation will convert more profile visitors.'},
+    {label:'Growth Momentum',val:sc.momentum,color:sc.momentum<40?'#ff6b9d':'#ffc43a',status:sc.momentum<40?'Low Priority':sc.momentum<65?'Emerging':'High Priority',cls:sc.momentum<40?'s-low':sc.momentum<65?'s-mid':'s-good',desc:sc.momentum<50?'Growth isn\'t a top priority right now — or the path to it isn\'t clear.':'There\'s genuine drive here — channel it into a consistent system for compounding results.'},
+  ];
+
+  const sg=document.getElementById('score-grid');sg.innerHTML='';
+  cards.forEach(card=>{
+    const div=document.createElement('div');div.className='score-card';
+    div.innerHTML=`<div class="ring-wrap"><canvas class="rc" width="100" height="100"></canvas><div class="ring-center"><span class="ring-num rn" data-t="${card.val}">0</span><span class="ring-unit">/ 100</span></div></div><div class="card-name">${card.label}</div><div class="card-status ${card.cls}">${card.status}</div><div class="card-desc">${card.desc}</div>`;
+    sg.appendChild(div);
+    setTimeout(()=>{animateRing(div.querySelector('.rc'),card.val,card.color);animateCounter(div.querySelector('.rn'),card.val);},400);
+  });
+
+  /* Insights */
+  const gaps=[],opps=[];
+  if(sc.profile<60)gaps.push('Your profile isn\'t converting visitors. Within seconds, the right person needs to see who you are, what you\'ve built, and why they should engage — and right now, that story isn\'t landing.');
+  if(sc.content<40)gaps.push('Without consistent content, your expertise stays within the walls of your practice. The clinicians, organisations, and collaborators who would benefit most from your work simply haven\'t found you yet.');
+  if(sc.audience<40)gaps.push('Your current network limits how far your ideas travel. Authority compounds through reach — and right now, the surface area for your voice is still too small.');
+  if(sc.positioning<55)gaps.push('There\'s a gap between the depth of what you know and how clearly it\'s articulated on LinkedIn. That gap quietly costs you inbound interest every week.');
+  if(!gaps.length)gaps.push('Your foundation is stronger than most. The real opportunity now is closing the gap between what you\'ve built in practice and what the right people see when they look you up.');
+
+  const hasNewsletter=D.assets&&(Array.isArray(D.assets)?D.assets.includes('newsletter'):D.assets==='newsletter');
+  if(hasNewsletter)opps.push('You already have a newsletter — repurposing key insights to LinkedIn would compound your reach substantially without adding to your workload.');
+  if(D.years==='20+'||D.years==='10-20')opps.push(`With ${D.years} of field experience, you carry a depth most LinkedIn voices simply can\'t match. That lived expertise is your most powerful positioning asset.`);
+  if(D.barrier==='time')opps.push('Time is the real constraint — not credibility or ideas. A done-for-you system extracts your voice in a single session, then runs entirely in the background.');
+  if(D.barrier==='peers')opps.push('The peer-perception concern is common among senior professionals. The key is content positioned at peer level — clinical frameworks and field perspectives, not patient-facing education.');
+  const wantSpeak=D.outcome&&(Array.isArray(D.outcome)?D.outcome.includes('speaking'):D.outcome==='speaking');
+  if(wantSpeak)opps.push('Speaking invitations follow visibility. Consistent peer-level thought leadership posts are the fastest path to the conference stage — not cold outreach.');
+  if(!opps.length)opps.push('Your background gives you multiple strong content angles that practitioners in your space haven\'t tapped. The infrastructure to make them visible is the missing piece.');
+
+  const ig=document.getElementById('insights-grid');ig.innerHTML='';
+  const gDiv=document.createElement('div');gDiv.className='ins-panel gap';
+  gDiv.innerHTML=`<div class="ins-head"><div class="ins-icon">▲</div><div class="ins-panel-title">Visibility gaps</div></div><div class="ins-list">${gaps.slice(0,2).map(g=>`<div class="ins-item"><div class="idot"></div><div class="itext">${g}</div></div>`).join('')}</div>`;
+  const oDiv=document.createElement('div');oDiv.className='ins-panel opp';
+  oDiv.innerHTML=`<div class="ins-head"><div class="ins-icon">◆</div><div class="ins-panel-title">Opportunities</div></div><div class="ins-list">${opps.slice(0,2).map(o=>`<div class="ins-item"><div class="idot"></div><div class="itext">${o}</div></div>`).join('')}</div>`;
+  ig.appendChild(gDiv);ig.appendChild(oDiv);
+
+  /* Opportunity bars */
+  const oppData=[
+    {name:'Thought Leadership Content (Consistent Posts)',val:D.freq==='never'?92:D.freq==='rarely'?85:60,color:'linear-gradient(to right,var(--teal),#00a8ff)',label:'+340% reach potential'},
+    {name:'Profile Headline & About Section Rewrite',val:sc.profile<60?88:65,color:'linear-gradient(to right,#00a8ff,#a855f7)',label:'+180% search appearances'},
+    {name:'Featured Section (Proof, Results, Media)',val:75,color:'linear-gradient(to right,var(--gold),var(--pink))',label:'+95% profile conversion'},
+    {name:'Strategic Network Expansion (Peer-Level)',val:70,color:'linear-gradient(to right,var(--green),var(--teal))',label:'+200% inbound per quarter'},
+    {name:'Content Repurposing from Existing Assets',val:hasNewsletter?82:55,color:'linear-gradient(to right,var(--pink),var(--gold))',label:'+500% follower growth rate'},
+  ];
+
+  const ob=document.getElementById('opp-bars');ob.innerHTML='';
+  oppData.forEach(o=>{
+    const d=document.createElement('div');
+    d.innerHTML=`<div class="opp-row-head"><span class="opp-name">${o.name}</span><span class="opp-val">${o.label}</span></div><div class="bar-track"><div class="bar-fill" data-w="${o.val}" style="background:${o.color};"></div></div>`;
+    ob.appendChild(d);
+  });
+
+  /* ROI strip */
+  const roiData=[
+    {num:'12×',label:'Profile views increase within 90 days of optimization',color:'var(--teal)'},
+    {num:'47%',label:'Of decision-makers check LinkedIn before a first meeting',color:'var(--gold)'},
+    {num:'5×',label:'More inbound opportunities from an optimised profile',color:'var(--green)'},
+    {num:'23k+',label:'Est. monthly impressions with active content strategy',color:'var(--pink)'},
+  ];
+  const rs=document.getElementById('roi-strip');rs.innerHTML='';
+  roiData.forEach(r=>{const d=document.createElement('div');d.className='roi-card';d.innerHTML=`<div class="roi-num" style="color:${r.color};">${r.num}</div><div class="roi-label">${r.label}</div>`;rs.appendChild(d);});
+
+  /* WhatsApp */
+  const msg=encodeURIComponent(`Hi Ketan, I just completed the LinkedIn Visibility Assessment and received a score of ${sc.total}/100. I'd love to discuss what this means and the next steps.`);
+  document.getElementById('wa-link').href=`https://wa.me/${WA}?text=${msg}`;
+
+  /* Budget-aware CTA */
+  const highBudget=D.budget==='1500-3000'||D.budget==='3000+';
+  if(highBudget)document.getElementById('urgency-note').textContent=`${first}, with the investment range you have in mind and the depth you've built, a full done-for-you authority system is the natural next move. Let's map exactly what that looks like for you in 20 minutes.`;
+
+  /* Show result */
+  const panel=document.getElementById('result-panel');
+  panel.style.display='block';
+  window.scrollTo({top:0,behavior:'smooth'});
+
+  /* Trigger bar fills after paint */
+  setTimeout(()=>document.querySelectorAll('.bar-fill').forEach(b=>b.style.width=b.dataset.w+'%'),600);
+
+  /* Visibility chart */
+  setTimeout(drawVisChart,800);
+}
+
+/* ══════════════════════════════════════
+   VISIBILITY CHART (same as Lori audit)
+══════════════════════════════════════*/
+function drawVisChart(){
+  const canvas=document.getElementById('visCanvas');if(!canvas)return;
+  const ctx=canvas.getContext('2d');
+  const labels=['Now','Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+  const current=[100,108,114,119,123,126,129,131,133,135,137,139,141];
+  const optimized=[100,132,188,265,355,465,585,715,865,1025,1185,1345,1485];
+  let progress=0;
+
+  function draw(prog){
+    const W=canvas.offsetWidth,H=280;canvas.width=W;canvas.height=H;
+    const pad={top:28,right:36,bottom:44,left:54};
+    const cW=W-pad.left-pad.right,cH=H-pad.top-pad.bottom;
+    ctx.clearRect(0,0,W,H);
+    const maxVal=1600,xStep=cW/(labels.length-1);
+    for(let i=0;i<=4;i++){
+      const y=pad.top+cH-(i/4)*cH;
+      ctx.strokeStyle='rgba(255,255,255,0.04)';ctx.lineWidth=1;ctx.setLineDash([4,6]);
+      ctx.beginPath();ctx.moveTo(pad.left,y);ctx.lineTo(pad.left+cW,y);ctx.stroke();ctx.setLineDash([]);
+      ctx.fillStyle='rgba(122,155,181,0.6)';ctx.font='10px Inter';ctx.textAlign='right';
+      ctx.fillText(Math.round(maxVal*i/4/100)*100,pad.left-8,y+4);
+    }
+    labels.forEach((l,i)=>{
+      const x=pad.left+i*xStep;
+      ctx.fillStyle='rgba(122,155,181,0.7)';ctx.font='10px Inter';ctx.textAlign='center';ctx.fillText(l,x,H-12);
+    });
+    const totalPts=Math.floor(prog*(labels.length-1));
+    ctx.beginPath();ctx.setLineDash([5,7]);ctx.strokeStyle='rgba(255,255,255,0.18)';ctx.lineWidth=2;
+    for(let i=0;i<=totalPts;i++){const x=pad.left+i*xStep,y=pad.top+cH-(current[i]/maxVal)*cH;i===0?ctx.moveTo(x,y):ctx.lineTo(x,y);}
+    ctx.stroke();ctx.setLineDash([]);
+    if(totalPts>0){
+      const grad=ctx.createLinearGradient(pad.left,0,pad.left+cW,0);
+      grad.addColorStop(0,'#00d4c8');grad.addColorStop(.5,'#00a8ff');grad.addColorStop(1,'#a855f7');
+      ctx.save();ctx.shadowBlur=14;ctx.shadowColor='#00d4c8';
+      ctx.strokeStyle=grad;ctx.lineWidth=2.5;ctx.lineJoin='round';ctx.beginPath();
+      for(let i=0;i<=totalPts;i++){const x=pad.left+i*xStep,y=pad.top+cH-(optimized[i]/maxVal)*cH;i===0?ctx.moveTo(x,y):ctx.lineTo(x,y);}
+      ctx.stroke();ctx.restore();
+      ctx.save();ctx.beginPath();
+      for(let i=0;i<=totalPts;i++){const x=pad.left+i*xStep,y=pad.top+cH-(optimized[i]/maxVal)*cH;i===0?ctx.moveTo(x,y):ctx.lineTo(x,y);}
+      ctx.lineTo(pad.left+totalPts*xStep,pad.top+cH);ctx.lineTo(pad.left,pad.top+cH);ctx.closePath();
+      const fill=ctx.createLinearGradient(0,pad.top,0,pad.top+cH);
+      fill.addColorStop(0,'rgba(0,212,200,0.15)');fill.addColorStop(1,'rgba(0,212,200,0)');
+      ctx.fillStyle=fill;ctx.fill();ctx.restore();
+      const lx=pad.left+totalPts*xStep,ly=pad.top+cH-(optimized[totalPts]/maxVal)*cH;
+      ctx.beginPath();ctx.arc(lx,ly,5,0,Math.PI*2);
+      ctx.fillStyle='#00d4c8';ctx.shadowBlur=14;ctx.shadowColor='#00d4c8';ctx.fill();
+    }
+  }
+
+  let start=null;
+  function anim(ts){if(!start)start=ts;progress=Math.min((ts-start)/2200,1);draw(progress);if(progress<1)requestAnimationFrame(anim);}
+  requestAnimationFrame(anim);
+  window.addEventListener('resize',()=>draw(progress||0));
+}
+
+/* ══════════════════════════════════════
+   FADE-IN OBSERVER
+══════════════════════════════════════*/
+const io=new IntersectionObserver(e=>{e.forEach(el=>{if(el.isIntersecting)el.target.classList.add('vis');});},{threshold:.12});
+document.querySelectorAll('.fade-in').forEach(el=>io.observe(el));
+
+/* ══════════════════════════════════════
+   CTA ACTIONS
+══════════════════════════════════════*/
+function openCal(){window.open(CAL,'_blank');}
+function openWA(e){e.preventDefault();window.open(document.getElementById('wa-link').href,'_blank');}
+</script>
+</body>
+</html>

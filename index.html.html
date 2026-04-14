@@ -1,0 +1,928 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>Ketan Vaghela · LinkedIn Authority Strategist · Always-On Authority System™</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Playfair+Display:ital,wght@0,600;1,500&display=swap');
+
+:root{
+  --navy:#050d1f; --navy2:#0a1628; --navy3:#0f2040;
+  --teal:#00d4c8; --teal2:#00f5ea;
+  --gold:#f0a500; --gold2:#ffc43a;
+  --green:#00e676; --pink:#ff6b9d; --red:#ff4757;
+  --text:#e8f4f8; --muted:#7a9bb5;
+  --card:rgba(255,255,255,0.04);
+  --border:rgba(0,212,200,0.15);
+}
+
+*{margin:0;padding:0;box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{background:var(--navy);color:var(--text);font-family:'Inter',sans-serif;overflow-x:hidden;-webkit-font-smoothing:antialiased;}
+
+/* ── NAV ── */
+nav{
+  position:fixed;top:0;left:0;right:0;z-index:200;
+  padding:0 32px;height:64px;
+  display:flex;align-items:center;justify-content:space-between;
+  background:rgba(5,13,31,0.85);backdrop-filter:blur(16px);
+  border-bottom:1px solid rgba(0,212,200,0.08);
+}
+.nav-brand{display:flex;align-items:center;gap:10px;text-decoration:none;}
+.nav-logo{
+  width:34px;height:34px;border-radius:8px;
+  background:linear-gradient(135deg,var(--teal),#00a8ff);
+  display:flex;align-items:center;justify-content:center;
+  font-weight:800;font-size:14px;color:var(--navy);
+}
+.nav-name{font-size:14px;font-weight:700;color:#fff;}
+.nav-tagline{font-size:10px;color:var(--muted);letter-spacing:.5px;}
+.nav-links{display:flex;align-items:center;gap:28px;}
+.nav-links a{font-size:13px;color:var(--muted);text-decoration:none;transition:color .2s;letter-spacing:.3px;}
+.nav-links a:hover{color:var(--teal);}
+.nav-cta{
+  padding:9px 22px;background:linear-gradient(135deg,var(--teal),#00a8ff);
+  color:var(--navy);font-weight:700;font-size:13px;border-radius:100px;
+  text-decoration:none;transition:transform .2s,box-shadow .2s;
+  box-shadow:0 0 20px rgba(0,212,200,0.2);
+}
+.nav-cta:hover{transform:translateY(-1px);box-shadow:0 0 30px rgba(0,212,200,0.4);}
+.nav-mob{display:none;background:none;border:none;color:var(--muted);cursor:pointer;font-size:22px;}
+@media(max-width:720px){
+  .nav-links{display:none;}.nav-mob{display:block;}
+  nav{padding:0 20px;}
+}
+
+/* ── SHARED ── */
+.sw{padding:96px 24px;max-width:1100px;margin:0 auto;}
+.section-label{font-size:11px;letter-spacing:3px;text-transform:uppercase;color:var(--teal);font-weight:600;margin-bottom:12px;}
+.section-title{font-family:'Playfair Display',serif;font-size:clamp(28px,4vw,46px);font-weight:600;line-height:1.2;margin-bottom:16px;color:#fff;}
+.section-sub{font-size:16px;color:var(--muted);line-height:1.7;max-width:600px;margin-bottom:52px;}
+.divider{height:1px;background:linear-gradient(to right,transparent,var(--border),transparent);margin:0 auto;}
+.fade-in{opacity:0;transform:translateY(22px);transition:opacity .7s ease,transform .7s ease;}
+.fade-in.vis{opacity:1;transform:none;}
+
+/* ── HERO ── */
+#hero{
+  position:relative;min-height:100vh;padding-top:64px;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  text-align:center;padding-left:24px;padding-right:24px;overflow:hidden;
+}
+#bgCanvas{position:absolute;inset:0;width:100%;height:100%;z-index:0;}
+
+.hero-badge{
+  position:relative;z-index:2;
+  display:inline-flex;align-items:center;gap:8px;
+  background:rgba(0,212,200,0.1);border:1px solid var(--border);
+  border-radius:100px;padding:8px 20px;
+  font-size:11px;letter-spacing:2px;text-transform:uppercase;
+  color:var(--teal);font-weight:600;margin-bottom:28px;backdrop-filter:blur(10px);
+}
+.dot{width:7px;height:7px;border-radius:50%;background:var(--teal);animation:pulse 2s infinite;}
+@keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.4;transform:scale(.7)}}
+
+.hero-h1{
+  position:relative;z-index:2;
+  font-family:'Playfair Display',serif;
+  font-size:clamp(34px,5.5vw,68px);font-weight:600;line-height:1.1;margin-bottom:20px;
+  background:linear-gradient(135deg,#fff 30%,var(--teal) 100%);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+}
+.hero-h1 em{font-style:italic;}
+
+.hero-sub-line{
+  position:relative;z-index:2;
+  font-size:clamp(16px,2.5vw,22px);font-weight:700;color:#fff;
+  margin-bottom:16px;letter-spacing:-.3px;
+}
+.hero-sub-line span{color:var(--gold);}
+
+.hero-desc{
+  position:relative;z-index:2;
+  max-width:540px;font-size:16px;line-height:1.75;color:var(--muted);margin-bottom:44px;
+}
+
+.hero-btns{position:relative;z-index:2;display:flex;gap:14px;flex-wrap:wrap;justify-content:center;}
+
+.btn-primary-hero{
+  display:inline-flex;align-items:center;gap:10px;
+  background:linear-gradient(135deg,var(--teal),#00a8ff);
+  color:var(--navy);font-weight:700;font-size:15px;
+  padding:16px 36px;border-radius:100px;
+  border:none;cursor:pointer;text-decoration:none;
+  box-shadow:0 0 40px rgba(0,212,200,.28);
+  transition:transform .2s,box-shadow .2s;font-family:'Inter',sans-serif;
+}
+.btn-primary-hero:hover{transform:translateY(-2px);box-shadow:0 0 60px rgba(0,212,200,.5);}
+
+.btn-ghost{
+  display:inline-flex;align-items:center;gap:8px;
+  background:transparent;border:1px solid rgba(0,212,200,0.25);
+  color:var(--text);font-weight:600;font-size:15px;
+  padding:15px 32px;border-radius:100px;
+  cursor:pointer;text-decoration:none;
+  transition:border-color .2s,color .2s;font-family:'Inter',sans-serif;
+}
+.btn-ghost:hover{border-color:var(--teal);color:var(--teal);}
+
+.hero-stats{
+  position:relative;z-index:2;
+  display:flex;gap:40px;margin-top:52px;flex-wrap:wrap;justify-content:center;
+}
+.hstat{text-align:center;}
+.hstat-num{font-size:28px;font-weight:800;color:var(--teal);line-height:1;margin-bottom:4px;}
+.hstat-label{font-size:11px;color:var(--muted);letter-spacing:.5px;}
+
+.scroll-hint{
+  position:absolute;bottom:28px;z-index:2;
+  display:flex;flex-direction:column;align-items:center;gap:8px;
+  color:var(--muted);font-size:10px;letter-spacing:2px;text-transform:uppercase;
+  animation:bounce 2s infinite;
+}
+@keyframes bounce{0%,100%{transform:translateY(0)}50%{transform:translateY(8px)}}
+
+/* ── HOW IT WORKS ── */
+#how{background:var(--navy2);}
+.steps-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:24px;}
+.step-card{
+  background:var(--card);border:1px solid var(--border);
+  border-radius:20px;padding:36px 28px;
+  position:relative;overflow:hidden;transition:transform .3s,border-color .3s;
+}
+.step-card:hover{transform:translateY(-4px);border-color:rgba(0,212,200,0.3);}
+.step-card::before{content:'';position:absolute;inset:0;background:radial-gradient(circle at 50% 0%,rgba(0,212,200,.05) 0%,transparent 70%);pointer-events:none;}
+.step-num{
+  font-family:'Playfair Display',serif;
+  font-size:48px;font-weight:600;
+  background:linear-gradient(135deg,var(--teal),#00a8ff);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+  line-height:1;margin-bottom:16px;
+}
+.step-title{font-size:16px;font-weight:700;color:#fff;margin-bottom:10px;}
+.step-desc{font-size:13px;color:var(--muted);line-height:1.7;}
+.step-tag{
+  display:inline-block;margin-top:16px;
+  background:rgba(0,212,200,0.08);border:1px solid rgba(0,212,200,0.2);
+  border-radius:100px;padding:4px 14px;
+  font-size:11px;color:var(--teal);font-weight:600;letter-spacing:.5px;
+}
+
+/* ── ABOUT ME ── */
+#about{background:linear-gradient(180deg,var(--navy) 0%,var(--navy2) 100%);}
+.about-grid{display:grid;grid-template-columns:1fr 1.6fr;gap:64px;align-items:center;}
+@media(max-width:800px){.about-grid{grid-template-columns:1fr;gap:40px;}}
+
+.about-avatar-wrap{display:flex;flex-direction:column;align-items:center;gap:20px;}
+.avatar-ring{
+  width:200px;height:200px;border-radius:50%;
+  border:2px solid rgba(0,212,200,0.25);
+  padding:4px;position:relative;
+}
+.avatar-inner{
+  width:100%;height:100%;border-radius:50%;
+  background:linear-gradient(135deg,var(--navy3),var(--navy2));
+  border:1px solid rgba(0,212,200,0.15);
+  display:flex;align-items:center;justify-content:center;
+  position:relative;overflow:hidden;
+}
+.avatar-initials{
+  font-size:56px;font-weight:800;
+  background:linear-gradient(135deg,var(--teal),#00a8ff);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+  font-family:'Playfair Display',serif;
+}
+.avatar-glow{
+  position:absolute;bottom:-20px;left:50%;transform:translateX(-50%);
+  width:120px;height:40px;
+  background:radial-gradient(ellipse,rgba(0,212,200,0.3),transparent 70%);
+}
+.avatar-badge{
+  background:rgba(0,212,200,0.08);border:1px solid rgba(0,212,200,0.2);
+  border-radius:12px;padding:14px 20px;text-align:center;width:200px;
+}
+.av-badge-num{font-size:24px;font-weight:800;color:var(--teal);line-height:1;}
+.av-badge-label{font-size:11px;color:var(--muted);margin-top:4px;}
+
+.about-content{}
+.about-name{
+  font-family:'Playfair Display',serif;
+  font-size:clamp(28px,4vw,42px);font-weight:600;color:#fff;
+  margin-bottom:6px;
+}
+.about-role{font-size:15px;color:var(--teal);font-weight:500;margin-bottom:24px;letter-spacing:.5px;}
+.about-bio{font-size:15px;color:var(--muted);line-height:1.8;margin-bottom:28px;}
+.about-bio strong{color:#fff;font-weight:600;}
+
+.about-tags{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:32px;}
+.about-tag{
+  padding:6px 16px;
+  background:rgba(240,165,0,0.08);border:1px solid rgba(240,165,0,0.2);
+  border-radius:100px;font-size:12px;color:var(--gold);font-weight:500;
+}
+
+.about-links{display:flex;gap:12px;flex-wrap:wrap;}
+.about-link{
+  display:inline-flex;align-items:center;gap:7px;
+  padding:10px 20px;border-radius:100px;
+  font-size:13px;font-weight:600;text-decoration:none;transition:all .2s;
+}
+.link-li{background:rgba(0,212,200,0.08);border:1px solid rgba(0,212,200,0.2);color:var(--teal);}
+.link-li:hover{background:rgba(0,212,200,0.14);border-color:rgba(0,212,200,0.4);}
+.link-wa{background:rgba(0,230,118,0.08);border:1px solid rgba(0,230,118,0.2);color:var(--green);}
+.link-wa:hover{background:rgba(0,230,118,0.14);}
+
+/* ── AUDIT SHOWCASE ── */
+#showcase{background:var(--navy3);}
+.showcase-intro{max-width:700px;margin:0 auto 56px;text-align:center;}
+
+.audit-cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:24px;margin-bottom:48px;}
+.audit-card{
+  background:var(--card);border:1px solid var(--border);
+  border-radius:20px;overflow:hidden;
+  transition:transform .3s,border-color .3s;
+  cursor:pointer;
+}
+.audit-card:hover{transform:translateY(-6px);border-color:rgba(0,212,200,0.35);}
+.audit-card-top{
+  padding:28px;background:linear-gradient(135deg,rgba(0,212,200,0.06),rgba(0,168,255,0.04));
+  border-bottom:1px solid var(--border);
+  position:relative;overflow:hidden;
+}
+.audit-card-top::before{
+  content:'';position:absolute;top:0;left:0;right:0;height:2px;
+  background:linear-gradient(to right,transparent,var(--teal),transparent);
+}
+.audit-avatar{
+  width:52px;height:52px;border-radius:50%;
+  background:linear-gradient(135deg,var(--teal),#00a8ff);
+  display:flex;align-items:center;justify-content:center;
+  font-size:20px;font-weight:800;color:var(--navy);
+  margin-bottom:14px;
+}
+.audit-person-name{font-size:17px;font-weight:700;color:#fff;margin-bottom:3px;}
+.audit-person-title{font-size:12px;color:var(--muted);margin-bottom:14px;line-height:1.4;}
+.audit-scores-mini{display:flex;gap:10px;flex-wrap:wrap;}
+.score-pill{
+  padding:4px 12px;border-radius:100px;font-size:11px;font-weight:700;
+}
+.sp-low{background:rgba(255,71,87,0.1);color:var(--red);}
+.sp-mid{background:rgba(240,165,0,0.1);color:var(--gold);}
+.sp-good{background:rgba(0,230,118,0.1);color:var(--green);}
+
+.audit-card-body{padding:22px 28px;}
+.audit-key-finding{font-size:13px;color:var(--muted);line-height:1.65;margin-bottom:18px;}
+.audit-key-finding strong{color:var(--text);font-weight:600;}
+
+.audit-view-btn{
+  display:flex;align-items:center;justify-content:center;gap:8px;
+  width:100%;padding:12px;
+  background:rgba(0,212,200,0.06);border:1px solid rgba(0,212,200,0.18);
+  border-radius:10px;font-size:13px;font-weight:600;color:var(--teal);
+  text-decoration:none;transition:all .2s;
+}
+.audit-view-btn:hover{background:rgba(0,212,200,0.12);border-color:rgba(0,212,200,0.35);}
+
+.showcase-cta-strip{
+  background:linear-gradient(135deg,rgba(0,212,200,0.06),rgba(0,168,255,0.04));
+  border:1px solid var(--border);border-radius:20px;
+  padding:40px 48px;display:flex;align-items:center;justify-content:space-between;gap:32px;flex-wrap:wrap;
+  position:relative;overflow:hidden;
+}
+.showcase-cta-strip::before{
+  content:'';position:absolute;top:0;left:0;right:0;height:1px;
+  background:linear-gradient(90deg,transparent,var(--teal),transparent);
+}
+.strip-text h3{font-family:'Playfair Display',serif;font-size:24px;color:#fff;margin-bottom:8px;}
+.strip-text p{font-size:14px;color:var(--muted);max-width:420px;line-height:1.6;}
+
+/* ── WHAT YOU GET ── */
+#deliverables{background:var(--navy2);}
+.del-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:20px;}
+.del-card{
+  background:var(--card);border:1px solid var(--border);
+  border-radius:18px;padding:28px;
+  transition:transform .3s,border-color .3s;
+}
+.del-card:hover{transform:translateY(-4px);border-color:rgba(240,165,0,0.3);}
+.del-icon-wrap{
+  width:44px;height:44px;border-radius:12px;
+  background:rgba(240,165,0,0.08);border:1px solid rgba(240,165,0,0.2);
+  display:flex;align-items:center;justify-content:center;font-size:20px;margin-bottom:16px;
+}
+.del-title{font-size:15px;font-weight:700;color:#fff;margin-bottom:8px;}
+.del-desc{font-size:13px;color:var(--muted);line-height:1.65;}
+
+/* ── CONTACT / BOOKING ── */
+#contact{
+  background:linear-gradient(135deg,var(--navy2),var(--navy3));
+  border-top:1px solid var(--border);border-bottom:1px solid var(--border);
+  padding:96px 24px;
+}
+.contact-wrap{max-width:1100px;margin:0 auto;display:grid;grid-template-columns:1fr 1fr;gap:64px;align-items:start;}
+@media(max-width:800px){.contact-wrap{grid-template-columns:1fr;gap:40px;}}
+
+.contact-why{list-style:none;margin:28px 0 36px;display:flex;flex-direction:column;gap:16px;}
+.contact-why li{display:flex;align-items:flex-start;gap:14px;font-size:14px;color:var(--muted);line-height:1.6;}
+.cw-icon{
+  width:32px;height:32px;border-radius:8px;
+  background:rgba(0,212,200,0.08);display:flex;align-items:center;justify-content:center;font-size:15px;flex-shrink:0;margin-top:1px;
+}
+.cw-icon b{color:#fff;display:block;font-size:12px;font-weight:600;margin-bottom:1px;}
+
+/* Cal card */
+.cal-box{background:rgba(255,255,255,0.02);border:1px solid var(--border);border-radius:20px;overflow:hidden;}
+.cal-head{
+  background:linear-gradient(135deg,rgba(0,212,200,0.1),rgba(0,168,255,0.07));
+  border-bottom:1px solid var(--border);padding:22px 28px;
+  display:flex;align-items:center;gap:14px;
+}
+.cal-title-el{font-size:15px;font-weight:700;color:#fff;}
+.cal-sub-el{font-size:12px;color:var(--muted);}
+.cal-details{padding:22px 28px;border-bottom:1px solid rgba(255,255,255,0.05);}
+.cal-row{display:flex;align-items:center;gap:12px;font-size:13px;color:var(--muted);margin-bottom:12px;}
+.cal-row:last-child{margin-bottom:0;}
+.cal-row span{color:#fff;font-weight:500;}
+.cal-slots{padding:16px 28px;display:flex;gap:10px;flex-wrap:wrap;border-bottom:1px solid rgba(255,255,255,0.05);}
+.slot{
+  background:rgba(0,212,200,0.06);border:1px solid rgba(0,212,200,0.2);
+  border-radius:8px;padding:6px 14px;font-size:11px;color:var(--teal);font-weight:600;
+}
+.cal-btn-wrap{padding:22px 28px;}
+.btn-cal{
+  display:flex;align-items:center;justify-content:center;gap:10px;
+  background:linear-gradient(135deg,var(--teal),#00a8ff);
+  color:var(--navy);font-weight:800;font-size:15px;padding:17px;
+  border-radius:14px;width:100%;text-decoration:none;border:none;cursor:pointer;
+  font-family:'Inter',sans-serif;box-shadow:0 0 36px rgba(0,212,200,0.22);
+  transition:transform .2s,box-shadow .2s;
+}
+.btn-cal:hover{transform:translateY(-2px);box-shadow:0 0 56px rgba(0,212,200,0.42);}
+
+/* Contact alternatives */
+.contact-alts{display:flex;flex-direction:column;gap:10px;margin-top:14px;}
+.alt-btn{
+  display:flex;align-items:center;gap:10px;width:100%;
+  padding:13px 18px;border-radius:12px;
+  font-size:13px;font-weight:600;text-decoration:none;transition:all .2s;
+  border:1px solid;cursor:pointer;font-family:'Inter',sans-serif;
+}
+.alt-wa{background:rgba(0,230,118,0.06);border-color:rgba(0,230,118,0.2);color:var(--green);}
+.alt-wa:hover{background:rgba(0,230,118,0.12);}
+.alt-li{background:rgba(0,168,255,0.06);border-color:rgba(0,168,255,0.2);color:#60b8ff;}
+.alt-li:hover{background:rgba(0,168,255,0.12);}
+.alt-email{background:rgba(240,165,0,0.06);border-color:rgba(240,165,0,0.2);color:var(--gold);}
+.alt-email:hover{background:rgba(240,165,0,0.12);}
+
+.wa-svg{width:17px;height:17px;fill:currentColor;flex-shrink:0;}
+
+.cal-note{text-align:center;font-size:12px;color:var(--muted);margin-top:14px;line-height:1.6;}
+.cal-note strong{color:var(--teal);}
+
+.urgency-box{
+  margin-top:18px;background:rgba(240,165,0,0.05);
+  border:1px solid rgba(240,165,0,0.18);border-radius:14px;padding:18px 22px;
+}
+.urgency-box .ub-label{font-size:12px;color:var(--gold);font-weight:700;margin-bottom:6px;}
+.urgency-box p{font-size:12px;color:var(--muted);line-height:1.65;}
+
+/* ── FINAL CTA BANNER ── */
+#finalcta{padding:96px 24px;text-align:center;}
+.finalcta-wrap{max-width:680px;margin:0 auto;}
+.cta-tag{
+  display:inline-block;background:rgba(240,165,0,0.1);color:var(--gold);
+  font-size:11px;letter-spacing:3px;text-transform:uppercase;font-weight:700;
+  padding:6px 18px;border-radius:100px;margin-bottom:28px;
+  border:1px solid rgba(240,165,0,0.2);
+}
+.cta-h{font-family:'Playfair Display',serif;font-size:clamp(26px,4vw,44px);font-weight:600;color:#fff;margin-bottom:18px;line-height:1.2;}
+.cta-h span{color:var(--teal);}
+.cta-desc{font-size:16px;color:var(--muted);line-height:1.75;margin-bottom:40px;}
+.cta-btns{display:flex;gap:14px;justify-content:center;flex-wrap:wrap;}
+.cta-note{margin-top:22px;font-size:12px;color:var(--muted);}
+
+/* ── FOOTER ── */
+footer{
+  border-top:1px solid rgba(255,255,255,0.06);
+  padding:36px 24px;
+  display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:16px;
+  max-width:1100px;margin:0 auto;
+}
+footer p{font-size:13px;color:var(--muted);}
+footer strong{color:var(--teal);}
+.footer-links{display:flex;gap:20px;flex-wrap:wrap;}
+.footer-links a{font-size:13px;color:var(--muted);text-decoration:none;transition:color .2s;}
+.footer-links a:hover{color:var(--teal);}
+
+/* ── MOBILE ── */
+@media(max-width:600px){
+  .sw{padding:64px 20px;}
+  #contact{padding:64px 20px;}
+  #finalcta{padding:64px 20px;}
+  .hero-stats{gap:24px;}
+  .showcase-cta-strip{padding:28px 24px;flex-direction:column;align-items:flex-start;}
+  .audit-cards{grid-template-columns:1fr;}
+}
+</style>
+</head>
+<body>
+
+<!-- ══════════ NAV ══════════ -->
+<nav>
+  <a class="nav-brand" href="#">
+    <div class="nav-logo">K</div>
+    <div>
+      <div class="nav-name">Ketan Vaghela</div>
+      <div class="nav-tagline">Always-On Authority System™</div>
+    </div>
+  </a>
+  <div class="nav-links">
+    <a href="#how">How It Works</a>
+    <a href="#about">About</a>
+    <a href="#showcase">Sample Audits</a>
+    <a href="#contact">Contact</a>
+    <a class="nav-cta" href="https://calendly.com/ketanvaghela/ai-avatar-demo" target="_blank">Book a Call</a>
+  </div>
+  <button class="nav-mob" onclick="toggleMobileMenu()">☰</button>
+</nav>
+
+<!-- ══════════ HERO ══════════ -->
+<div id="hero">
+  <canvas id="bgCanvas"></canvas>
+
+  <div class="hero-badge"><span class="dot"></span>Always-On Authority System™ · Viedge Box</div>
+
+  <div class="hero-h1">Your expertise is world-class.<br/><em>Your LinkedIn presence isn't.</em></div>
+
+  <div class="hero-sub-line">Let's change that — <span>without taking your time.</span></div>
+
+  <p class="hero-desc">
+    I build a LinkedIn authority system around your expertise — one onboarding session, then content goes out daily, connections grow quietly, and the right people start finding you. You stay focused on your work.
+  </p>
+
+  <div class="hero-btns">
+    <a class="btn-primary-hero" href="#contact">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+      Book a Free Strategy Call
+    </a>
+    <a class="btn-ghost" href="linkedin_authority_assessment_v5.html">
+      Take the Free Audit →
+    </a>
+  </div>
+
+  <div class="hero-stats">
+    <div class="hstat"><div class="hstat-num">24hrs</div><div class="hstat-label">To first content live</div></div>
+    <div class="hstat"><div class="hstat-num">1</div><div class="hstat-label">Onboarding session only</div></div>
+    <div class="hstat"><div class="hstat-num">0</div><div class="hstat-label">Ongoing time from you</div></div>
+    <div class="hstat"><div class="hstat-num">90 days</div><div class="hstat-label">To inbound momentum</div></div>
+  </div>
+
+  <div class="scroll-hint">
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12l7 7 7-7"/></svg>
+    scroll
+  </div>
+</div>
+
+<!-- ══════════ HOW IT WORKS ══════════ -->
+<div id="how" style="background:var(--navy2);">
+  <div class="sw">
+    <div class="section-label fade-in">How It Works</div>
+    <div class="section-title fade-in">One session. Then the system does the work.</div>
+    <p class="section-sub fade-in">Built for doctors, surgeons, and consultants who have genuine expertise but no time for content creation.</p>
+
+    <div class="steps-grid">
+      <div class="step-card fade-in">
+        <div class="step-num">01</div>
+        <div class="step-title">Deep-Dive Onboarding</div>
+        <div class="step-desc">One 90-minute session where I extract how you think, the frameworks you use, the outcomes you've delivered, and the patients or collaborators you most want to reach. This is your only time commitment.</div>
+        <div class="step-tag">Single session · 90 mins</div>
+      </div>
+      <div class="step-card fade-in">
+        <div class="step-num">02</div>
+        <div class="step-title">Voice & Strategy Built</div>
+        <div class="step-desc">I develop your unique content voice, positioning angles, and a 90-day content strategy — all grounded in your real expertise, not generic health content. Peer-level thinking that resonates with the right people.</div>
+        <div class="step-tag">Done for you · 0 effort</div>
+      </div>
+      <div class="step-card fade-in">
+        <div class="step-num">03</div>
+        <div class="step-title">Content Goes Out Daily</div>
+        <div class="step-desc">12 posts per month go live under your name, in your voice. Connections grow quietly. The right clinicians, organisations, and collaborators start finding you — before you even know they're looking.</div>
+        <div class="step-tag">Runs in background · Always on</div>
+      </div>
+      <div class="step-card fade-in">
+        <div class="step-num">04</div>
+        <div class="step-title">Inbound Starts Moving</div>
+        <div class="step-desc">By month 3–4, the visibility compounds. Speaking invitations, peer referrals, partnership enquiries, and advisory opportunities start arriving inbound — without cold outreach, without sales calls.</div>
+        <div class="step-tag">Month 3–4 · Compounding</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="divider"></div>
+
+<!-- ══════════ ABOUT ME ══════════ -->
+<div id="about">
+  <div class="sw">
+    <div class="about-grid">
+      <div class="about-avatar-wrap fade-in">
+        <div class="avatar-ring">
+          <div class="avatar-inner">
+            <div class="avatar-initials">KV</div>
+            <div class="avatar-glow"></div>
+          </div>
+        </div>
+        <div class="avatar-badge">
+          <div class="av-badge-num">Always-On</div>
+          <div class="av-badge-label">Authority System™</div>
+        </div>
+        <div class="avatar-badge" style="margin-top:0;">
+          <div class="av-badge-num" style="color:var(--gold);">Viedge Box</div>
+          <div class="av-badge-label">Done-for-You Brand</div>
+        </div>
+      </div>
+
+      <div class="about-content fade-in">
+        <div class="section-label">About Ketan</div>
+        <div class="about-name">Ketan Vaghela</div>
+        <div class="about-role">LinkedIn Authority Strategist · Founder, Viedge Box</div>
+
+        <p class="about-bio">
+          I work with <strong>senior health professionals, physicians, surgeons, and consultants</strong> who have spent decades building genuine expertise — and whose LinkedIn presence doesn't come close to reflecting it.
+        </p>
+        <p class="about-bio">
+          The problem I solve isn't a lack of credibility. It's a lack of <strong>visible credibility</strong>. The people who would refer to you, partner with you, invite you to speak, or offer you advisory positions can't find you — not because you aren't qualified, but because your voice isn't in the rooms they're already in.
+        </p>
+        <p class="about-bio">
+          My system fixes that. One session to extract your expertise. AI builds your voice. Content goes out automatically. <strong>You stay focused entirely on your patients and your practice.</strong>
+        </p>
+
+        <div class="about-tags">
+          <div class="about-tag">Health Professionals</div>
+          <div class="about-tag">Senior Clinicians</div>
+          <div class="about-tag">Done-For-You Content</div>
+          <div class="about-tag">LinkedIn Authority</div>
+          <div class="about-tag">AI-Powered Voice</div>
+          <div class="about-tag">Inbound Visibility</div>
+        </div>
+
+        <div class="about-links">
+          <a href="https://www.linkedin.com/in/kketanrv/" target="_blank" class="about-link link-li">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 01-2.063-2.065 2.064 2.064 0 112.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
+            LinkedIn Profile
+          </a>
+          <a href="https://wa.me/919081581581" target="_blank" class="about-link link-wa">
+            <svg class="wa-svg" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/></svg>
+            WhatsApp
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="divider"></div>
+
+<!-- ══════════ AUDIT SHOWCASE ══════════ -->
+<div id="showcase" style="background:var(--navy3);padding:96px 24px;">
+  <div style="max-width:1100px;margin:0 auto;">
+    <div class="showcase-intro fade-in">
+      <div class="section-label">Sample Audits</div>
+      <div class="section-title">See the depth of analysis — for real professionals.</div>
+      <p style="font-size:15px;color:var(--muted);line-height:1.7;">Each audit is built from real profile data, scored across 5 dimensions, and tailored to the person's specific field, audience, and goals. This is what we send before any conversation.</p>
+    </div>
+
+    <div class="audit-cards">
+
+      <!-- Lori Costantino -->
+      <div class="audit-card fade-in">
+        <div class="audit-card-top">
+          <div class="audit-avatar">LC</div>
+          <div class="audit-person-name">Dr. Lori Costantino, PhD.</div>
+          <div class="audit-person-title">Founder, Integrative Resources · Preventive Medicine · Behavioral Health · USA</div>
+          <div class="audit-scores-mini">
+            <div class="score-pill sp-mid">Profile 68/100</div>
+            <div class="score-pill sp-low">Content 31/100</div>
+            <div class="score-pill sp-good">Authority 82/100</div>
+          </div>
+        </div>
+        <div class="audit-card-body">
+          <p class="audit-key-finding">
+            <strong>Core finding:</strong> 20+ years of pioneering work — including the world's only biophotonic antioxidant scanner integration — is completely invisible on LinkedIn. The profile reads like a resume, not a story. Content cadence is zero, which actively penalises her in LinkedIn's algorithm.
+          </p>
+          <a href="index.html" target="_blank" class="audit-view-btn">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6M15 3h6v6M10 14L21 3"/></svg>
+            View Full Audit Report
+          </a>
+        </div>
+      </div>
+
+      <!-- Dr. Sivaraj (anonymised future slot) -->
+      <div class="audit-card fade-in" style="opacity:0.65;pointer-events:none;">
+        <div class="audit-card-top">
+          <div class="audit-avatar" style="background:linear-gradient(135deg,var(--gold),var(--pink));">DS</div>
+          <div class="audit-person-name">Dr. S. Govindasamy</div>
+          <div class="audit-person-title">Consultant Cardiac & Endovascular Surgeon · National Heart Centre Singapore</div>
+          <div class="audit-scores-mini">
+            <div class="score-pill sp-good">Authority 91/100</div>
+            <div class="score-pill sp-low">Content 18/100</div>
+            <div class="score-pill sp-mid">Reach 44/100</div>
+          </div>
+        </div>
+        <div class="audit-card-body">
+          <p class="audit-key-finding">
+            <strong>Core finding:</strong> Elite surgical credentials and national-level recognition — but zero LinkedIn content presence. The opportunity: positioning around peer-level clinical decision-making, Singapore/Asia medical leadership, and MedTech advisory reach.
+          </p>
+          <div class="audit-view-btn" style="opacity:0.4;cursor:not-allowed;pointer-events:none;">
+            🔒 Audit In Progress
+          </div>
+        </div>
+      </div>
+
+      <!-- Your free audit CTA card -->
+      <div class="audit-card fade-in" style="border-color:rgba(240,165,0,0.25);background:rgba(240,165,0,0.03);">
+        <div class="audit-card-top" style="background:linear-gradient(135deg,rgba(240,165,0,0.08),rgba(255,107,157,0.04));border-color:rgba(240,165,0,0.15);">
+          <div class="audit-avatar" style="background:linear-gradient(135deg,var(--gold),var(--gold2));">?</div>
+          <div class="audit-person-name">Your Profile</div>
+          <div class="audit-person-title">Your field · Your credentials · Your visibility opportunity</div>
+          <div class="audit-scores-mini">
+            <div class="score-pill" style="background:rgba(240,165,0,0.1);color:var(--gold);">Profile Score: ?</div>
+            <div class="score-pill" style="background:rgba(240,165,0,0.1);color:var(--gold);">Authority: ?</div>
+          </div>
+        </div>
+        <div class="audit-card-body">
+          <p class="audit-key-finding">
+            <strong>Find out where you actually stand.</strong> Answer 6 short sections and receive an instant personalised authority score — with specific gaps and the exact levers to pull for your field.
+          </p>
+          <a href="linkedin_authority_assessment_v5.html" class="audit-view-btn" style="background:rgba(240,165,0,0.08);border-color:rgba(240,165,0,0.25);color:var(--gold);">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+            Start Your Free Assessment →
+          </a>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Strip CTA -->
+    <div class="showcase-cta-strip fade-in">
+      <div class="strip-text">
+        <h3>Want us to audit your profile?</h3>
+        <p>Book a free 20-minute call. We'll review your LinkedIn live, score it across 5 dimensions, and give you a clear picture of what's possible — at no cost and no obligation.</p>
+      </div>
+      <a class="btn-primary-hero" href="https://calendly.com/ketanvaghela/ai-avatar-demo" target="_blank">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+        Book Free Profile Review
+      </a>
+    </div>
+  </div>
+</div>
+
+<div class="divider"></div>
+
+<!-- ══════════ WHAT YOU GET ══════════ -->
+<div id="deliverables">
+  <div class="sw">
+    <div class="section-label fade-in">What's Included</div>
+    <div class="section-title fade-in">Everything done. Nothing left on you.</div>
+    <p class="section-sub fade-in">The Always-On Authority System™ is a fully managed service. After one onboarding session, every element runs without you.</p>
+
+    <div class="del-grid">
+      <div class="del-card fade-in">
+        <div class="del-icon-wrap">✍️</div>
+        <div class="del-title">12 Posts Per Month</div>
+        <div class="del-desc">Written in your exact voice, reflecting your real clinical thinking. Not generic health content — peer-level insights that position you with the right people.</div>
+      </div>
+      <div class="del-card fade-in">
+        <div class="del-icon-wrap">🎯</div>
+        <div class="del-title">Profile Optimisation</div>
+        <div class="del-desc">Headline, About section, Featured section — all rewritten to convert the right profile visitors into connections, referrals, and enquiries.</div>
+      </div>
+      <div class="del-card fade-in">
+        <div class="del-icon-wrap">🤝</div>
+        <div class="del-title">Quiet Connection Growth</div>
+        <div class="del-desc">Targeted connections to clinicians, organisations, and collaborators in your specific field — growing the right network, not just any network.</div>
+      </div>
+      <div class="del-card fade-in">
+        <div class="del-icon-wrap">📊</div>
+        <div class="del-title">Monthly Performance Report</div>
+        <div class="del-desc">Clear reporting on profile views, post reach, follower growth, and inbound signals — so you can see the system working without being in it.</div>
+      </div>
+      <div class="del-card fade-in">
+        <div class="del-icon-wrap">🔒</div>
+        <div class="del-title">Dedicated Account Manager</div>
+        <div class="del-desc">One point of contact. Always responsive. The system runs, but you're never left wondering what's happening — clarity on demand.</div>
+      </div>
+      <div class="del-card fade-in">
+        <div class="del-icon-wrap">⚡</div>
+        <div class="del-title">AI-Powered Voice System</div>
+        <div class="del-desc">After one onboarding session, an AI voice model is built around your expertise. Content is produced at scale without ever losing the depth or authenticity of your real thinking.</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="divider"></div>
+
+<!-- ══════════ CONTACT / BOOKING ══════════ -->
+<div id="contact">
+  <div class="contact-wrap">
+
+    <div class="fade-in">
+      <div class="section-label" style="color:var(--gold);">Book a Free Strategy Call</div>
+      <div class="section-title" style="font-size:clamp(24px,3.5vw,36px);">Let's look at your LinkedIn together — and build a clear plan.</div>
+
+      <ul class="contact-why">
+        <li>
+          <span class="cw-icon">🔍</span>
+          <div><strong style="color:#fff;display:block;font-size:13px;font-weight:600;margin-bottom:3px;">Live Profile Deep-Dive</strong>We'll open your LinkedIn together and walk through exactly what's working, what isn't, and what the priority fixes are.</div>
+        </li>
+        <li>
+          <span class="cw-icon">🗺️</span>
+          <div><strong style="color:#fff;display:block;font-size:13px;font-weight:600;margin-bottom:3px;">Personalised 90-Day Roadmap</strong>You'll leave with a clear, specific plan for your profile, content angles, and target audience — not generic advice.</div>
+        </li>
+        <li>
+          <span class="cw-icon">📈</span>
+          <div><strong style="color:#fff;display:block;font-size:13px;font-weight:600;margin-bottom:3px;">Realistic Visibility Projection</strong>Based on your field, credentials, and goals — what's actually achievable in 90 days and 12 months, with numbers.</div>
+        </li>
+        <li>
+          <span class="cw-icon">🤝</span>
+          <div><strong style="color:#fff;display:block;font-size:13px;font-weight:600;margin-bottom:3px;">Zero Pressure</strong>This is a 20-minute strategy session — not a sales pitch. Whether we work together or not, you walk away with clarity and a concrete plan.</div>
+        </li>
+      </ul>
+
+      <!-- Alternative contact -->
+      <div class="section-label" style="margin-bottom:14px;">Other ways to reach me</div>
+      <div class="contact-alts">
+        <a class="alt-btn alt-wa" href="https://wa.me/919081581581" target="_blank">
+          <svg class="wa-svg" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/></svg>
+          WhatsApp — +91 90815 81581
+        </a>
+        <a class="alt-btn alt-li" href="https://www.linkedin.com/in/kketanrv/" target="_blank">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 01-2.063-2.065 2.064 2.064 0 112.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
+          Connect on LinkedIn
+        </a>
+        <a class="alt-btn alt-email" href="mailto:ketan@viedgebox.com">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+          Send an Email
+        </a>
+      </div>
+    </div>
+
+    <div class="fade-in">
+      <div class="cal-box">
+        <div class="cal-head">
+          <span style="font-size:22px;">📅</span>
+          <div>
+            <div class="cal-title-el">Free 20-Min LinkedIn Strategy Call</div>
+            <div class="cal-sub-el">with Ketan Vaghela · Always-On Authority System™</div>
+          </div>
+        </div>
+        <div class="cal-details">
+          <div class="cal-row">⏱ <span>Duration:</span> 20 minutes · video call</div>
+          <div class="cal-row">🎁 <span>Cost:</span> Completely free — no obligation</div>
+          <div class="cal-row">📍 <span>Format:</span> Google Meet / Zoom</div>
+          <div class="cal-row">✅ <span>You leave with:</span> Custom roadmap + live profile review</div>
+          <div class="cal-row">🌏 <span>Markets:</span> Singapore, Canada, USA, UK, India</div>
+        </div>
+        <div class="cal-slots">
+          <div class="slot">Mon – Fri</div>
+          <div class="slot">Mornings & Afternoons</div>
+          <div class="slot">Flexible Timezones</div>
+        </div>
+        <div class="cal-btn-wrap">
+          <a class="btn-cal" href="https://calendly.com/ketanvaghela/ai-avatar-demo" target="_blank">
+            📅 Book Your Free Strategy Call
+          </a>
+          <div class="contact-alts" style="margin-top:10px;">
+            <a class="alt-btn alt-wa" href="https://wa.me/919081581581?text=Hi%20Ketan%2C%20I%20saw%20your%20LinkedIn%20Authority%20System%20and%20would%20like%20to%20discuss%20my%20profile." target="_blank" style="justify-content:center;">
+              <svg class="wa-svg" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/></svg>
+              Message on WhatsApp Instead
+            </a>
+          </div>
+          <div class="cal-note">No credit card. No commitment.<br/><strong>Just a real conversation about what's possible.</strong></div>
+        </div>
+      </div>
+
+      <div class="urgency-box">
+        <div class="ub-label">⚡ Why now?</div>
+        <p>Every week your peers in your specialty are publishing content, building authority, and capturing inbound opportunities. The best time to start was a year ago. The second best time is today.</p>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ══════════ FINAL CTA ══════════ -->
+<div id="finalcta">
+  <div class="finalcta-wrap fade-in">
+    <div class="cta-tag">Your Next Move</div>
+    <div class="cta-h">Your expertise deserves<br/>to be seen <span>at scale.</span></div>
+    <p class="cta-desc">You've spent years — possibly decades — building something genuinely valuable. That knowledge and track record should be reaching the clients, organisations, and collaborators who need exactly what you offer. Let's make that happen — together.</p>
+    <div class="cta-btns">
+      <a class="btn-primary-hero" href="https://calendly.com/ketanvaghela/ai-avatar-demo" target="_blank">
+        📅 Book Free Strategy Call
+      </a>
+      <a class="btn-ghost" href="linkedin_authority_assessment_v5.html">
+        Take the Free Audit →
+      </a>
+    </div>
+    <p class="cta-note">20 minutes. Free. No obligation. Just a real conversation about what's possible for your profile.</p>
+  </div>
+</div>
+
+<!-- ══════════ FOOTER ══════════ -->
+<div style="border-top:1px solid rgba(255,255,255,0.06);">
+  <footer>
+    <p>Built by <strong>Ketan Vaghela</strong> · Always-On Authority System™ · Viedge Box · 2026</p>
+    <div class="footer-links">
+      <a href="https://calendly.com/ketanvaghela/ai-avatar-demo" target="_blank">📅 Book a Call</a>
+      <a href="https://wa.me/919081581581" target="_blank">WhatsApp</a>
+      <a href="https://www.linkedin.com/in/kketanrv/" target="_blank">LinkedIn</a>
+      <a href="linkedin_authority_assessment_v5.html">Free Audit Tool</a>
+    </div>
+  </footer>
+</div>
+
+<script>
+/* ── HERO CANVAS (same biophoton system as Lori audit) ── */
+(function(){
+  const cv=document.getElementById('bgCanvas'),cx=cv.getContext('2d');
+  let W,H,particles=[],scanAngle=0;
+  function resize(){W=cv.width=cv.offsetWidth;H=cv.height=cv.offsetHeight;}
+  resize();window.addEventListener('resize',resize);
+
+  class P{
+    constructor(){this.reset();}
+    reset(){
+      this.x=Math.random()*W;this.y=Math.random()*H;
+      this.r=Math.random()*2+.5;
+      this.vx=(Math.random()-.5)*.35;this.vy=(Math.random()-.5)*.35;
+      this.alpha=Math.random()*.5+.1;
+      this.color=Math.random()>.6?'#00d4c8':Math.random()>.5?'#f0a500':'#00e676';
+      this.pulse=Math.random()*Math.PI*2;
+    }
+    update(){this.x+=this.vx;this.y+=this.vy;this.pulse+=.04;if(this.x<0||this.x>W||this.y<0||this.y>H)this.reset();}
+    draw(){
+      cx.save();cx.globalAlpha=this.alpha*(.7+.3*Math.sin(this.pulse));
+      cx.beginPath();cx.arc(this.x,this.y,this.r,0,Math.PI*2);
+      cx.fillStyle=this.color;cx.shadowBlur=8;cx.shadowColor=this.color;cx.fill();cx.restore();
+    }
+  }
+  for(let i=0;i<130;i++)particles.push(new P());
+
+  function drawConnections(){
+    for(let i=0;i<particles.length;i++){
+      for(let j=i+1;j<particles.length;j++){
+        const dx=particles[i].x-particles[j].x,dy=particles[i].y-particles[j].y,d=Math.sqrt(dx*dx+dy*dy);
+        if(d<90){
+          cx.save();cx.globalAlpha=(1-d/90)*.1;cx.strokeStyle='#00d4c8';cx.lineWidth=.5;
+          cx.beginPath();cx.moveTo(particles[i].x,particles[i].y);cx.lineTo(particles[j].x,particles[j].y);cx.stroke();cx.restore();
+        }
+      }
+    }
+  }
+
+  function drawScanner(){
+    const ox=W/2,oy=H/2,R=Math.min(W,H)*.3;
+    cx.save();
+    [1,.6,.35].forEach(f=>{
+      cx.beginPath();cx.arc(ox,oy,R*f,0,Math.PI*2);
+      cx.strokeStyle='rgba(0,212,200,0.05)';cx.lineWidth=1;cx.stroke();
+    });
+    cx.translate(ox,oy);cx.rotate(scanAngle);
+    const sw=cx.createLinearGradient(0,0,R,0);
+    sw.addColorStop(0,'rgba(0,212,200,0.25)');sw.addColorStop(1,'rgba(0,212,200,0)');
+    cx.beginPath();cx.moveTo(0,0);cx.arc(0,0,R,-.35,.35);cx.closePath();
+    cx.fillStyle=sw;cx.fill();
+    cx.beginPath();cx.arc(R,0,4,0,Math.PI*2);
+    cx.fillStyle='#00f5ea';cx.shadowBlur=16;cx.shadowColor='#00d4c8';cx.fill();
+    cx.restore();
+  }
+
+  function tick(){
+    cx.clearRect(0,0,W,H);
+    const bg=cx.createRadialGradient(W/2,H/2,0,W/2,H/2,Math.max(W,H)*.7);
+    bg.addColorStop(0,'rgba(10,22,40,0.5)');bg.addColorStop(1,'rgba(5,13,31,0.96)');
+    cx.fillStyle=bg;cx.fillRect(0,0,W,H);
+    drawConnections();particles.forEach(p=>{p.update();p.draw();});
+    drawScanner();scanAngle+=.008;requestAnimationFrame(tick);
+  }
+  tick();
+})();
+
+/* ── FADE-IN OBSERVER ── */
+const io=new IntersectionObserver(e=>{e.forEach(el=>{if(el.isIntersecting)el.target.classList.add('vis');});},{threshold:.12});
+document.querySelectorAll('.fade-in').forEach(el=>io.observe(el));
+
+/* ── MOBILE MENU (simple toggle) ── */
+function toggleMobileMenu(){
+  const links=document.querySelector('.nav-links');
+  if(links.style.display==='flex'){
+    links.style.display='none';
+  } else {
+    links.style.cssText='display:flex;flex-direction:column;position:fixed;top:64px;left:0;right:0;background:rgba(5,13,31,0.97);padding:24px;gap:20px;z-index:199;border-bottom:1px solid rgba(0,212,200,0.12);backdrop-filter:blur(16px);';
+  }
+}
+</script>
+</body>
+</html>
