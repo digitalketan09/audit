@@ -1,0 +1,916 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>LinkedIn Profile Audit · Anga Gonzalez</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Playfair+Display:ital,wght@0,600;1,500&display=swap');
+
+  :root {
+    --navy:  #050d1f;
+    --navy2: #0a1628;
+    --navy3: #0f2040;
+    --teal:  #00d4c8;
+    --teal2: #00f5ea;
+    --gold:  #f0a500;
+    --gold2: #ffc43a;
+    --green: #00e676;
+    --pink:  #ff6b9d;
+    --rose:  #ff8ab3;
+    --red:   #ff4757;
+    --text:  #e8f4f8;
+    --muted: #7a9bb5;
+    --card:  rgba(255,255,255,0.04);
+    --border:rgba(0,212,200,0.15);
+  }
+
+  * { margin:0; padding:0; box-sizing:border-box; }
+  html { scroll-behavior:smooth; }
+  body { background:var(--navy); color:var(--text); font-family:'Inter',sans-serif; overflow-x:hidden; }
+
+  /* ── HERO ─────────────────────────────── */
+  #hero {
+    position:relative; min-height:100vh;
+    display:flex; flex-direction:column; align-items:center; justify-content:center;
+    text-align:center; padding:40px 24px; overflow:hidden;
+  }
+  #bgCanvas { position:absolute; inset:0; width:100%; height:100%; z-index:0; }
+
+  .hero-badge {
+    position:relative; z-index:2;
+    display:inline-flex; align-items:center; gap:8px;
+    background:rgba(255,107,157,0.12); border:1px solid rgba(255,107,157,0.25);
+    border-radius:100px; padding:8px 20px;
+    font-size:12px; letter-spacing:2px; text-transform:uppercase;
+    color:var(--pink); font-weight:600; margin-bottom:28px; backdrop-filter:blur(10px);
+  }
+  .hero-badge .dot { width:7px; height:7px; border-radius:50%; background:var(--pink); animation:pulse 2s infinite; }
+  @keyframes pulse { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:.4;transform:scale(.7)} }
+
+  .hero-name {
+    position:relative; z-index:2;
+    font-family:'Playfair Display',serif;
+    font-size:clamp(36px,6vw,72px); font-weight:600; line-height:1.1; margin-bottom:16px;
+    background:linear-gradient(135deg,#fff 30%,var(--pink) 100%);
+    -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text;
+  }
+  .hero-title { position:relative; z-index:2; font-size:clamp(14px,2vw,18px); color:var(--muted); margin-bottom:8px; font-weight:400; letter-spacing:.5px; }
+  .hero-sub   { position:relative; z-index:2; font-size:clamp(22px,4vw,42px); font-weight:800; margin-bottom:20px; color:#fff; letter-spacing:-.5px; max-width:860px; }
+  .hero-sub span { color:var(--gold); }
+  .hero-desc  { position:relative; z-index:2; max-width:640px; font-size:16px; line-height:1.7; color:var(--muted); margin-bottom:44px; }
+
+  .hero-cta {
+    position:relative; z-index:2;
+    display:inline-flex; align-items:center; gap:10px;
+    background:linear-gradient(135deg,var(--pink),var(--teal));
+    color:var(--navy); font-weight:700; font-size:15px;
+    padding:16px 36px; border-radius:100px;
+    text-decoration:none; border:none; cursor:pointer;
+    box-shadow:0 0 40px rgba(255,107,157,.3);
+    transition:transform .2s,box-shadow .2s;
+  }
+  .hero-cta:hover { transform:translateY(-2px); box-shadow:0 0 60px rgba(255,107,157,.5); }
+
+  .scroll-hint {
+    position:absolute; bottom:32px; z-index:2;
+    display:flex; flex-direction:column; align-items:center; gap:8px;
+    color:var(--muted); font-size:11px; letter-spacing:2px; text-transform:uppercase;
+    animation:bounce 2s infinite;
+  }
+  @keyframes bounce { 0%,100%{transform:translateY(0)} 50%{transform:translateY(8px)} }
+
+  /* ── PRE-CALL NOTE ─────────────────────── */
+  #precall {
+    background:linear-gradient(135deg,rgba(240,165,0,0.06),rgba(255,107,157,0.04));
+    border-top:1px solid rgba(240,165,0,0.2);
+    border-bottom:1px solid rgba(240,165,0,0.2);
+    padding:36px 24px;
+  }
+  .precall-wrap {
+    max-width:900px; margin:0 auto;
+    display:flex; gap:20px; align-items:flex-start;
+  }
+  .precall-icon {
+    width:44px; height:44px; border-radius:12px;
+    background:rgba(240,165,0,0.12);
+    display:flex; align-items:center; justify-content:center;
+    font-size:20px; flex-shrink:0;
+  }
+  .precall-text { font-size:14px; color:var(--muted); line-height:1.7; }
+  .precall-text strong { color:var(--gold); display:block; font-size:12px; letter-spacing:2px; text-transform:uppercase; margin-bottom:6px; }
+
+  /* ── SHARED ───────────────────────────── */
+  .section-wrap { padding:96px 24px; max-width:1100px; margin:0 auto; }
+  .section-label { font-size:11px; letter-spacing:3px; text-transform:uppercase; color:var(--pink); font-weight:600; margin-bottom:12px; }
+  .section-title { font-family:'Playfair Display',serif; font-size:clamp(28px,4vw,48px); font-weight:600; line-height:1.2; margin-bottom:16px; color:#fff; }
+  .section-sub   { font-size:16px; color:var(--muted); line-height:1.7; max-width:720px; margin-bottom:60px; }
+
+  .fade-in { opacity:0; transform:translateY(24px); transition:opacity .7s ease,transform .7s ease; }
+  .fade-in.visible { opacity:1; transform:none; }
+  .divider { height:1px; background:linear-gradient(to right,transparent,var(--border),transparent); max-width:1100px; margin:0 auto; }
+
+  /* ── SCORE CARDS ──────────────────────── */
+  .scores-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(200px,1fr)); gap:24px; }
+  .score-card {
+    background:var(--card); border:1px solid var(--border); border-radius:20px;
+    padding:36px 24px; text-align:center; position:relative; overflow:hidden;
+    transition:transform .3s,border-color .3s;
+  }
+  .score-card:hover { transform:translateY(-4px); border-color:var(--pink); }
+  .score-card::before {
+    content:''; position:absolute; inset:0;
+    background:radial-gradient(circle at 50% 0%,rgba(255,107,157,.06) 0%,transparent 70%); pointer-events:none;
+  }
+  .ring-wrap { position:relative; width:110px; height:110px; margin:0 auto 20px; }
+  .ring-wrap canvas { position:absolute; inset:0; }
+  .ring-pct { position:absolute; inset:0; display:flex; flex-direction:column; align-items:center; justify-content:center; }
+  .ring-num  { font-size:26px; font-weight:800; color:#fff; line-height:1; }
+  .ring-unit { font-size:12px; color:var(--muted); margin-top:2px; }
+  .score-name { font-size:14px; font-weight:600; color:#fff; margin-bottom:6px; }
+  .score-status { font-size:12px; padding:4px 12px; border-radius:100px; display:inline-block; font-weight:600; margin-bottom:12px; }
+  .status-good { background:rgba(0,230,118,.12); color:var(--green); }
+  .status-mid  { background:rgba(240,165,0,.12);  color:var(--gold); }
+  .status-low  { background:rgba(255,71,87,.12);   color:var(--red); }
+  .score-desc  { font-size:12px; color:var(--muted); line-height:1.6; }
+
+  /* ── PROBLEM SECTION ─────────────────── */
+  #problems { background:linear-gradient(180deg,var(--navy2) 0%,var(--navy) 100%); }
+  .problems-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(300px,1fr)); gap:24px; }
+
+  .problem-card {
+    background:rgba(255,71,87,0.04);
+    border:1px solid rgba(255,71,87,0.15);
+    border-radius:20px; padding:36px 32px;
+    position:relative; overflow:hidden;
+    transition:transform .3s, border-color .3s, box-shadow .3s;
+    cursor:default;
+  }
+  .problem-card:hover {
+    transform:translateY(-4px);
+    border-color:rgba(255,71,87,0.4);
+    box-shadow:0 12px 40px rgba(255,71,87,0.1);
+  }
+  .problem-card::before {
+    content:''; position:absolute; top:0; left:0; right:0; height:2px;
+    background:linear-gradient(to right,transparent,rgba(255,71,87,0.5),transparent);
+  }
+
+  .problem-icon {
+    width:48px; height:48px; border-radius:12px;
+    background:rgba(255,71,87,0.1);
+    display:flex; align-items:center; justify-content:center;
+    font-size:22px; margin-bottom:20px;
+  }
+  .problem-title { font-size:17px; font-weight:700; color:#fff; margin-bottom:12px; line-height:1.4; }
+  .problem-body { font-size:14px; color:var(--muted); line-height:1.7; margin-bottom:20px; }
+
+  .problem-cost {
+    background:rgba(255,71,87,0.08);
+    border:1px solid rgba(255,71,87,0.2);
+    border-radius:10px; padding:14px 16px;
+    font-size:13px; color:rgba(255,107,107,0.9);
+    font-weight:500; line-height:1.5;
+  }
+  .problem-cost strong { color:var(--red); display:block; font-size:11px; letter-spacing:1px; text-transform:uppercase; margin-bottom:4px; }
+
+  /* ── REALITY CHECK ───────────────────── */
+  .reality-strip {
+    background:linear-gradient(135deg,rgba(255,71,87,0.08),rgba(255,107,157,0.06));
+    border:1px solid rgba(255,71,87,0.2);
+    border-radius:20px; padding:40px 48px;
+    display:flex; gap:48px; align-items:center;
+    flex-wrap:wrap; margin-bottom:60px;
+  }
+  .reality-stat { text-align:center; flex:1; min-width:140px; }
+  .reality-num  { font-size:40px; font-weight:800; color:var(--red); line-height:1; margin-bottom:6px; }
+  .reality-num.mixed { color:var(--pink); }
+  .reality-label{ font-size:13px; color:var(--muted); line-height:1.5; }
+
+  /* ── TWO-COL ─────────────────────────── */
+  .two-col { display:grid; grid-template-columns:1fr 1fr; gap:32px; }
+  @media(max-width:720px){ .two-col{ grid-template-columns:1fr; } }
+  .col-box { background:var(--card); border:1px solid var(--border); border-radius:20px; padding:36px; }
+  .col-box h3 { font-size:18px; font-weight:700; margin-bottom:24px; display:flex; align-items:center; gap:10px; }
+  .col-box h3 .icon { width:32px; height:32px; border-radius:8px; display:flex; align-items:center; justify-content:center; font-size:16px; }
+  .icon-green { background:rgba(0,230,118,.12); }
+  .icon-amber { background:rgba(240,165,0,.12); }
+  .item { display:flex; gap:14px; margin-bottom:18px; align-items:flex-start; }
+  .item-dot { width:8px; height:8px; border-radius:50%; margin-top:6px; flex-shrink:0; }
+  .item-dot-green { background:var(--green); box-shadow:0 0 8px var(--green); }
+  .item-dot-amber { background:var(--gold);  box-shadow:0 0 8px var(--gold); }
+  .item-text strong { font-size:13px; font-weight:600; color:#fff; display:block; margin-bottom:2px; }
+  .item-text span   { font-size:12px; color:var(--muted); line-height:1.5; }
+
+  /* ── VISIBILITY CHART ────────────────── */
+  .chart-legend { display:flex; gap:32px; margin-top:20px; flex-wrap:wrap; }
+  .legend-item  { display:flex; align-items:center; gap:10px; font-size:13px; color:var(--muted); }
+  .legend-line  { width:28px; height:3px; border-radius:2px; }
+
+  /* ── EXECUTION TENSION ───────────────── */
+  .tension-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(260px,1fr)); gap:20px; }
+  .tension-card {
+    background:rgba(240,165,0,0.04);
+    border:1px solid rgba(240,165,0,0.18);
+    border-radius:16px; padding:28px 26px;
+    transition:transform .3s;
+  }
+  .tension-card:hover { transform:translateY(-3px); border-color:rgba(240,165,0,0.4); }
+  .tension-icon { font-size:24px; margin-bottom:14px; }
+  .tension-title { font-size:15px; font-weight:700; color:#fff; margin-bottom:8px; }
+  .tension-body  { font-size:13px; color:var(--muted); line-height:1.65; }
+
+  /* ── ROI CARDS ───────────────────────── */
+  .roi-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(200px,1fr)); gap:20px; margin-bottom:60px; }
+  .roi-card {
+    background:var(--card); border:1px solid var(--border);
+    border-radius:16px; padding:28px 24px; text-align:center; transition:transform .3s;
+  }
+  .roi-card:hover { transform:translateY(-4px); }
+  .roi-num   { font-size:40px; font-weight:800; line-height:1; margin-bottom:8px; }
+  .roi-label { font-size:13px; color:var(--muted); line-height:1.4; }
+
+  /* ── TIMELINE ────────────────────────── */
+  .timeline { position:relative; padding-left:32px; }
+  .timeline::before {
+    content:''; position:absolute; left:8px; top:0; bottom:0;
+    width:2px; background:linear-gradient(to bottom,var(--pink),transparent);
+  }
+  .tl-item { position:relative; margin-bottom:36px; opacity:0; transform:translateX(-20px); transition:opacity .5s,transform .5s; }
+  .tl-item.visible { opacity:1; transform:translateX(0); }
+  .tl-dot   { position:absolute; left:-28px; top:4px; width:12px; height:12px; border-radius:50%; background:var(--pink); box-shadow:0 0 10px var(--pink); }
+  .tl-year  { font-size:11px; color:var(--pink); letter-spacing:2px; text-transform:uppercase; font-weight:600; margin-bottom:4px; }
+  .tl-title { font-size:16px; font-weight:700; color:#fff; margin-bottom:4px; }
+  .tl-desc  { font-size:13px; color:var(--muted); line-height:1.6; }
+
+  /* ── BOOKING SECTION ─────────────────── */
+  #booking {
+    background:linear-gradient(135deg,var(--navy2),var(--navy3));
+    border-top:1px solid var(--border);
+    border-bottom:1px solid var(--border);
+    padding:96px 24px;
+  }
+  .booking-wrap { max-width:1100px; margin:0 auto; display:grid; grid-template-columns:1fr 1fr; gap:60px; align-items:start; }
+  @media(max-width:800px){ .booking-wrap{ grid-template-columns:1fr; } }
+
+  .booking-left .section-title { font-size:clamp(28px,3.5vw,42px); margin-bottom:20px; }
+  .booking-why { list-style:none; margin:28px 0 36px; display:flex; flex-direction:column; gap:16px; }
+  .booking-why li {
+    display:flex; align-items:flex-start; gap:14px;
+    font-size:14px; color:var(--muted); line-height:1.6;
+  }
+  .booking-why li .bw-icon {
+    width:32px; height:32px; border-radius:8px;
+    background:rgba(255,107,157,0.1); display:flex; align-items:center;
+    justify-content:center; font-size:15px; flex-shrink:0; margin-top:2px;
+  }
+  .booking-why li strong { color:#fff; display:block; font-size:13px; font-weight:600; margin-bottom:2px; }
+
+  .ketan-card {
+    background:rgba(0,212,200,0.04);
+    border:1px solid var(--border);
+    border-radius:16px; padding:24px;
+    display:flex; align-items:center; gap:20px;
+    text-decoration:none; transition:border-color .2s, transform .2s;
+  }
+  .ketan-card:hover { border-color:var(--teal); transform:translateY(-2px); }
+  .ketan-avatar {
+    width:56px; height:56px; border-radius:50%;
+    background:linear-gradient(135deg,var(--pink),var(--teal));
+    display:flex; align-items:center; justify-content:center;
+    font-size:22px; font-weight:800; color:var(--navy); flex-shrink:0;
+  }
+  .ketan-name  { font-size:15px; font-weight:700; color:#fff; margin-bottom:2px; }
+  .ketan-role  { font-size:12px; color:var(--muted); margin-bottom:6px; }
+  .ketan-link  { font-size:12px; color:var(--teal); font-weight:600; display:flex; align-items:center; gap:4px; }
+
+  .calendly-box {
+    background:rgba(255,255,255,0.02);
+    border:1px solid var(--border);
+    border-radius:20px; overflow:hidden;
+  }
+  .calendly-header {
+    background:linear-gradient(135deg,rgba(255,107,157,0.12),rgba(0,212,200,0.08));
+    border-bottom:1px solid var(--border);
+    padding:20px 28px;
+    display:flex; align-items:center; gap:12px;
+  }
+  .cal-icon { font-size:22px; }
+  .cal-title { font-size:15px; font-weight:700; color:#fff; }
+  .cal-sub   { font-size:12px; color:var(--muted); }
+  .cal-details { padding:24px 28px; border-bottom:1px solid rgba(255,255,255,0.06); display:flex; flex-direction:column; gap:12px; }
+  .cal-row { display:flex; align-items:center; gap:12px; font-size:13px; color:var(--muted); }
+  .cal-row span { color:#fff; font-weight:500; }
+  .cal-btn-wrap { padding:24px 28px; }
+  .cal-btn {
+    display:flex; align-items:center; justify-content:center; gap:10px;
+    background:linear-gradient(135deg,var(--pink),var(--teal));
+    color:var(--navy); font-weight:800; font-size:16px;
+    padding:18px 32px; border-radius:14px;
+    text-decoration:none; width:100%;
+    box-shadow:0 0 40px rgba(255,107,157,0.25);
+    transition:transform .2s, box-shadow .2s;
+  }
+  .cal-btn:hover { transform:translateY(-2px); box-shadow:0 0 60px rgba(255,107,157,0.45); }
+  .cal-note { text-align:center; font-size:12px; color:var(--muted); margin-top:14px; }
+  .cal-slots { padding:0 28px 24px; display:flex; gap:10px; flex-wrap:wrap; }
+  .slot {
+    background:rgba(255,107,157,0.08); border:1px solid rgba(255,107,157,0.25);
+    border-radius:8px; padding:8px 14px; font-size:12px; color:var(--pink);
+    font-weight:600; cursor:pointer; transition:background .2s;
+  }
+  .slot:hover { background:rgba(255,107,157,0.18); }
+
+  /* ── FINAL CTA ───────────────────────── */
+  #finalcta { padding:96px 24px; text-align:center; }
+  .finalcta-wrap { max-width:720px; margin:0 auto; }
+  .cta-tag { display:inline-block; background:rgba(240,165,0,.12); color:var(--gold); font-size:11px; letter-spacing:3px; text-transform:uppercase; font-weight:700; padding:6px 18px; border-radius:100px; margin-bottom:28px; border:1px solid rgba(240,165,0,.2); }
+  .cta-title { font-family:'Playfair Display',serif; font-size:clamp(28px,4vw,48px); font-weight:600; color:#fff; margin-bottom:20px; line-height:1.2; }
+  .cta-title span { color:var(--pink); }
+  .cta-desc  { font-size:16px; color:var(--muted); line-height:1.7; margin-bottom:44px; }
+  .cta-buttons { display:flex; gap:16px; justify-content:center; flex-wrap:wrap; }
+  .btn-primary {
+    background:linear-gradient(135deg,var(--pink),var(--teal)); color:var(--navy);
+    font-weight:700; font-size:15px; padding:16px 36px; border-radius:100px;
+    border:none; cursor:pointer; text-decoration:none;
+    box-shadow:0 0 40px rgba(255,107,157,.25); transition:transform .2s,box-shadow .2s;
+    display:inline-flex; align-items:center; gap:8px;
+  }
+  .btn-primary:hover { transform:translateY(-2px); box-shadow:0 0 60px rgba(255,107,157,.45); }
+  .btn-secondary {
+    background:transparent; color:var(--text);
+    font-weight:600; font-size:15px; padding:16px 36px; border-radius:100px;
+    border:1px solid var(--border); cursor:pointer; text-decoration:none;
+    transition:border-color .2s,color .2s; display:inline-flex; align-items:center; gap:8px;
+  }
+  .btn-secondary:hover { border-color:var(--pink); color:var(--pink); }
+  .cta-note { margin-top:24px; font-size:12px; color:var(--muted); }
+
+  /* ── FOOTER ─────────────────────────── */
+  footer {
+    background:var(--navy); border-top:1px solid rgba(255,255,255,.06);
+    padding:36px 24px; display:flex; flex-wrap:wrap;
+    align-items:center; justify-content:space-between; gap:16px;
+    max-width:1100px; margin:0 auto;
+  }
+  footer p { font-size:13px; color:var(--muted); }
+  footer strong { color:var(--pink); }
+  .footer-links { display:flex; gap:20px; }
+  .footer-links a { font-size:13px; color:var(--muted); text-decoration:none; transition:color .2s; }
+  .footer-links a:hover { color:var(--pink); }
+</style>
+</head>
+<body>
+
+<!-- ═══════════════ HERO ═══════════════ -->
+<div id="hero">
+  <canvas id="bgCanvas"></canvas>
+
+  <div class="hero-badge"><span class="dot"></span>Complimentary LinkedIn Audit · April 2026</div>
+  <div class="hero-name">Anga Gonzalez</div>
+  <div class="hero-title">LAc. HOM MSTCM · Stork Club Reproductive Care Benefits · Berkeley, California</div>
+  <div class="hero-sub">Your expertise took two decades to build.<br/>Your LinkedIn is still introducing you through <span>other people's voices.</span></div>
+  <p class="hero-desc">We analyzed your profile across 40+ signals — the headline, the About, your posts and reposts, your follower-to-connection curve, and the structural gap between the authority you've earned in 20 years of clinical practice and the voice LinkedIn is currently attributing to you.</p>
+  <button class="hero-cta" onclick="document.getElementById('scores').scrollIntoView({behavior:'smooth'})">See Your Full Audit ↓</button>
+  <div class="scroll-hint">
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12l7 7 7-7"/></svg>
+    Scroll to explore
+  </div>
+</div>
+
+<!-- ═══════════════ PRE-CALL NOTE ═══════════════ -->
+<div id="precall">
+  <div class="precall-wrap">
+    <div class="precall-icon">📌</div>
+    <div class="precall-text">
+      <strong>Read this before our call</strong>
+      This audit is your pre-brief for our conversation. I've gone deep into your profile so we don't spend the call on surface-level observations. By the time we meet, we'll be talking about what to do — not what's wrong. Take 10 minutes, scroll through, and come to the call with the questions it raises for you.
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════ SCORE DASHBOARD ═══════════════ -->
+<div id="scores" style="background:var(--navy2);padding:96px 24px;">
+  <div style="max-width:1100px;margin:0 auto 60px;">
+    <div class="section-label fade-in">Profile Health Dashboard</div>
+    <div class="section-title fade-in">Where you stand today</div>
+    <div class="section-sub fade-in">Scored across 5 dimensions LinkedIn's algorithm — and the functional-medicine practitioners, corporate benefits decision-makers, and reproductive-health journalists who could shape your next decade — use to judge authority, niche ownership, and signal strength.</div>
+  </div>
+  <div class="scores-grid" style="max-width:1100px;margin:0 auto;">
+    <div class="score-card fade-in">
+      <div class="ring-wrap"><canvas class="ring-canvas" data-pct="62" data-color="#f0a500" width="110" height="110"></canvas><div class="ring-pct"><span class="ring-num counter" data-target="62">0</span><span class="ring-unit">/ 100</span></div></div>
+      <div class="score-name">Profile Completeness</div>
+      <div class="score-status status-mid">Partial</div>
+      <div class="score-desc">Headline and About present but About is truncated on preview. Featured section empty. Custom URL not claimed — still ends in /52822150.</div>
+    </div>
+    <div class="score-card fade-in">
+      <div class="ring-wrap"><canvas class="ring-canvas" data-pct="5" data-color="#ff4757" width="110" height="110"></canvas><div class="ring-pct"><span class="ring-num counter" data-target="5">0</span><span class="ring-unit">/ 100</span></div></div>
+      <div class="score-name">Content Originality</div>
+      <div class="score-status status-low">Near Zero</div>
+      <div class="score-desc">Your Posts tab reads "Nothing to see for now." Zero original posts on-record. 4,486 followers are watching reposts of other practitioners.</div>
+    </div>
+    <div class="score-card fade-in">
+      <div class="ring-wrap"><canvas class="ring-canvas" data-pct="45" data-color="#f0a500" width="110" height="110"></canvas><div class="ring-pct"><span class="ring-num counter" data-target="45">0</span><span class="ring-unit">/ 100</span></div></div>
+      <div class="score-name">Niche Ownership</div>
+      <div class="score-status status-mid">Claimed, Not Owned</div>
+      <div class="score-desc">Fertility, hormonal, and functional medicine are named in your headline but not consistently reinforced across posts, comments, or Featured.</div>
+    </div>
+    <div class="score-card fade-in">
+      <div class="ring-wrap"><canvas class="ring-canvas" data-pct="72" data-color="#00e676" width="110" height="110"></canvas><div class="ring-pct"><span class="ring-num counter" data-target="72">0</span><span class="ring-unit">/ 100</span></div></div>
+      <div class="score-name">Authority Foundation</div>
+      <div class="score-status status-good">Strong, Under-Amplified</div>
+      <div class="score-desc">20+ years of practice, MSTCM from Shandong, LAc + HOM, Stork Club affiliation, 4.4k followers. The raw authority is there. The surface isn't telegraphing it.</div>
+    </div>
+    <div class="score-card fade-in">
+      <div class="ring-wrap"><canvas class="ring-canvas" data-pct="48" data-color="#f0a500" width="110" height="110"></canvas><div class="ring-pct"><span class="ring-num counter" data-target="48">0</span><span class="ring-unit">/ 100</span></div></div>
+      <div class="score-name">Network Depth</div>
+      <div class="score-status status-mid">Reach &gt; Relationships</div>
+      <div class="score-desc">4,486 followers vs 500+ connections. You have audience. You don't yet have the deliberate network of peers, benefits leaders, and reproductive-health press to convert it.</div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════ PROBLEMS IN DEPTH ═══════════════ -->
+<div id="problems" style="padding:96px 24px;">
+  <div style="max-width:1100px;margin:0 auto;">
+    <div class="section-label fade-in" style="color:var(--red);">The Real Problems</div>
+    <div class="section-title fade-in">What's actually holding your voice back —<br/>and what it's costing the next 12 months</div>
+    <div class="section-sub fade-in">
+      You are a 20-year Chinese Medicine practitioner, credentialled in three modalities, inside one of the more visible reproductive-care benefits platforms in the US. But LinkedIn doesn't know that. Here's what your profile is actually saying about you right now — in specific detail.
+    </div>
+
+    <!-- Reality strip -->
+    <div class="reality-strip fade-in">
+      <div class="reality-stat">
+        <div class="reality-num mixed"><span class="counter2" data-target="4486">0</span></div>
+        <div class="reality-label">Followers — audience already<br/>built and mostly silent</div>
+      </div>
+      <div class="reality-stat">
+        <div class="reality-num"><span class="counter2" data-target="0">0</span></div>
+        <div class="reality-label">Original posts<br/>in your Posts tab</div>
+      </div>
+      <div class="reality-stat">
+        <div class="reality-num"><span class="counter2" data-target="10">0</span>+</div>
+        <div class="reality-label">Reposts of other<br/>practitioners' voices</div>
+      </div>
+      <div class="reality-stat">
+        <div class="reality-num"><span class="counter2" data-target="20">0</span></div>
+        <div class="reality-label">Years of clinical practice<br/>— largely invisible on-profile</div>
+      </div>
+    </div>
+
+    <!-- Problem cards -->
+    <div class="problems-grid fade-in">
+
+      <div class="problem-card">
+        <div class="problem-icon">🔖</div>
+        <div class="problem-title">Your headline is a credentials list, not a claim of authority</div>
+        <div class="problem-body">
+          Your current headline reads: <em>"Functional Medicine, Hormonal & Fertility Expert LAc. HOM MSTCM"</em> — three niches and three credentials, stacked. It tells a visitor <strong>what you have</strong>. It doesn't tell them <strong>who you help, how, or what only you can say</strong>.
+          <br/><br/>
+          The strongest positioning lines in your field don't lead with credentials. They lead with the specific problem the practitioner is known for solving. Yours is doing the opposite — asking the visitor to do the interpretive work of figuring out which kind of expert you are, on which kind of case.
+        </div>
+        <div class="problem-cost">
+          <strong>What this costs you</strong>
+          When benefits directors, journalists, or peer practitioners scan you in a search, there's no single sentence that tells them "this is the woman who does <em>that</em> kind of work." You get remembered as "a functional medicine expert" — a category, not a person.
+        </div>
+      </div>
+
+      <div class="problem-card">
+        <div class="problem-icon">🔗</div>
+        <div class="problem-title">Your LinkedIn URL still ends in /52822150</div>
+        <div class="problem-body">
+          Your profile URL ends in <code style="background:rgba(255,255,255,0.05);padding:2px 6px;border-radius:4px;font-size:12px;">/anga-gonzalez-52822150</code> — the auto-generated numeric suffix LinkedIn assigns to accounts that haven't customized their vanity URL. For a 20-year practitioner with a platform-grade affiliation, this is the smallest possible signal that LinkedIn isn't being treated as the professional asset it deserves to be.
+          <br/><br/>
+          Every time a journalist, patient, or corporate partner Googles your name, the URL they land on telegraphs "account, not brand." It's fixable in 30 seconds — and exactly the kind of detail that signals how the rest of the profile is being treated.
+        </div>
+        <div class="problem-cost">
+          <strong>What this costs you</strong>
+          Trust-at-a-glance. Referral shares that get copy-pasted into team chats. Every tiny compounding moment where someone expected a polished personal brand and found a placeholder URL instead.
+        </div>
+      </div>
+
+      <div class="problem-card">
+        <div class="problem-icon">🕳️</div>
+        <div class="problem-title">Your Posts tab literally says "Nothing to see for now"</div>
+        <div class="problem-body">
+          When a visitor clicks "Posts" under your activity, LinkedIn returns: <em>"Nothing to see for now. Articles, posts, documents, images, videos, or events that Anga adds will appear here."</em>
+          <br/><br/>
+          Meanwhile your recent activity is filled with reposts of <strong>Jacqueline L., Dr. David Reiner, Joanna Krzeslak-Hoogland, Deanna Minich, James M. K.</strong>, and <strong>Nova Dietetics</strong> — all smart, all relevant, none of them you. The algorithm reads this pattern and classifies you as an amplifier, not an author. Your 4,486 followers opened their feed today, saw a post you shared from someone else, and walked away having absorbed <em>their</em> ideas — not yours.
+        </div>
+        <div class="problem-cost">
+          <strong>What this costs you</strong>
+          The single biggest underleverage in your profile: 4,486 people signed up to hear from you, and the official public record shows zero original thoughts. Twenty years of clinical observations, patient patterns, and hard-won insight — sitting silent while your follower count grows on other people's content.
+        </div>
+      </div>
+
+      <div class="problem-card">
+        <div class="problem-icon">📝</div>
+        <div class="problem-title">Your About opens with "two decades of enriching experience"…and truncates</div>
+        <div class="problem-body">
+          The visible opening of your About section reads: <em>"With over two decades of enriching experience, my journey as a Chinese Medicine Practitioner has bee…"</em> and collapses into a "see more" before the first real claim is made.
+          <br/><br/>
+          The first 220 characters of an About section are the only part most visitors ever read. Yours opens with a phrase that could describe any practitioner with 20 years of experience in any modality. There is no hook, no case, no unusual angle that would make a Stork Club HR director, a fertility journalist, or a peer practitioner pause and read further. The depth is inside — but the surface gives them no reason to dig.
+        </div>
+        <div class="problem-cost">
+          <strong>What this costs you</strong>
+          Most profile visits convert to memory or they don't. An About that opens with a generic decades-of-experience phrase gets remembered as "experienced" — a pleasant, forgettable category. Twenty years of rare clinical practice deserves a first line that closes loops, not one that opens a category.
+        </div>
+      </div>
+
+      <div class="problem-card">
+        <div class="problem-icon">🎯</div>
+        <div class="problem-title">Fertility, hormonal, and functional — three niches, no lane</div>
+        <div class="problem-body">
+          Your headline claims three expertise areas simultaneously: functional medicine, hormonal health, and fertility. All three are genuine, all three are related, and all three are <em>different LinkedIn audiences with different feeds, different interests, and different decision-makers</em>.
+          <br/><br/>
+          A corporate benefits director searching "fertility specialist" filters differently than a peri-menopause wellness editor searching "hormonal health" or a functional-medicine clinic seeking a contributing practitioner. Right now your profile sits in the intersection of all three — and because it doesn't lead in any one, it doesn't rank top-of-mind in any one. The positioning isn't wrong; it's unpicked.
+        </div>
+        <div class="problem-cost">
+          <strong>What this costs you</strong>
+          Partial authority in three adjacent niches instead of dominant authority in the one that actually drives your best opportunities. The next Stork Club-tier partnership, the next JAMA Integrative piece, the next keynote — they go to the practitioner who owns a lane, not the one who names three.
+        </div>
+      </div>
+
+      <div class="problem-card">
+        <div class="problem-icon">🧩</div>
+        <div class="problem-title">The scattered playbook: five parallel tactics, no system</div>
+        <div class="problem-body">
+          Website. Video content made with a friend. Instagram Lives for Q&amp;A. An ebook to write. Courses to build. Monthly blogging. Each one of these is a reasonable visibility tactic on its own. Run in parallel, by one person, inside a full clinical week — they are six separate projects, each under-resourced, none compounding into the others.
+          <br/><br/>
+          The core issue isn't motivation or ideas. It's that every one of those tactics is a standalone effort. The website doesn't feed the LinkedIn presence. The videos don't distribute to LinkedIn. The blog doesn't loop into the ebook. The ebook doesn't promote through the courses. Six engines running in isolation — and one practitioner alternating between them in the cracks between patient sessions.
+        </div>
+        <div class="problem-cost">
+          <strong>What this costs you</strong>
+          Every hour you spend on one of them moves the other five backwards. A year from now, the audience that existed today is still 4,486 — because none of the six tactics was given the concentrated output required to compound.
+        </div>
+      </div>
+
+      <div class="problem-card">
+        <div class="problem-icon">📹</div>
+        <div class="problem-title">The content exists — it's just not on LinkedIn</div>
+        <div class="problem-body">
+          You've mentioned filming video content with a friend. That work is real — and it's the single most valuable raw material for LinkedIn visibility a practitioner in your space can have. But none of it is surfacing on your profile. No native video posts. No Featured section entries linking to it. No transcriptions turned into text posts. No clips reshared for the LinkedIn feed.
+          <br/><br/>
+          That means the effort is happening. The output is being produced. And the 4,486 people who follow you on LinkedIn are unaware any of it exists. The content-production problem is already solved. The distribution-to-LinkedIn problem hasn't been touched.
+        </div>
+        <div class="problem-cost">
+          <strong>What this costs you</strong>
+          The steepest form of wasted effort: work you've already done, which your existing audience never gets to see. Every video lost to a single platform is a week of leverage left on the table.
+        </div>
+      </div>
+
+      <div class="problem-card">
+        <div class="problem-icon">📆</div>
+        <div class="problem-title">Monday is admin day — not a visibility day</div>
+        <div class="problem-body">
+          You see patients the rest of the week. Monday is your catch-up day for meetings, admin, and CEU study. That's an honest calendar. It's also the exact schedule where a visibility effort — if it depends on "finding time" inside Monday — will lose to admin 48 weeks of the year.
+          <br/><br/>
+          Every practitioner who tries to build LinkedIn visibility inside a single weekly gap ends up in one of two places: the content stops mid-month when one Monday gets consumed by something urgent, or the visibility work steals from CEU study time and the studying stops. Neither outcome is acceptable. And neither is solved by willpower — it's a structural problem about where the content production actually happens.
+        </div>
+        <div class="problem-cost">
+          <strong>What this costs you</strong>
+          The exhaustion of trying to will a visibility rhythm into existence on top of a full clinical schedule — and the slow resignation that follows when Monday after Monday gets taken by something else.
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<div class="divider"></div>
+
+<!-- ═══════════════ STRENGTHS + GAPS ═══════════════ -->
+<div style="padding:96px 24px;">
+  <div style="max-width:1100px;margin:0 auto;">
+    <div class="section-label fade-in">Detailed Breakdown</div>
+    <div class="section-title fade-in">What you already have vs. what's missing</div>
+    <div class="section-sub fade-in">The good news: the raw material for a category-defining voice in fertility + functional medicine is already in place. What's missing is not credentials — it's structure, rhythm, and a positioning discipline.</div>
+    <div class="two-col fade-in">
+      <div class="col-box">
+        <h3><span class="icon icon-green">✦</span>What's Working</h3>
+        <div class="item"><div class="item-dot item-dot-green"></div><div class="item-text"><strong>Twenty Years of Real Clinical Practice</strong><span>The hardest part — actual clinical judgment built over two decades — is already there. No content strategy can manufacture that. You simply have it.</span></div></div>
+        <div class="item"><div class="item-dot item-dot-green"></div><div class="item-text"><strong>Rare Credential Stack</strong><span>LAc + HOM + MSTCM (Shandong University) is an unusual combination in the US functional-medicine space. It's genuine differentiation — and your network peers confirm it: the "similar profiles" LinkedIn surfaces alongside yours are functional MDs, nutrition doctors, and homeopaths, not generalists.</span></div></div>
+        <div class="item"><div class="item-dot item-dot-green"></div><div class="item-text"><strong>Platform-Grade Affiliation</strong><span>Stork Club is a category-defining employer-benefits brand in the reproductive-care space. That context elevates every professional signal you send — when it's visible.</span></div></div>
+        <div class="item"><div class="item-dot item-dot-green"></div><div class="item-text"><strong>Audience Already Built</strong><span>4,486 followers is real reach. Most practitioners we audit don't have it. You've cleared the hardest growth hurdle — and now the question is whether to keep renting that audience to other people's content or start using it for your own.</span></div></div>
+        <div class="item"><div class="item-dot item-dot-green"></div><div class="item-text"><strong>Active Content Production Already Happening</strong><span>You've started filming video with a friend, you write a website, you have an ebook in mind, and you're building toward courses. The hardest cold-start problem — "am I willing to create" — is already solved. What's missing isn't ambition. It's orchestration.</span></div></div>
+      </div>
+      <div class="col-box">
+        <h3><span class="icon icon-amber">◈</span>What's Missing</h3>
+        <div class="item"><div class="item-dot item-dot-amber"></div><div class="item-text"><strong>A Positioning Sentence</strong><span>One line — not a credentials list — that names who you help, on what kind of case, and what only you can say about it. This is the piece doing the most work on every other section once it exists.</span></div></div>
+        <div class="item"><div class="item-dot item-dot-amber"></div><div class="item-text"><strong>An Original Content Rhythm</strong><span>Not reposts. Not shared links. Your own clinical observations, case-adjacent reflections, and the kind of posts only a 20-year Chinese-medicine practitioner inside a reproductive-benefits company could credibly write.</span></div></div>
+        <div class="item"><div class="item-dot item-dot-amber"></div><div class="item-text"><strong>A Featured Section That Seals the Visit</strong><span>Empty right now. Used correctly, it's where a first-time visitor decides in 10 seconds whether to take you seriously — before they've read a word of your About.</span></div></div>
+        <div class="item"><div class="item-dot item-dot-amber"></div><div class="item-text"><strong>Network Depth to Match Reach</strong><span>4,486 followers, 500+ connections. The deliberate set of 100–200 peer practitioners, benefits leaders, and reproductive-health press that should be in your first-degree network — mostly isn't yet.</span></div></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="divider"></div>
+
+<!-- ═══════════════ VISIBILITY CHART ═══════════════ -->
+<div style="background:var(--navy2);padding:96px 24px;">
+  <div style="max-width:1100px;margin:0 auto;">
+    <div class="section-label fade-in">Visibility Projection</div>
+    <div class="section-title fade-in">Two futures. Same practitioner. Different outcomes.</div>
+    <div class="section-sub fade-in">A practitioner with your credentials and platform, staying on the current trajectory, will still be somewhere around 5,200 followers next April — with the same reach-to-relationship ratio and the same silent curator positioning. With a niche-anchored voice and a structured content cadence, the same practitioner — without changing anything about her actual medicine — compounds into a recognizable category authority in fertility + functional medicine. Here's what 12 months looks like in both directions.</div>
+    <canvas id="visCanvas" height="360" style="width:100%;border-radius:16px;"></canvas>
+    <div class="chart-legend" style="margin-top:20px;">
+      <div class="legend-item"><div class="legend-line" style="background:var(--pink);"></div>With a niche-anchored authority system</div>
+      <div class="legend-item"><div class="legend-line" style="background:rgba(255,255,255,0.2);border-top:2px dashed rgba(255,255,255,0.2);height:0;"></div>Current trajectory</div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════ EXECUTION TENSION ═══════════════ -->
+<div style="padding:96px 24px;">
+  <div style="max-width:1100px;margin:0 auto;">
+    <div class="section-label fade-in">Why This Is Actually Hard</div>
+    <div class="section-title fade-in">Knowing the gaps is the easy part</div>
+    <div class="section-sub fade-in">Most practitioners who read an audit like this nod, agree with every point, open a new tab to rewrite their headline — and stop within 10 days. Not because they weren't motivated. Because the execution side of this, while running a clinical practice inside a platform company, is genuinely harder than it looks from the outside.</div>
+
+    <div class="tension-grid fade-in">
+      <div class="tension-card">
+        <div class="tension-icon">🌀</div>
+        <div class="tension-title">The Pivot Problem</div>
+        <div class="tension-body">You've trained your audience, your algorithm, and your own habit loop to expect curation. Shifting from amplifier to voice isn't a one-post decision — it's a months-long re-signal that initially under-performs before it compounds. Most practitioners quit during the under-performing phase.</div>
+      </div>
+      <div class="tension-card">
+        <div class="tension-icon">🗣️</div>
+        <div class="tension-title">The Voice Problem</div>
+        <div class="tension-body">Translating 20 years of Chinese-medicine clinical nuance into LinkedIn-readable posts — without flattening it into generic wellness content, and without alienating the peer practitioners who'll smell oversimplification — is a craft. It takes most people 30–50 iterations to find their register. That's 12 months on your own.</div>
+      </div>
+      <div class="tension-card">
+        <div class="tension-icon">🎯</div>
+        <div class="tension-title">The Niche Problem</div>
+        <div class="tension-body">Functional. Hormonal. Fertility. Picking the lane that becomes your public identity — while the other two support it rather than compete with it — is a strategic call, not a preference call. Get it wrong and you rebuild the audience from scratch a year later. Get it right and every post compounds.</div>
+      </div>
+      <div class="tension-card">
+        <div class="tension-icon">🕐</div>
+        <div class="tension-title">The Cadence Problem</div>
+        <div class="tension-body">LinkedIn doesn't reward one great post. It rewards 40 good ones across six months. Inside a Stork Club workload plus private-practice patients, finding the time and headspace to ship that consistently — week after week, including the weeks you're clinic-exhausted — is where 90% of practitioners quietly stop.</div>
+      </div>
+      <div class="tension-card">
+        <div class="tension-icon">📉</div>
+        <div class="tension-title">The Algorithm Penalty</div>
+        <div class="tension-body">You're currently classified as a curator account — high repost ratio, low original signal. That classification decays original-post reach when you do publish. Reversing it is technical, not motivational. You can't "try harder" your way out of an algorithm that has categorized you.</div>
+      </div>
+      <div class="tension-card">
+        <div class="tension-icon">⚖️</div>
+        <div class="tension-title">The Authority Paradox</div>
+        <div class="tension-body">Twenty-year practitioners often lose LinkedIn visibility to social-first newcomers with a third of the expertise but a tenth of the caution. Your clinical restraint — which makes you trustworthy in practice — can make you invisible on a platform that rewards opinion. Threading that needle without becoming the thing you don't want to become is the hardest piece of the whole thing.</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="divider"></div>
+
+<!-- ═══════════════ ROI + TIMELINE ═══════════════ -->
+<div style="padding:96px 24px;">
+  <div style="max-width:1100px;margin:0 auto;">
+    <div class="section-label fade-in">The Long Game</div>
+    <div class="section-title fade-in">LinkedIn, done right, is a<br/>compounding authority asset.</div>
+    <div class="section-sub fade-in">The functional-medicine practitioners who end up defining their category aren't just more credentialled. They're more recognizable in the specialty-adjacent networks that eventually shape corporate partnerships, press mentions, and speaking slots. That recognition doesn't happen in a week — it's built, quietly and consistently, over 12 to 18 months.</div>
+
+    <div class="roi-grid fade-in">
+      <div class="roi-card"><div class="roi-num" style="color:var(--pink);"><span class="counter3" data-target="4">0</span>×</div><div class="roi-label">Profile views within 90 days<br/>of positioning + Featured rebuild</div></div>
+      <div class="roi-card"><div class="roi-num" style="color:var(--gold);"><span class="counter3" data-target="68">0</span>%</div><div class="roi-label">Of corporate benefits leaders<br/>check LinkedIn pre-engagement</div></div>
+      <div class="roi-card"><div class="roi-num" style="color:var(--green);"><span class="counter3" data-target="3">0</span>×</div><div class="roi-label">More inbound (press, partnership,<br/>speaking) from peer-level practitioners</div></div>
+      <div class="roi-card"><div class="roi-num" style="color:var(--teal);"><span class="counter3" data-target="25">0</span>k+</div><div class="roi-label">Estimated monthly impressions<br/>with a live original-content cadence</div></div>
+    </div>
+
+    <div class="section-label fade-in" style="margin-top:60px;">What We'd Build Together</div>
+    <div class="section-title fade-in" style="font-size:28px;margin-bottom:40px;">A rough arc of the work ahead</div>
+    <div class="timeline">
+      <div class="tl-item"><div class="tl-dot"></div><div class="tl-year">Phase 1</div><div class="tl-title">Positioning Rewrite</div><div class="tl-desc">Everything a visitor sees in the first 10 seconds — headline, About opening line, Featured section, custom URL, experience copy — rebuilt around a single defensible authority claim. Not three niches. One lane that carries all three.</div></div>
+      <div class="tl-item"><div class="tl-dot"></div><div class="tl-year">Phase 2</div><div class="tl-title">Voice Recovery</div><div class="tl-desc">Unlocking the 20-year clinical voice you already have, in a form the LinkedIn feed will actually read and share. This is the phase that decides whether the next six months compound — and the one most practitioners skip.</div></div>
+      <div class="tl-item"><div class="tl-dot"></div><div class="tl-year">Phase 3</div><div class="tl-title">Consistency Engine</div><div class="tl-desc">A rhythm of original content that survives a full Stork Club workload, private-practice sessions, and the weeks you don't want to open LinkedIn. This is the system part of the work — and the reason most people never reach it alone.</div></div>
+      <div class="tl-item"><div class="tl-dot"></div><div class="tl-year">Phase 4</div><div class="tl-title">Network Activation</div><div class="tl-desc">Turning 4,486 passive followers into a deliberate first-degree network of 100–200 peer practitioners, benefits decision-makers, and reproductive-health press — the kind of network that generates the opportunities a silent audience never will.</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════ BOOKING SECTION ═══════════════ -->
+<div id="booking">
+  <div class="booking-wrap fade-in">
+
+    <!-- LEFT: Why book -->
+    <div class="booking-left">
+      <div class="section-label" style="color:var(--gold);">Our Strategy Call</div>
+      <div class="section-title">Let's turn this audit into a clear next move for your authority.</div>
+
+      <ul class="booking-why">
+        <li>
+          <span class="bw-icon">🎯</span>
+          <div><strong>A Niche-Anchored Roadmap</strong>We'll map the next 90 days of your LinkedIn specifically to your fertility + functional medicine authority — not a generic practitioner template.</div>
+        </li>
+        <li>
+          <span class="bw-icon">🔬</span>
+          <div><strong>Live Profile Walk-through</strong>We'll open your profile together and go line by line — headline, About, Featured, experience — and decide what changes first and why.</div>
+        </li>
+        <li>
+          <span class="bw-icon">📈</span>
+          <div><strong>Honest Growth Projection</strong>You'll leave the call knowing what's realistic for a practitioner inside a platform role, and what isn't. No hype, no inflated numbers.</div>
+        </li>
+        <li>
+          <span class="bw-icon">💡</span>
+          <div><strong>Zero Pressure</strong>This is a 30-minute strategy session. If we fit, great. If not, you'll still walk away with clarity you didn't have before.</div>
+        </li>
+      </ul>
+
+      <!-- Ketan's card -->
+      <a href="https://www.linkedin.com/in/kketanrv/" target="_blank" class="ketan-card">
+        <div class="ketan-avatar">K</div>
+        <div class="ketan-info">
+          <div class="ketan-name">Ketan Vaghela</div>
+          <div class="ketan-role">LinkedIn Growth Strategist · Authority System Builder</div>
+          <div class="ketan-link">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 01-2.063-2.065 2.064 2.064 0 112.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
+            View Ketan's LinkedIn Profile →
+          </div>
+        </div>
+      </a>
+    </div>
+
+    <!-- RIGHT: Calendly card -->
+    <div class="booking-right">
+      <div class="calendly-box">
+        <div class="calendly-header">
+          <span class="cal-icon">📅</span>
+          <div>
+            <div class="cal-title">Free 30-Min LinkedIn Strategy Call</div>
+            <div class="cal-sub">with Ketan Vaghela · LinkedIn Growth Specialist</div>
+          </div>
+        </div>
+
+        <div class="cal-details">
+          <div class="cal-row">⏱ <span>Duration:</span> 30 minutes, video call</div>
+          <div class="cal-row">🎁 <span>Cost:</span> Completely free — no obligation</div>
+          <div class="cal-row">📍 <span>Format:</span> Google Meet / Zoom (your choice)</div>
+          <div class="cal-row">✅ <span>What you'll get:</span> Custom action plan + live profile review</div>
+        </div>
+
+        <div class="cal-slots">
+          <div class="slot">Mon – Fri</div>
+          <div class="slot">Morning & Afternoon</div>
+          <div class="slot">PT / CT / ET Friendly</div>
+        </div>
+
+        <div class="cal-btn-wrap">
+          <a href="https://calendly.com/ketanvaghela/ai-avatar-demo" target="_blank" class="cal-btn">
+            📅 Book / Confirm Your Strategy Call
+          </a>
+          <div class="cal-note">
+            If you've already booked, this is your confirmation link.<br/>
+            <span style="color:var(--pink);font-weight:600;">See you on the call.</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Urgency notice -->
+      <div style="margin-top:20px;background:rgba(240,165,0,0.06);border:1px solid rgba(240,165,0,0.2);border-radius:14px;padding:20px 24px;">
+        <div style="font-size:13px;color:var(--gold);font-weight:700;margin-bottom:6px;">⏳ Why the timing matters</div>
+        <div style="font-size:13px;color:var(--muted);line-height:1.6;">Fertility + functional medicine is becoming a crowded LinkedIn space. The practitioners defining the category publicly right now — in 2026 — are the ones whose names corporate partners, journalists, and peer networks will default to in 2028. The compounding starts the moment the voice stops being borrowed.</div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ═══════════════ FINAL CTA ═══════════════ -->
+<div id="finalcta">
+  <div class="finalcta-wrap fade-in">
+    <div class="cta-tag">Your Next Move</div>
+    <div class="cta-title">Your expertise deserves<br/><span>a voice that carries it.</span></div>
+    <p class="cta-desc">You already have two decades of clinical practice, three credentials, a platform-grade affiliation, and an audience 4,486 strong. The women who'll need a functional-medicine fertility voice in the next decade don't yet know your name — but the decision-makers who shape whether they find you are already on LinkedIn. Let's make sure, by the time they look, there's something unmistakably yours to find.</p>
+    <div class="cta-buttons">
+      <a href="https://calendly.com/ketanvaghela/ai-avatar-demo" target="_blank" class="btn-primary">📅 Book / Confirm Your Call</a>
+      <a href="https://www.linkedin.com/in/kketanrv/" target="_blank" class="btn-secondary">Connect on LinkedIn</a>
+    </div>
+    <p class="cta-note">30 minutes. Free. A real conversation about what's possible for your name.</p>
+  </div>
+</div>
+
+<!-- ═══════════════ FOOTER ═══════════════ -->
+<div style="border-top:1px solid rgba(255,255,255,0.06);">
+  <footer>
+    <p>Prepared by <strong>Ketan Vaghela · LinkedIn Growth Strategist</strong> · Complimentary Audit for Anga Gonzalez · April 2026</p>
+    <div class="footer-links">
+      <a href="https://calendly.com/ketanvaghela/ai-avatar-demo" target="_blank">📅 Book a Call</a>
+      <a href="https://www.linkedin.com/in/kketanrv/" target="_blank">LinkedIn</a>
+      <a href="https://www.linkedin.com/in/anga-gonzalez-52822150/" target="_blank">Your Profile</a>
+    </div>
+  </footer>
+</div>
+
+<!-- ═══════════════ SCRIPTS ═══════════════ -->
+<script>
+// ─── HERO BACKGROUND CANVAS ───────────────────────────────────────────────
+(function(){
+  const canvas=document.getElementById('bgCanvas');
+  const ctx=canvas.getContext('2d');
+  let W,H,particles=[],pulse=0;
+  function resize(){W=canvas.width=canvas.offsetWidth;H=canvas.height=canvas.offsetHeight;}
+  resize();window.addEventListener('resize',resize);
+  class Particle{
+    constructor(){this.reset();}
+    reset(){this.x=Math.random()*W;this.y=Math.random()*H;this.r=Math.random()*2+.5;this.vx=(Math.random()-.5)*.4;this.vy=(Math.random()-.5)*.4;this.alpha=Math.random()*.6+.1;this.color=Math.random()>.6?'#ff6b9d':Math.random()>.5?'#f0a500':'#00d4c8';this.phase=Math.random()*Math.PI*2;}
+    update(){this.x+=this.vx;this.y+=this.vy;this.phase+=.04;if(this.x<0||this.x>W||this.y<0||this.y>H)this.reset();}
+    draw(){ctx.save();ctx.globalAlpha=this.alpha*(.7+.3*Math.sin(this.phase));ctx.beginPath();ctx.arc(this.x,this.y,this.r,0,Math.PI*2);ctx.fillStyle=this.color;ctx.shadowBlur=8;ctx.shadowColor=this.color;ctx.fill();ctx.restore();}
+  }
+  for(let i=0;i<130;i++)particles.push(new Particle());
+  function drawConnections(){for(let i=0;i<particles.length;i++){for(let j=i+1;j<particles.length;j++){const dx=particles[i].x-particles[j].x,dy=particles[i].y-particles[j].y,d=Math.sqrt(dx*dx+dy*dy);if(d<90){ctx.save();ctx.globalAlpha=(1-d/90)*.12;ctx.strokeStyle='#ff6b9d';ctx.lineWidth=.5;ctx.beginPath();ctx.moveTo(particles[i].x,particles[i].y);ctx.lineTo(particles[j].x,particles[j].y);ctx.stroke();ctx.restore();}}}}
+  function drawPulse(){const cx=W/2,cy=H/2,R=Math.min(W,H)*.32;ctx.save();for(let i=0;i<3;i++){const p=(pulse+i*0.33)%1;const r=R*p;const a=(1-p)*.2;ctx.beginPath();ctx.arc(cx,cy,r,0,Math.PI*2);ctx.strokeStyle=`rgba(255,107,157,${a})`;ctx.lineWidth=1;ctx.stroke();}ctx.restore();}
+  function tick(){ctx.clearRect(0,0,W,H);const bg=ctx.createRadialGradient(W/2,H/2,0,W/2,H/2,Math.max(W,H)*.7);bg.addColorStop(0,'rgba(10,22,40,0.5)');bg.addColorStop(1,'rgba(5,13,31,0.95)');ctx.fillStyle=bg;ctx.fillRect(0,0,W,H);drawConnections();particles.forEach(p=>{p.update();p.draw();});drawPulse();pulse+=.003;requestAnimationFrame(tick);}
+  tick();
+})();
+
+// ─── RING CHARTS ─────────────────────────────────────────────────────────
+function drawRing(canvas,pct,color){
+  const ctx=canvas.getContext('2d'),size=110,cx=size/2,cy=size/2,r=44;
+  const start=-Math.PI/2,end=start+(pct/100)*Math.PI*2;
+  ctx.clearRect(0,0,size,size);
+  ctx.beginPath();ctx.arc(cx,cy,r,0,Math.PI*2);ctx.strokeStyle='rgba(255,255,255,0.06)';ctx.lineWidth=8;ctx.stroke();
+  ctx.beginPath();ctx.arc(cx,cy,r,start,end);ctx.strokeStyle=color;ctx.lineWidth=8;ctx.lineCap='round';ctx.shadowBlur=12;ctx.shadowColor=color;ctx.stroke();
+}
+
+// ─── INTERSECTION OBSERVER ────────────────────────────────────────────────
+const io=new IntersectionObserver(e=>{e.forEach(el=>{if(el.isIntersecting)el.target.classList.add('visible');});},{threshold:.15});
+document.querySelectorAll('.fade-in').forEach(el=>io.observe(el));
+
+// ─── SCORES animate ──────────────────────────────────────────────────────
+let ringsAnimated=false;
+const ringIo=new IntersectionObserver(e=>{e.forEach(en=>{if(en.isIntersecting&&!ringsAnimated){ringsAnimated=true;animateRings();animateGroup('.counter');}});},{threshold:.3});
+const scoresSec=document.getElementById('scores');
+if(scoresSec)ringIo.observe(scoresSec);
+
+function animateRings(){
+  document.querySelectorAll('.ring-canvas').forEach(canvas=>{
+    const target=parseInt(canvas.dataset.pct),color=canvas.dataset.color;
+    let cur=0,step=target/60;
+    const t=setInterval(()=>{cur=Math.min(cur+step,target);drawRing(canvas,cur,color);if(cur>=target)clearInterval(t);},16);
+  });
+}
+function animateGroup(sel){
+  document.querySelectorAll(sel).forEach(el=>{
+    const target=parseInt(el.dataset.target);let cur=0,step=Math.max(1,target/60);
+    const t=setInterval(()=>{cur=Math.min(cur+step,target);el.textContent=Math.round(cur);if(cur>=target)clearInterval(t);},16);
+  });
+}
+
+// ─── REALITY counters ────────────────────────────────────────────────────
+const realityIo=new IntersectionObserver(e=>{e.forEach(en=>{if(en.isIntersecting){en.target.querySelectorAll('.counter2').forEach(el=>{if(el.dataset.animated)return;el.dataset.animated=1;const target=parseInt(el.dataset.target);let cur=0,step=Math.max(1,target/60);const t=setInterval(()=>{cur=Math.min(cur+step,target);el.textContent=Math.round(cur).toLocaleString();if(cur>=target)clearInterval(t);},16);});}});},{threshold:.3});
+document.querySelectorAll('.reality-strip').forEach(el=>realityIo.observe(el));
+
+// ─── ROI counters ────────────────────────────────────────────────────────
+const roiIo=new IntersectionObserver(e=>{e.forEach(en=>{if(en.isIntersecting){en.target.querySelectorAll('.counter3').forEach(el=>{if(el.dataset.animated)return;el.dataset.animated=1;const target=parseInt(el.dataset.target);let cur=0,step=Math.max(1,target/60);const t=setInterval(()=>{cur=Math.min(cur+step,target);el.textContent=Math.round(cur);if(cur>=target)clearInterval(t);},20);});}});},{threshold:.4});
+document.querySelectorAll('.roi-grid').forEach(el=>roiIo.observe(el));
+
+// ─── VISIBILITY CHART ─────────────────────────────────────────────────────
+(function(){
+  const canvas=document.getElementById('visCanvas');if(!canvas)return;
+  const ctx=canvas.getContext('2d');
+  const labels=['Now','M1','M2','M3','M4','M5','M6','M7','M8','M9','M10','M11','M12'];
+  const current   =[4486,4540,4598,4660,4724,4790,4858,4928,5000,5074,5150,5228,5308];
+  const optimized =[4486,4820,5260,5830,6540,7420,8500,9800,11350,13200,15380,17920,20880];
+  let progress=0,animating=false;
+  const chartIo=new IntersectionObserver(e=>{if(e[0].isIntersecting&&!animating){animating=true;animate();}},{threshold:.3});
+  chartIo.observe(canvas);
+  function draw(prog){
+    const W=canvas.offsetWidth,H=360;canvas.width=W;canvas.height=H;
+    const pad={top:30,right:40,bottom:50,left:70};
+    const cW=W-pad.left-pad.right,cH=H-pad.top-pad.bottom;
+    ctx.clearRect(0,0,W,H);
+    ctx.fillStyle='rgba(255,255,255,0.02)';ctx.beginPath();ctx.roundRect(0,0,W,H,16);ctx.fill();
+    const maxVal=22000,xStep=cW/(labels.length-1);
+    for(let i=0;i<=4;i++){const y=pad.top+cH-(i/4)*cH;ctx.strokeStyle='rgba(255,255,255,0.05)';ctx.lineWidth=1;ctx.setLineDash([4,6]);ctx.beginPath();ctx.moveTo(pad.left,y);ctx.lineTo(pad.left+cW,y);ctx.stroke();ctx.setLineDash([]);ctx.fillStyle='rgba(122,155,181,0.7)';ctx.font='11px Inter';ctx.textAlign='right';const val=Math.round(maxVal*i/4/1000);ctx.fillText(val+'k',pad.left-10,y+4);}
+    labels.forEach((l,i)=>{const x=pad.left+i*xStep;ctx.fillStyle='rgba(122,155,181,0.8)';ctx.font='11px Inter';ctx.textAlign='center';ctx.fillText(l,x,H-14);});
+    ctx.save();ctx.translate(18,H/2);ctx.rotate(-Math.PI/2);ctx.fillStyle='rgba(122,155,181,0.6)';ctx.font='11px Inter';ctx.textAlign='center';ctx.fillText('Followers',0,0);ctx.restore();
+    const totalPoints=Math.floor(prog*(labels.length-1));
+    ctx.beginPath();ctx.setLineDash([6,8]);ctx.strokeStyle='rgba(255,255,255,0.2)';ctx.lineWidth=2;
+    for(let i=0;i<=totalPoints;i++){const x=pad.left+i*xStep,y=pad.top+cH-(current[i]/maxVal)*cH;i===0?ctx.moveTo(x,y):ctx.lineTo(x,y);}
+    ctx.stroke();ctx.setLineDash([]);
+    if(totalPoints>0){
+      const grad=ctx.createLinearGradient(pad.left,0,pad.left+cW,0);grad.addColorStop(0,'#ff6b9d');grad.addColorStop(.5,'#ff8ab3');grad.addColorStop(1,'#00d4c8');
+      ctx.save();ctx.shadowBlur=16;ctx.shadowColor='#ff6b9d';ctx.strokeStyle=grad;ctx.lineWidth=3;ctx.lineJoin='round';ctx.beginPath();
+      for(let i=0;i<=totalPoints;i++){const x=pad.left+i*xStep,y=pad.top+cH-(optimized[i]/maxVal)*cH;i===0?ctx.moveTo(x,y):ctx.lineTo(x,y);}
+      ctx.stroke();ctx.restore();
+      ctx.save();ctx.beginPath();
+      for(let i=0;i<=totalPoints;i++){const x=pad.left+i*xStep,y=pad.top+cH-(optimized[i]/maxVal)*cH;i===0?ctx.moveTo(x,y):ctx.lineTo(x,y);}
+      ctx.lineTo(pad.left+totalPoints*xStep,pad.top+cH);ctx.lineTo(pad.left,pad.top+cH);ctx.closePath();
+      const fill=ctx.createLinearGradient(0,pad.top,0,pad.top+cH);fill.addColorStop(0,'rgba(255,107,157,0.18)');fill.addColorStop(1,'rgba(255,107,157,0)');ctx.fillStyle=fill;ctx.fill();ctx.restore();
+      const lx=pad.left+totalPoints*xStep,ly=pad.top+cH-(optimized[totalPoints]/maxVal)*cH;
+      ctx.beginPath();ctx.arc(lx,ly,5,0,Math.PI*2);ctx.fillStyle='#ff6b9d';ctx.shadowBlur=14;ctx.shadowColor='#ff6b9d';ctx.fill();
+    }
+  }
+  function animate(){let start=null;const dur=2200;function step(ts){if(!start)start=ts;progress=Math.min((ts-start)/dur,1);draw(progress);if(progress<1)requestAnimationFrame(step);}requestAnimationFrame(step);}
+  window.addEventListener('resize',()=>draw(progress||0));
+})();
+
+// ─── TIMELINE ────────────────────────────────────────────────────────────
+const tlIo=new IntersectionObserver(e=>{e.forEach(en=>{if(en.isIntersecting)en.target.classList.add('visible');});},{threshold:.3});
+document.querySelectorAll('.tl-item').forEach((el,i)=>{el.style.transitionDelay=i*.15+'s';tlIo.observe(el);});
+</script>
+</body>
+</html>
