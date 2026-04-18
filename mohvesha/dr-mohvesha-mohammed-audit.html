@@ -1,0 +1,625 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>LinkedIn Visibility Audit · Dr. Mohvesha Mohammed</title>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:wght@400;500;600;700;800&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{font-family:'Inter',sans-serif;background:#0a0e1a;color:#e8ecf3;line-height:1.6;-webkit-font-smoothing:antialiased}
+  .serif{font-family:'Fraunces',serif;letter-spacing:-0.01em}
+  .container{max-width:1180px;margin:0 auto;padding:0 28px}
+  .section{padding:84px 0;border-bottom:1px solid rgba(255,255,255,0.05)}
+  .eyebrow{display:inline-block;font-size:11px;letter-spacing:0.18em;text-transform:uppercase;color:#c89b3c;font-weight:600;margin-bottom:18px;padding:6px 14px;border:1px solid rgba(200,155,60,0.3);border-radius:100px;background:rgba(200,155,60,0.08)}
+  h1,h2,h3{font-family:'Fraunces',serif;font-weight:600;letter-spacing:-0.02em;line-height:1.15}
+  h1{font-size:clamp(40px,5vw,64px)}
+  h2{font-size:clamp(30px,3.5vw,44px);margin-bottom:20px}
+  h3{font-size:22px;margin-bottom:10px}
+  p{color:#b4bdcd;font-size:17px}
+  .muted{color:#8592a8;font-size:15px}
+  .accent{color:#c89b3c}
+  .white{color:#f5f7fc}
+
+  /* HERO */
+  .hero{position:relative;padding:110px 0 90px;background:radial-gradient(ellipse at 15% 0%,rgba(200,155,60,0.14),transparent 55%),radial-gradient(ellipse at 85% 100%,rgba(80,110,220,0.14),transparent 55%),linear-gradient(180deg,#0a0e1a 0%,#0d1220 100%);overflow:hidden}
+  .hero-grid{display:grid;grid-template-columns:1.3fr 1fr;gap:56px;align-items:center}
+  .hero h1{color:#f5f7fc;margin-bottom:22px}
+  .hero h1 .highlight{background:linear-gradient(90deg,#e8b85c,#c89b3c);-webkit-background-clip:text;background-clip:text;color:transparent}
+  .hero-sub{font-size:19px;color:#c2cade;max-width:620px;margin-bottom:30px}
+  .hero-card{background:linear-gradient(160deg,rgba(255,255,255,0.04),rgba(255,255,255,0.01));border:1px solid rgba(255,255,255,0.08);border-radius:20px;padding:30px;backdrop-filter:blur(12px)}
+  .hero-card-label{font-size:10px;letter-spacing:0.2em;text-transform:uppercase;color:#c89b3c;font-weight:700;margin-bottom:14px}
+  .hero-card-name{font-family:'Fraunces',serif;font-size:24px;color:#f5f7fc;margin-bottom:6px;font-weight:600}
+  .hero-card-role{color:#9aa5ba;font-size:13px;margin-bottom:18px}
+  .hero-card-divider{height:1px;background:rgba(255,255,255,0.08);margin:18px 0}
+  .hero-card-row{display:flex;justify-content:space-between;margin-bottom:10px;font-size:13px}
+  .hero-card-row .label{color:#8592a8}
+  .hero-card-row .val{color:#e8ecf3;font-weight:500}
+
+  /* PRE-CALL NOTE */
+  .note{margin-top:32px;padding:20px 24px;background:rgba(200,155,60,0.06);border-left:3px solid #c89b3c;border-radius:4px}
+  .note strong{color:#e8b85c}
+
+  /* SECTION HEADER */
+  .section-header{text-align:center;max-width:780px;margin:0 auto 56px}
+  .section-header p{margin-top:12px;font-size:18px}
+
+  /* SCORE RINGS */
+  .scores{display:grid;grid-template-columns:repeat(5,1fr);gap:20px}
+  .score-card{background:linear-gradient(160deg,rgba(255,255,255,0.03),rgba(255,255,255,0.01));border:1px solid rgba(255,255,255,0.08);border-radius:18px;padding:26px 20px;text-align:center}
+  .ring{position:relative;width:110px;height:110px;margin:0 auto 16px}
+  .ring svg{transform:rotate(-90deg)}
+  .ring-num{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-family:'Fraunces',serif;font-size:30px;font-weight:600;color:#f5f7fc}
+  .score-label{font-size:12px;letter-spacing:0.12em;text-transform:uppercase;color:#b4bdcd;font-weight:600;margin-bottom:6px}
+  .score-desc{font-size:12px;color:#8592a8;line-height:1.5}
+
+  /* REALITY STRIP */
+  .reality{display:grid;grid-template-columns:repeat(4,1fr);gap:22px;margin-top:16px}
+  .r-cell{background:linear-gradient(160deg,rgba(255,255,255,0.03),rgba(255,255,255,0.01));border:1px solid rgba(255,255,255,0.08);border-radius:16px;padding:28px 24px}
+  .r-big{font-family:'Fraunces',serif;font-size:46px;color:#e8b85c;font-weight:600;line-height:1;margin-bottom:8px}
+  .r-label{color:#f5f7fc;font-size:13px;font-weight:600;margin-bottom:10px}
+  .r-sub{color:#8592a8;font-size:12.5px;font-style:italic;line-height:1.5}
+
+  /* PROBLEM CARDS */
+  .problems{display:grid;grid-template-columns:repeat(2,1fr);gap:22px}
+  .problem{background:linear-gradient(160deg,rgba(255,255,255,0.03),rgba(255,255,255,0.01));border:1px solid rgba(255,255,255,0.08);border-radius:18px;padding:30px;position:relative;transition:transform .2s,border-color .2s}
+  .problem:hover{transform:translateY(-2px);border-color:rgba(200,155,60,0.3)}
+  .problem-num{position:absolute;top:22px;right:24px;font-family:'Fraunces',serif;font-size:44px;font-weight:600;color:rgba(200,155,60,0.15);line-height:1}
+  .problem-tag{display:inline-block;font-size:10px;letter-spacing:0.18em;text-transform:uppercase;color:#c89b3c;font-weight:700;margin-bottom:12px}
+  .problem h3{color:#f5f7fc;margin-bottom:12px;max-width:85%;font-size:20px}
+  .problem p{font-size:14.5px;line-height:1.7;margin-bottom:14px}
+  .cost{padding:12px 16px;background:rgba(255,80,80,0.06);border-left:3px solid rgba(255,80,80,0.5);border-radius:4px;font-size:13px;color:#d6dcea}
+  .cost strong{color:#ff9c8f}
+
+  /* STRENGTHS vs GAPS */
+  .two-col{display:grid;grid-template-columns:1fr 1fr;gap:24px}
+  .col{background:linear-gradient(160deg,rgba(255,255,255,0.03),rgba(255,255,255,0.01));border:1px solid rgba(255,255,255,0.08);border-radius:18px;padding:34px}
+  .col.strengths{border-color:rgba(100,220,150,0.2)}
+  .col.gaps{border-color:rgba(255,150,120,0.2)}
+  .col h3{font-size:18px;color:#f5f7fc;margin-bottom:20px;display:flex;align-items:center;gap:10px}
+  .col-dot{width:10px;height:10px;border-radius:50%}
+  .col.strengths .col-dot{background:#64dc96}
+  .col.gaps .col-dot{background:#ff9680}
+  .col ul{list-style:none}
+  .col li{padding:14px 0;border-top:1px dashed rgba(255,255,255,0.06);display:flex;gap:12px;align-items:flex-start;font-size:14.5px;color:#c2cade;line-height:1.6}
+  .col li:first-child{border-top:none}
+  .col li::before{content:"→";color:#c89b3c;flex-shrink:0;font-weight:600}
+  .col.strengths li::before{content:"✓";color:#64dc96}
+
+  /* PROJECTION */
+  .projection{display:grid;grid-template-columns:1.3fr 1fr;gap:42px;align-items:center;margin-top:30px}
+  .proj-stats{display:flex;flex-direction:column;gap:20px}
+  .proj-stat{background:linear-gradient(160deg,rgba(255,255,255,0.03),rgba(255,255,255,0.01));border:1px solid rgba(255,255,255,0.08);border-radius:14px;padding:22px 26px}
+  .proj-stat-num{font-family:'Fraunces',serif;font-size:38px;color:#e8b85c;font-weight:600;line-height:1.1}
+  .proj-stat-label{color:#b4bdcd;font-size:13.5px;margin-top:6px;line-height:1.5}
+  canvas{max-width:100%;height:auto}
+
+  /* EXECUTION TENSION */
+  .tension{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
+  .tension-card{background:linear-gradient(135deg,rgba(80,110,220,0.06),rgba(200,155,60,0.04));border:1px solid rgba(80,110,220,0.15);border-radius:16px;padding:26px}
+  .tension-tag{font-size:10px;letter-spacing:0.15em;text-transform:uppercase;color:#8aa0e0;font-weight:700;margin-bottom:10px}
+  .tension-card h4{font-family:'Fraunces',serif;font-size:17px;color:#f5f7fc;margin-bottom:10px;font-weight:600}
+  .tension-card p{font-size:13.5px;color:#b4bdcd;line-height:1.65}
+
+  /* ROI */
+  .roi{display:grid;grid-template-columns:repeat(3,1fr);gap:22px;margin-top:30px}
+  .roi-card{background:linear-gradient(160deg,rgba(200,155,60,0.05),rgba(200,155,60,0.02));border:1px solid rgba(200,155,60,0.2);border-radius:16px;padding:32px 28px;text-align:center}
+  .roi-num{font-family:'Fraunces',serif;font-size:44px;color:#e8b85c;font-weight:600;line-height:1;margin-bottom:8px}
+  .roi-label{font-size:13px;color:#f5f7fc;font-weight:600;margin-bottom:6px}
+  .roi-sub{font-size:12px;color:#8592a8;line-height:1.5}
+
+  /* ROADMAP */
+  .roadmap{display:grid;grid-template-columns:repeat(4,1fr);gap:18px;margin-top:30px}
+  .phase{background:#0f1424;border:1px solid rgba(255,255,255,0.08);border-radius:16px;padding:28px 22px;position:relative}
+  .phase::before{content:"";position:absolute;top:0;left:0;width:100%;height:3px;background:linear-gradient(90deg,#c89b3c,#e8b85c);border-radius:16px 16px 0 0}
+  .phase-num{font-family:'Fraunces',serif;font-size:13px;color:#c89b3c;font-weight:600;letter-spacing:0.08em;margin-bottom:6px}
+  .phase h4{font-family:'Fraunces',serif;font-size:18px;color:#f5f7fc;margin-bottom:10px;font-weight:600}
+  .phase p{font-size:13px;color:#b4bdcd;line-height:1.6}
+
+  /* BOOKING */
+  .booking{background:linear-gradient(160deg,#0f1424,#0a0e1a);border:1px solid rgba(200,155,60,0.2);border-radius:24px;padding:50px;display:grid;grid-template-columns:1fr 1fr;gap:42px;align-items:center}
+  .profile-card{background:rgba(10,14,26,0.6);border:1px solid rgba(255,255,255,0.1);border-radius:18px;padding:32px}
+  .avatar{width:80px;height:80px;border-radius:50%;background:linear-gradient(135deg,#e8b85c,#c89b3c);display:flex;align-items:center;justify-content:center;font-family:'Fraunces',serif;font-size:30px;color:#0a0e1a;font-weight:700;margin-bottom:18px}
+  .profile-name{font-family:'Fraunces',serif;font-size:22px;color:#f5f7fc;font-weight:600;margin-bottom:4px}
+  .profile-role{color:#c89b3c;font-size:13px;margin-bottom:16px}
+  .profile-bio{color:#b4bdcd;font-size:13.5px;line-height:1.65;margin-bottom:18px}
+  .profile-links{display:flex;flex-direction:column;gap:8px;font-size:13px;color:#8592a8}
+  .profile-links a{color:#c89b3c;text-decoration:none}
+  .booking-right h2{color:#f5f7fc}
+  .booking-right p{margin:14px 0 28px;font-size:16px;line-height:1.65}
+
+  /* CTA */
+  .cta-section{background:radial-gradient(ellipse at center,rgba(200,155,60,0.12),transparent 60%),linear-gradient(160deg,#0f1424,#0a0e1a);text-align:center;padding:80px 0;border-radius:24px;margin:40px 0}
+  .cta-btn{display:inline-flex;align-items:center;gap:12px;background:linear-gradient(90deg,#e8b85c,#c89b3c);color:#0a0e1a;font-weight:700;font-size:16px;padding:20px 42px;border-radius:12px;text-decoration:none;transition:transform .15s,box-shadow .15s}
+  .cta-btn:hover{transform:translateY(-2px);box-shadow:0 12px 40px rgba(200,155,60,0.3)}
+  .cta-btn svg{width:18px;height:18px}
+  .cta-sub{display:block;margin-top:18px;color:#8592a8;font-size:14px}
+
+  footer{padding:40px 0;text-align:center;border-top:1px solid rgba(255,255,255,0.05);color:#6c7a94;font-size:13px}
+  footer a{color:#c89b3c;text-decoration:none}
+  footer .name{font-family:'Fraunces',serif;color:#e8ecf3;font-size:15px;margin-bottom:6px;display:block;font-weight:600}
+
+  @media (max-width:860px){
+    .hero-grid,.projection,.two-col,.booking,.scores,.reality,.problems,.tension,.roi,.roadmap{grid-template-columns:1fr}
+    .scores,.reality{grid-template-columns:repeat(2,1fr)}
+    .section{padding:56px 0}
+    .booking{padding:32px}
+  }
+</style>
+</head>
+<body>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="container">
+    <div class="hero-grid">
+      <div>
+        <span class="eyebrow">LinkedIn Visibility Audit</span>
+        <h1>You're at the <span class="highlight">start</span> of a career that can compound — but your profile is not yet set up to compound <em>anything</em>.</h1>
+        <p class="hero-sub">Naturopathy and preventive medicine is one of the fastest-growing niches in Indian healthcare. You're qualified, you're certified, and you're ready to work. The question isn't whether the opportunity is there. It's whether the right employer, patient, or collaborator can find you when they search.</p>
+        <div class="note">
+          <p style="font-size:14px;color:#c2cade"><strong>Pre-call note:</strong> This is the exact diagnosis I'll walk you through at 3 PM today. Skim it beforehand if you can. I'd rather use our 30 minutes moving forward than explaining what you can see for yourself here.</p>
+        </div>
+      </div>
+      <div class="hero-card">
+        <div class="hero-card-label">Prepared For</div>
+        <div class="hero-card-name">Dr. Mohvesha Mohammed</div>
+        <div class="hero-card-role">Medical Professional · Naturopathic Practitioner · Mangaluru</div>
+        <div class="hero-card-divider"></div>
+        <div class="hero-card-row"><span class="label">Education</span><span class="val">Yenepoya University</span></div>
+        <div class="hero-card-row"><span class="label">Focus</span><span class="val">Preventive / Lifestyle</span></div>
+        <div class="hero-card-row"><span class="label">Location</span><span class="val">Mangaluru, Karnataka</span></div>
+        <div class="hero-card-row"><span class="label">Status</span><span class="val">Open to Work</span></div>
+        <div class="hero-card-divider"></div>
+        <div class="hero-card-row"><span class="label">Prepared by</span><span class="val">Ketan Vaghela</span></div>
+        <div class="hero-card-row"><span class="label">Call</span><span class="val">Today · 3:00 PM</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SCORE DASHBOARD -->
+<section class="section">
+  <div class="container">
+    <div class="section-header">
+      <span class="eyebrow">Scoring Dashboard</span>
+      <h2>Five dimensions. This is how your profile reads <span class="accent">right now</span>.</h2>
+      <p>Scored against the profile pattern of working BNYS / integrative medicine doctors in India, not global celebrity specialists. This is the honest current state, not theory.</p>
+    </div>
+    <div class="scores">
+      <div class="score-card">
+        <div class="ring">
+          <svg width="110" height="110"><circle cx="55" cy="55" r="48" stroke="rgba(255,255,255,0.06)" stroke-width="8" fill="none"/><circle cx="55" cy="55" r="48" stroke="#c89b3c" stroke-width="8" fill="none" stroke-dasharray="301.6" stroke-dashoffset="196" stroke-linecap="round"/></svg>
+          <div class="ring-num">35</div>
+        </div>
+        <div class="score-label">Profile Completeness</div>
+        <div class="score-desc">No About section. Auto URL. Headline is a label list, not positioning.</div>
+      </div>
+      <div class="score-card">
+        <div class="ring">
+          <svg width="110" height="110"><circle cx="55" cy="55" r="48" stroke="rgba(255,255,255,0.06)" stroke-width="8" fill="none"/><circle cx="55" cy="55" r="48" stroke="#e8b85c" stroke-width="8" fill="none" stroke-dasharray="301.6" stroke-dashoffset="256" stroke-linecap="round"/></svg>
+          <div class="ring-num">15</div>
+        </div>
+        <div class="score-label">Content Visibility</div>
+        <div class="score-desc">3 original posts in 60 days — all auto-generated certification cards.</div>
+      </div>
+      <div class="score-card">
+        <div class="ring">
+          <svg width="110" height="110"><circle cx="55" cy="55" r="48" stroke="rgba(255,255,255,0.06)" stroke-width="8" fill="none"/><circle cx="55" cy="55" r="48" stroke="#e8b85c" stroke-width="8" fill="none" stroke-dasharray="301.6" stroke-dashoffset="241" stroke-linecap="round"/></svg>
+          <div class="ring-num">20</div>
+        </div>
+        <div class="score-label">Specialty Positioning</div>
+        <div class="score-desc">Three generic descriptors. No niche anchor. No searchable sub-focus.</div>
+      </div>
+      <div class="score-card">
+        <div class="ring">
+          <svg width="110" height="110"><circle cx="55" cy="55" r="48" stroke="rgba(255,255,255,0.06)" stroke-width="8" fill="none"/><circle cx="55" cy="55" r="48" stroke="#c89b3c" stroke-width="8" fill="none" stroke-dasharray="301.6" stroke-dashoffset="166" stroke-linecap="round"/></svg>
+          <div class="ring-num">45</div>
+        </div>
+        <div class="score-label">Authority Foundation</div>
+        <div class="score-desc">BNYS + Yenepoya + 3 certifications is real — but invisible without framing.</div>
+      </div>
+      <div class="score-card">
+        <div class="ring">
+          <svg width="110" height="110"><circle cx="55" cy="55" r="48" stroke="rgba(255,255,255,0.06)" stroke-width="8" fill="none"/><circle cx="55" cy="55" r="48" stroke="#e8b85c" stroke-width="8" fill="none" stroke-dasharray="301.6" stroke-dashoffset="247" stroke-linecap="round"/></svg>
+          <div class="ring-num">18</div>
+        </div>
+        <div class="score-label">Network Reach</div>
+        <div class="score-desc">138 connections, 139 followers. Distribution floor is near zero.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- REALITY STRIP -->
+<section class="section" style="background:linear-gradient(180deg,transparent,rgba(200,155,60,0.03),transparent)">
+  <div class="container">
+    <div class="section-header">
+      <span class="eyebrow">The Reality Check</span>
+      <h2>Four numbers that decide whether you get <span class="accent">found</span> — or not.</h2>
+      <p>Not opinion. These are the signals every recruiter, potential patient, and the LinkedIn algorithm itself are reading about you right now.</p>
+    </div>
+    <div class="reality">
+      <div class="r-cell">
+        <div class="r-big">138</div>
+        <div class="r-label">connections · 139 followers</div>
+        <div class="r-sub">Below the threshold where anything you post reaches strangers. Your network = your audience.</div>
+      </div>
+      <div class="r-cell">
+        <div class="r-big">3 of 3</div>
+        <div class="r-label">recent posts are auto-generated</div>
+        <div class="r-sub">"Celebrating a new certification" posts are system-created. The algorithm tags profiles that only publish these as inactive.</div>
+      </div>
+      <div class="r-cell">
+        <div class="r-big">0</div>
+        <div class="r-label">specialty-anchored original posts</div>
+        <div class="r-sub">Nothing on preventive medicine, lifestyle interventions, patient outcomes, naturopathy POV. Your expertise is silent.</div>
+      </div>
+      <div class="r-cell">
+        <div class="r-big">"Open to Work"</div>
+        <div class="r-label">active · but vague</div>
+        <div class="r-sub">You're telling recruiters "hire me" — but not what for. The banner without the positioning underneath does more harm than good.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PROBLEM CARDS -->
+<section class="section">
+  <div class="container">
+    <div class="section-header">
+      <span class="eyebrow">What Your Profile Is Actually Doing</span>
+      <h2>Six things working <span class="accent">against</span> you — even while you're job-hunting.</h2>
+    </div>
+    <div class="problems">
+
+      <div class="problem">
+        <div class="problem-num">01</div>
+        <div class="problem-tag">Problem One</div>
+        <h3>Your headline is three category labels, not a promise.</h3>
+        <p>"Medical Professional · Naturopathic Practitioner · Preventive and Lifestyle Medicine" — three descriptors that tell a recruiter WHAT you are, not WHO you help or HOW. In a 6-second recruiter scan, that's forgettable.</p>
+        <div class="cost"><strong>What this costs you:</strong> Every recruiter and patient search stops before they even click your profile. You disappear in the feed.</div>
+      </div>
+
+      <div class="problem">
+        <div class="problem-num">02</div>
+        <div class="problem-tag">Problem Two</div>
+        <h3>Your URL is still auto-generated.</h3>
+        <p>/dr-mohvesha-mohammed-<strong>265b463a2</strong> — that string at the end is the placeholder LinkedIn assigns when a profile is never claimed. Both Google search and the algorithm read this as a signal you don't take your profile seriously.</p>
+        <div class="cost"><strong>What this costs you:</strong> Anyone who Googles your name lands on a URL that looks temporary — not professional.</div>
+      </div>
+
+      <div class="problem">
+        <div class="problem-num">03</div>
+        <div class="problem-tag">Problem Three</div>
+        <h3>Open-to-Work is on, but you haven't told anyone what you're open to.</h3>
+        <p>You've signaled availability to recruiters. But your profile doesn't specify whether you want clinical, corporate wellness, preventive medicine research, integrative care clinics, or teaching. That banner raised a flag — and the flag is blank.</p>
+        <div class="cost"><strong>What this costs you:</strong> Recruiters who do find you can't tell if their role fits. Most scroll past.</div>
+      </div>
+
+      <div class="problem">
+        <div class="problem-num">04</div>
+        <div class="problem-tag">Problem Four</div>
+        <h3>Every original post you have is an auto-generated certification celebration.</h3>
+        <p>3 certifications announced in 60 days — NIN internship, Mental Wellbeing, Cupping Therapy. All auto-posts. The algorithm categorizes profiles that only publish system-generated content as "not creators." Your organic reach is pinned near zero.</p>
+        <div class="cost"><strong>What this costs you:</strong> Even your connections don't see your posts. You're effectively invisible on your own feed.</div>
+      </div>
+
+      <div class="problem">
+        <div class="problem-num">05</div>
+        <div class="problem-tag">Problem Five</div>
+        <h3>Your one opinion-bearing repost is borrowing someone else's voice.</h3>
+        <p>Your only meaningful repost is Dr. Bhavit Bansal's post on BNYS regulatory recognition. Your instincts are already pointing somewhere — you care about the fight for BNYS legitimacy. But amplifying someone else's words isn't the same as forming your own.</p>
+        <div class="cost"><strong>What this costs you:</strong> You're associated with a cause without ever being claimed as a voice in it. The attention goes to whoever wrote the post — not you.</div>
+      </div>
+
+      <div class="problem">
+        <div class="problem-num">06</div>
+        <div class="problem-tag">Problem Six</div>
+        <h3>There's no About section telling anyone why you chose this path.</h3>
+        <p>Naturopathy is a profession where the why matters as much as the credentials. Patients choose naturopaths on belief and trust — not just qualifications. Without an About, there's no space for the story, POV, or patient philosophy that earns that trust before the first consultation.</p>
+        <div class="cost"><strong>What this costs you:</strong> You're reduced to a category. And naturopathy has a lot of people in that category.</div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- STRENGTHS vs GAPS -->
+<section class="section">
+  <div class="container">
+    <div class="section-header">
+      <span class="eyebrow">What's Working · What's Not</span>
+      <h2>The honest ledger.</h2>
+    </div>
+    <div class="two-col">
+      <div class="col strengths">
+        <h3><span class="col-dot"></span>What you have going for you</h3>
+        <ul>
+          <li>Yenepoya Deemed University — a recognized, well-regarded institution in South India's medical ecosystem.</li>
+          <li>BNYS degree — a credentialed 5.5-year integrated medicine path, not a short course.</li>
+          <li>Three fresh certifications in 60 days — NIN internship, Mental Wellbeing, Cupping Therapy. Proof you're actively investing in your craft.</li>
+          <li>Preventive + lifestyle medicine is the fastest-growing segment in Indian healthcare right now — you're in the right niche.</li>
+          <li>Awareness of the policy fight for BNYS regulation — you're thinking at a profession-level, not just a job-level.</li>
+          <li>Active Open-to-Work signal — you're ready to deploy, not still deciding.</li>
+        </ul>
+      </div>
+      <div class="col gaps">
+        <h3><span class="col-dot"></span>What's standing between you and the right role</h3>
+        <ul>
+          <li>No specialty anchor — BNYS practitioners can go in 6 different directions, and yours isn't chosen yet.</li>
+          <li>No About section — zero space to tell a recruiter or patient your story, philosophy, or what you want to do next.</li>
+          <li>Headline doesn't contain a single searchable sub-niche keyword (detox, corporate wellness, women's health, lifestyle disease, etc.)</li>
+          <li>No visible clinical experience storyline — only certifications listed, not cases or outcomes.</li>
+          <li>Profile has no "proof" — no patient testimonials, no case reflections, no teaching content. Just listings.</li>
+          <li>Network is 138 people. Before distribution, you need reach. Before reach, you need people.</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- VISIBILITY PROJECTION -->
+<section class="section">
+  <div class="container">
+    <div class="section-header">
+      <span class="eyebrow">Where This Is Headed</span>
+      <h2>Your 12-month trajectory · current path vs. <span class="accent">positioned path</span>.</h2>
+    </div>
+    <div class="projection">
+      <div>
+        <canvas id="projChart" width="600" height="360"></canvas>
+      </div>
+      <div class="proj-stats">
+        <div class="proj-stat">
+          <div class="proj-stat-num">139 → ~190</div>
+          <div class="proj-stat-label">Followers in 12 months if current pattern continues. That's not "growing" — that's passive drift.</div>
+        </div>
+        <div class="proj-stat">
+          <div class="proj-stat-num">139 → 2,500+</div>
+          <div class="proj-stat-label">Followers with a positioning system running. Enough to make you findable by the RIGHT employers and patients, not just anyone.</div>
+        </div>
+        <div class="proj-stat">
+          <div class="proj-stat-num">First right role</div>
+          <div class="proj-stat-label">Most BNYS doctors take 12–18 months of random applications. Digital-first positioning cuts that to 3–5 months.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- EXECUTION TENSION -->
+<section class="section" style="background:linear-gradient(180deg,transparent,rgba(80,110,220,0.04),transparent)">
+  <div class="container">
+    <div class="section-header">
+      <span class="eyebrow">Why Most BNYS Doctors Stay Invisible</span>
+      <h2>It's not that they don't try. It's that <span class="accent">each of these</span> is hard alone.</h2>
+      <p>You've probably already noticed some of the gaps above. Most doctors do. The problem isn't identification — it's execution. These six frictions are why almost nobody does this alone.</p>
+    </div>
+    <div class="tension">
+
+      <div class="tension-card">
+        <div class="tension-tag">Friction One</div>
+        <h4>The Consistency Trap</h4>
+        <p>LinkedIn's algorithm needs 3–4 posts/week for 4–6 months before it reclassifies you as a creator. That's 80+ posts, most while you're starting a clinical career. Most candidates stop at post 10.</p>
+      </div>
+
+      <div class="tension-card">
+        <div class="tension-tag">Friction Two</div>
+        <h4>The Voice Problem</h4>
+        <p>Preventive and lifestyle medicine is a crowded niche — thousands of BNYS doctors post similar content. Differentiation requires a POV you haven't named yet. You can't name it in isolation. It gets extracted, not invented.</p>
+      </div>
+
+      <div class="tension-card">
+        <div class="tension-tag">Friction Three</div>
+        <h4>The Angle Commitment</h4>
+        <p>Clinical private practice. Corporate wellness. Hospital integrative care. Research. Teaching. Content. BNYS can lead to 6 different careers. Most new doctors never publicly commit to one — and hedging shows in every post.</p>
+      </div>
+
+      <div class="tension-card">
+        <div class="tension-tag">Friction Four</div>
+        <h4>The Network Math</h4>
+        <p>138 → 5,000 connections isn't about mass-connecting. Every wrong connection dilutes your feed quality and your credibility. Strategic network growth requires a list, a reason to connect, and a cadence — not a connect-all spree.</p>
+      </div>
+
+      <div class="tension-card">
+        <div class="tension-tag">Friction Five</div>
+        <h4>The Algorithm Penalty</h4>
+        <p>Right now, LinkedIn suppresses your posts because you're classified as inactive. Reversing that requires consistency + quality + engagement simultaneously — not one at a time. Miss any leg and the climb resets.</p>
+      </div>
+
+      <div class="tension-card">
+        <div class="tension-tag">Friction Six</div>
+        <h4>The Identity Question</h4>
+        <p>"A naturopath" is a category. "The naturopath known for [X]" is a career. But X has to be something you can actually deliver, claim publicly, and defend with proof. Picking X alone, without a strategist, is why most doctors settle for the category.</p>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ROI -->
+<section class="section">
+  <div class="container">
+    <div class="section-header">
+      <span class="eyebrow">What Solving This Is Actually Worth</span>
+      <h2>The economics of <span class="accent">being findable</span>.</h2>
+    </div>
+    <div class="roi">
+      <div class="roi-card">
+        <div class="roi-num">3–5 mo</div>
+        <div class="roi-label">Time-to-first-right-role</div>
+        <div class="roi-sub">For digital-first positioned BNYS doctors vs. 12–18 months for profile-invisible candidates.</div>
+      </div>
+      <div class="roi-card">
+        <div class="roi-num">2–3x</div>
+        <div class="roi-label">Corporate wellness vs. clinic rates</div>
+        <div class="roi-sub">The rate differential — but only accessible to doctors with visible authority, not just a degree.</div>
+      </div>
+      <div class="roi-card">
+        <div class="roi-num">1 right fit</div>
+        <div class="roi-label">Changes the whole trajectory</div>
+        <div class="roi-sub">One right first role, mentor, or private practice partner. Compounds for a decade.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ROADMAP -->
+<section class="section" style="background:linear-gradient(180deg,transparent,rgba(200,155,60,0.03),transparent)">
+  <div class="container">
+    <div class="section-header">
+      <span class="eyebrow">What We'd Build Together</span>
+      <h2>A four-phase repositioning, designed for <span class="accent">where you actually are</span>.</h2>
+      <p>Not a generic "build authority in 12 months" roadmap. This is a career-launch positioning system — designed for doctors at the start, not at the peak.</p>
+    </div>
+    <div class="roadmap">
+      <div class="phase">
+        <div class="phase-num">PHASE 1</div>
+        <h4>Identity Anchor</h4>
+        <p>We pick the ONE subspecialty niche you'll own publicly — clinical, corporate wellness, research, or teaching. Everything else is arranged around that commitment.</p>
+      </div>
+      <div class="phase">
+        <div class="phase-num">PHASE 2</div>
+        <h4>Voice Extraction</h4>
+        <p>We find the POV that's actually yours — not borrowed from reposts. Your clinical curiosity, your philosophy, your unanswered questions become the foundation of your content.</p>
+      </div>
+      <div class="phase">
+        <div class="phase-num">PHASE 3</div>
+        <h4>Visibility Engine</h4>
+        <p>The posting cadence that moves LinkedIn from "inactive" to "creator." The system keeps publishing — whether you're in a shift, in a workshop, or finding your first job.</p>
+      </div>
+      <div class="phase">
+        <div class="phase-num">PHASE 4</div>
+        <h4>Network Activation</h4>
+        <p>Strategic outreach to the RIGHT 500 people — recruiters, senior BNYS doctors, clinic founders, researchers — who move your career forward. Not the mass-connect game.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- BOOKING -->
+<section class="section">
+  <div class="container">
+    <div class="booking">
+      <div class="profile-card">
+        <div class="avatar">K</div>
+        <div class="profile-name">Ketan Vaghela</div>
+        <div class="profile-role">LinkedIn Growth Strategist · Authority System Builder</div>
+        <div class="profile-bio">I help doctors and subject-matter experts turn real-world credentials into a digital presence that actually brings in the right opportunities — roles, referrals, collaborations. Not influencer content. Authority systems.</div>
+        <div class="profile-links">
+          <div>LinkedIn: <a href="https://www.linkedin.com/in/kketanrv/" target="_blank">/in/kketanrv</a></div>
+          <div>Calendly: <a href="https://calendly.com/ketanvaghela/ai-avatar-demo" target="_blank">calendly.com/ketanvaghela/ai-avatar-demo</a></div>
+        </div>
+      </div>
+      <div class="booking-right">
+        <span class="eyebrow">Our Call · 3:00 PM Today</span>
+        <h2>Let's use our 30 minutes to decide which direction your career actually leans.</h2>
+        <p>The audit above is the diagnosis. On our call, I want to hear what you're imagining — clinical practice, corporate wellness, research — and tell you honestly which positioning path fits. No pitch. If working together makes sense, I'll tell you. If you're better off self-executing with a 90-day checklist, I'll tell you that too.</p>
+        <a href="https://calendly.com/ketanvaghela/ai-avatar-demo" class="cta-btn" target="_blank">
+          Confirm / Reschedule Call
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FINAL CTA -->
+<section>
+  <div class="container">
+    <div class="cta-section">
+      <span class="eyebrow">One Honest Next Step</span>
+      <h2 style="color:#f5f7fc">The earlier you anchor, the earlier the right people start finding you.</h2>
+      <p style="max-width:640px;margin:18px auto 34px;color:#b4bdcd">The difference between BNYS doctors who build sustainable practices and the ones who drift for years isn't talent. It's the clarity of their first public commitment. Let's make yours today.</p>
+      <a href="https://calendly.com/ketanvaghela/ai-avatar-demo" class="cta-btn" target="_blank">
+        Book Your Free Strategy Call
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+      </a>
+      <span class="cta-sub">30 minutes · free · video call (Google Meet or Zoom)</span>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="container">
+    <span class="name">Ketan Vaghela · LinkedIn Growth Strategist</span>
+    <div>Prepared exclusively for Dr. Mohvesha Mohammed · For our call at 3:00 PM today</div>
+    <div style="margin-top:8px"><a href="https://calendly.com/ketanvaghela/ai-avatar-demo">calendly.com/ketanvaghela/ai-avatar-demo</a> · <a href="https://www.linkedin.com/in/kketanrv/">linkedin.com/in/kketanrv</a></div>
+  </div>
+</footer>
+
+<script>
+const c = document.getElementById('projChart');
+const ctx = c.getContext('2d');
+const W = c.width, H = c.height;
+const pad = {l:54, r:20, t:26, b:40};
+const plotW = W - pad.l - pad.r;
+const plotH = H - pad.t - pad.b;
+
+const months = ['Now','M2','M4','M6','M8','M10','M12'];
+const positioned = [139, 340, 680, 1180, 1720, 2180, 2560];
+const current    = [139, 146, 155, 164, 172, 181, 192];
+const maxY = 2800;
+
+ctx.strokeStyle = 'rgba(255,255,255,0.05)';
+ctx.lineWidth = 1;
+for(let i=0;i<=5;i++){
+  const y = pad.t + (plotH/5)*i;
+  ctx.beginPath(); ctx.moveTo(pad.l,y); ctx.lineTo(W-pad.r,y); ctx.stroke();
+  ctx.fillStyle='#8592a8'; ctx.font='11px Inter'; ctx.textAlign='right';
+  ctx.fillText(Math.round(maxY - (maxY/5)*i).toLocaleString(), pad.l-8, y+4);
+}
+ctx.textAlign='center';
+months.forEach((m,i)=>{
+  const x = pad.l + (plotW/(months.length-1))*i;
+  ctx.fillStyle='#8592a8';
+  ctx.fillText(m, x, H-pad.b+22);
+});
+
+function drawLine(arr,color){
+  ctx.beginPath();
+  arr.forEach((v,i)=>{
+    const x = pad.l + (plotW/(arr.length-1))*i;
+    const y = pad.t + plotH - (v/maxY)*plotH;
+    if(i===0) ctx.moveTo(x,y); else ctx.lineTo(x,y);
+  });
+  ctx.strokeStyle=color; ctx.lineWidth=2.8; ctx.stroke();
+  ctx.fillStyle=color;
+  arr.forEach((v,i)=>{
+    const x = pad.l + (plotW/(arr.length-1))*i;
+    const y = pad.t + plotH - (v/maxY)*plotH;
+    ctx.beginPath(); ctx.arc(x,y,3.5,0,Math.PI*2); ctx.fill();
+  });
+}
+
+ctx.beginPath();
+positioned.forEach((v,i)=>{
+  const x = pad.l + (plotW/(positioned.length-1))*i;
+  const y = pad.t + plotH - (v/maxY)*plotH;
+  if(i===0) ctx.moveTo(x,y); else ctx.lineTo(x,y);
+});
+ctx.lineTo(pad.l+plotW, pad.t+plotH);
+ctx.lineTo(pad.l, pad.t+plotH);
+ctx.closePath();
+const grad = ctx.createLinearGradient(0,pad.t,0,pad.t+plotH);
+grad.addColorStop(0,'rgba(200,155,60,0.26)');
+grad.addColorStop(1,'rgba(200,155,60,0)');
+ctx.fillStyle=grad; ctx.fill();
+
+drawLine(positioned,'#e8b85c');
+drawLine(current,'#506edc');
+
+ctx.textAlign='left';
+ctx.fillStyle='#e8b85c';
+ctx.fillRect(pad.l+10, pad.t-10, 12, 3);
+ctx.fillStyle='#e8ecf3'; ctx.font='12px Inter';
+ctx.fillText('Positioned trajectory', pad.l+28, pad.t-7);
+ctx.fillStyle='#506edc';
+ctx.fillRect(pad.l+180, pad.t-10, 12, 3);
+ctx.fillStyle='#e8ecf3';
+ctx.fillText('Current pattern', pad.l+198, pad.t-7);
+</script>
+
+</body>
+</html>
